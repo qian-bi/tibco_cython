@@ -30,7 +30,7 @@ setup(
     ],
     python_requires='>=3.6',
     ext_modules=cythonize([
-        Extension('tibemsMsg.emsSession', ['tibemsMsg/emsSession.pyx'], libraries=['tibems'], library_dirs=['lib'], include_dirs=['include']),
+        Extension('tibemsMsg.emsSession', ['tibemsMsg/emsSession.pyx'], libraries=['tibems64'], library_dirs=['lib'], include_dirs=['include']),
     ], language_level=3, gdb_debug=False, compiler_directives={'infer_types': False, 'boundscheck': False, 'wraparound': False}),
     zip_safe=False,
 )
