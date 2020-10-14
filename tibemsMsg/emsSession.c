@@ -3,6 +3,7 @@
 /* BEGIN: Cython Metadata
 {
     "distutils": {
+        "depends": [],
         "include_dirs": [
             "include"
         ],
@@ -825,27 +826,28 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "stringsource",
   "tibemsMsg\\emsSession.pyx",
+  "stringsource",
 };
 
 /*--- Type declarations ---*/
 struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession;
 struct __pyx_opt_args_9tibemsMsg_10emsSession_10EmsSession__check_status;
 
-/* "tibemsMsg/emsSession.pyx":50
- *         return self.txt.decode()
+/* "tibemsMsg/emsSession.pyx":106
+ *         self._unsubscribe(name.encode())
  * 
- *     cdef int _check_status(self, int error=0) except ? -1:             # <<<<<<<<<<<<<<
- *         cdef const char* status_text
- *         if self.status != ctibco.TIBEMS_OK or error:
+ *     cdef int _check_status(self, int error=0, char* msg=NULL) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             const char* errMsg
  */
 struct __pyx_opt_args_9tibemsMsg_10emsSession_10EmsSession__check_status {
   int __pyx_n;
   int error;
+  char *msg;
 };
 
-/* "tibemsMsg/emsSession.pyx":5
+/* "tibemsMsg/emsSession.pyx":26
  * 
  * 
  * cdef class EmsSession:             # <<<<<<<<<<<<<<
@@ -859,25 +861,34 @@ struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession {
   tibemsConnectionFactory factory;
   tibemsConnection connection;
   tibemsSession session;
-  tibemsDestination destination;
   tibems_status status;
-  char const *errMsg;
-  char const *errTraceback;
   char const *txt;
+  char *msgTypeName;
   int debug;
+  PyObject *msgTypeMap;
+  PyObject *msg;
+  int connected;
 };
 
 
 
 struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession {
   int (*_check_status)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, struct __pyx_opt_args_9tibemsMsg_10emsSession_10EmsSession__check_status *__pyx_optional_args);
+  int (*_check_conn)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *);
+  void (*_getMsgTypeName)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, tibemsMsgType);
   int (*_create)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, char *, char *);
   int (*_close)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *);
-  int (*_create_dest)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int);
-  int (*_destroy_dest)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *);
-  int (*_producer)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int, char *);
+  int (*_create_dest)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, tibemsDestination *, char *, int);
+  int (*_destroy_dest)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, tibemsDestination);
+  int (*_get_msg)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, tibemsMsg);
+  int (*_producer)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int, char *, tibemsMsgType, char *);
   int (*_consumer)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int, int);
   int (*_requester)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int, char *);
+  int (*_listener)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int, tibemsMsgCallback, void *);
+  int (*_unsubscribe)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *);
+  int (*_subscriber)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, char *, char *, int);
+  int (*_shared_consumer)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, char *, char *, int);
+  int (*_shared_subscriber)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, char *, char *, int);
 };
 static struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *__pyx_vtabptr_9tibemsMsg_10emsSession_EmsSession;
 
@@ -955,23 +966,35 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_GetAttrStr(PyObject* obj, PyObject
 /* GetBuiltinName.proto */
 static PyObject *__Pyx_GetBuiltinName(PyObject *name);
 
-/* RaiseDoubleKeywords.proto */
-static void __Pyx_RaiseDoubleKeywordsError(const char* func_name, PyObject* kw_name);
+/* IncludeStringH.proto */
+#include <string.h>
 
-/* ParseKeywords.proto */
-static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
-    PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args,\
-    const char* function_name);
+/* decode_c_string_utf16.proto */
+static CYTHON_INLINE PyObject *__Pyx_PyUnicode_DecodeUTF16(const char *s, Py_ssize_t size, const char *errors) {
+    int byteorder = 0;
+    return PyUnicode_DecodeUTF16(s, size, errors, &byteorder);
+}
+static CYTHON_INLINE PyObject *__Pyx_PyUnicode_DecodeUTF16LE(const char *s, Py_ssize_t size, const char *errors) {
+    int byteorder = -1;
+    return PyUnicode_DecodeUTF16(s, size, errors, &byteorder);
+}
+static CYTHON_INLINE PyObject *__Pyx_PyUnicode_DecodeUTF16BE(const char *s, Py_ssize_t size, const char *errors) {
+    int byteorder = 1;
+    return PyUnicode_DecodeUTF16(s, size, errors, &byteorder);
+}
 
-/* RaiseArgTupleInvalid.proto */
-static void __Pyx_RaiseArgtupleInvalid(const char* func_name, int exact,
-    Py_ssize_t num_min, Py_ssize_t num_max, Py_ssize_t num_found);
+/* decode_c_string.proto */
+static CYTHON_INLINE PyObject* __Pyx_decode_c_string(
+         const char* cstring, Py_ssize_t start, Py_ssize_t stop,
+         const char* encoding, const char* errors,
+         PyObject* (*decode_func)(const char *s, Py_ssize_t size, const char *errors));
 
-/* ArgTypeTest.proto */
-#define __Pyx_ArgTypeTest(obj, type, none_allowed, name, exact)\
-    ((likely((Py_TYPE(obj) == type) | (none_allowed && (obj == Py_None)))) ? 1 :\
-        __Pyx__ArgTypeTest(obj, type, name, exact))
-static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact);
+/* PyCFunctionFastCall.proto */
+#if CYTHON_FAST_PYCCALL
+static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
+#else
+#define __Pyx_PyCFunction_FastCall(func, args, nargs)  (assert(0), NULL)
+#endif
 
 /* PyFunctionFastCall.proto */
 #if CYTHON_FAST_PYCALL
@@ -996,18 +1019,27 @@ static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, 
     (assert(__pyx_pyframe_localsplus_offset), (PyObject **)(((char *)(frame)) + __pyx_pyframe_localsplus_offset))
 #endif
 
-/* PyCFunctionFastCall.proto */
-#if CYTHON_FAST_PYCCALL
-static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
-#else
-#define __Pyx_PyCFunction_FastCall(func, args, nargs)  (assert(0), NULL)
-#endif
-
 /* PyObjectCall.proto */
 #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
 #else
 #define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
+#endif
+
+/* PyObjectCall2Args.proto */
+static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
+
+/* PyObjectCallMethO.proto */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg);
+#endif
+
+/* PyObjectCallOneArg.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
+
+/* GetTopmostException.proto */
+#if CYTHON_USE_EXC_INFO_STACK
+static _PyErr_StackItem * __Pyx_PyErr_GetTopmostException(PyThreadState *tstate);
 #endif
 
 /* PyThreadStateGet.proto */
@@ -1019,6 +1051,40 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg
 #define __Pyx_PyThreadState_declare
 #define __Pyx_PyThreadState_assign
 #define __Pyx_PyErr_Occurred()  PyErr_Occurred()
+#endif
+
+/* SaveResetException.proto */
+#if CYTHON_FAST_THREAD_STATE
+#define __Pyx_ExceptionSave(type, value, tb)  __Pyx__ExceptionSave(__pyx_tstate, type, value, tb)
+static CYTHON_INLINE void __Pyx__ExceptionSave(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb);
+#define __Pyx_ExceptionReset(type, value, tb)  __Pyx__ExceptionReset(__pyx_tstate, type, value, tb)
+static CYTHON_INLINE void __Pyx__ExceptionReset(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb);
+#else
+#define __Pyx_ExceptionSave(type, value, tb)   PyErr_GetExcInfo(type, value, tb)
+#define __Pyx_ExceptionReset(type, value, tb)  PyErr_SetExcInfo(type, value, tb)
+#endif
+
+/* PyErrExceptionMatches.proto */
+#if CYTHON_FAST_THREAD_STATE
+#define __Pyx_PyErr_ExceptionMatches(err) __Pyx_PyErr_ExceptionMatchesInState(__pyx_tstate, err)
+static CYTHON_INLINE int __Pyx_PyErr_ExceptionMatchesInState(PyThreadState* tstate, PyObject* err);
+#else
+#define __Pyx_PyErr_ExceptionMatches(err)  PyErr_ExceptionMatches(err)
+#endif
+
+/* GetException.proto */
+#if CYTHON_FAST_THREAD_STATE
+#define __Pyx_GetException(type, value, tb)  __Pyx__GetException(__pyx_tstate, type, value, tb)
+static int __Pyx__GetException(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb);
+#else
+static int __Pyx_GetException(PyObject **type, PyObject **value, PyObject **tb);
+#endif
+
+/* PyObjectCallNoArg.proto */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
+#else
+#define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
 #endif
 
 /* PyErrFetchRestore.proto */
@@ -1046,33 +1112,53 @@ static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject 
 #define __Pyx_ErrFetch(type, value, tb)  PyErr_Fetch(type, value, tb)
 #endif
 
+/* SwapException.proto */
+#if CYTHON_FAST_THREAD_STATE
+#define __Pyx_ExceptionSwap(type, value, tb)  __Pyx__ExceptionSwap(__pyx_tstate, type, value, tb)
+static CYTHON_INLINE void __Pyx__ExceptionSwap(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb);
+#else
+static CYTHON_INLINE void __Pyx_ExceptionSwap(PyObject **type, PyObject **value, PyObject **tb);
+#endif
+
 /* WriteUnraisableException.proto */
 static void __Pyx_WriteUnraisable(const char *name, int clineno,
                                   int lineno, const char *filename,
                                   int full_traceback, int nogil);
 
-/* IncludeStringH.proto */
-#include <string.h>
+/* RaiseDoubleKeywords.proto */
+static void __Pyx_RaiseDoubleKeywordsError(const char* func_name, PyObject* kw_name);
 
-/* decode_c_string_utf16.proto */
-static CYTHON_INLINE PyObject *__Pyx_PyUnicode_DecodeUTF16(const char *s, Py_ssize_t size, const char *errors) {
-    int byteorder = 0;
-    return PyUnicode_DecodeUTF16(s, size, errors, &byteorder);
-}
-static CYTHON_INLINE PyObject *__Pyx_PyUnicode_DecodeUTF16LE(const char *s, Py_ssize_t size, const char *errors) {
-    int byteorder = -1;
-    return PyUnicode_DecodeUTF16(s, size, errors, &byteorder);
-}
-static CYTHON_INLINE PyObject *__Pyx_PyUnicode_DecodeUTF16BE(const char *s, Py_ssize_t size, const char *errors) {
-    int byteorder = 1;
-    return PyUnicode_DecodeUTF16(s, size, errors, &byteorder);
-}
+/* ParseKeywords.proto */
+static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[],\
+    PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args,\
+    const char* function_name);
 
-/* decode_c_string.proto */
-static CYTHON_INLINE PyObject* __Pyx_decode_c_string(
-         const char* cstring, Py_ssize_t start, Py_ssize_t stop,
-         const char* encoding, const char* errors,
-         PyObject* (*decode_func)(const char *s, Py_ssize_t size, const char *errors));
+/* RaiseArgTupleInvalid.proto */
+static void __Pyx_RaiseArgtupleInvalid(const char* func_name, int exact,
+    Py_ssize_t num_min, Py_ssize_t num_max, Py_ssize_t num_found);
+
+/* ArgTypeTest.proto */
+#define __Pyx_ArgTypeTest(obj, type, none_allowed, name, exact)\
+    ((likely((Py_TYPE(obj) == type) | (none_allowed && (obj == Py_None)))) ? 1 :\
+        __Pyx__ArgTypeTest(obj, type, name, exact))
+static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact);
+
+/* BytesEquals.proto */
+static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int equals);
+
+/* UnicodeEquals.proto */
+static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals);
+
+/* DictGetItem.proto */
+#if PY_MAJOR_VERSION >= 3 && !CYTHON_COMPILING_IN_PYPY
+static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key);
+#define __Pyx_PyObject_Dict_GetItem(obj, name)\
+    (likely(PyDict_CheckExact(obj)) ?\
+     __Pyx_PyDict_GetItem(obj, name) : PyObject_GetItem(obj, name))
+#else
+#define __Pyx_PyDict_GetItem(d, key) PyObject_GetItem(d, key)
+#define __Pyx_PyObject_Dict_GetItem(obj, name)  PyObject_GetItem(obj, name)
+#endif
 
 /* PyDictVersioning.proto */
 #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_TYPE_SLOTS
@@ -1124,17 +1210,6 @@ static CYTHON_INLINE PyObject *__Pyx__GetModuleGlobalName(PyObject *name);
 /* RaiseException.proto */
 static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject *cause);
 
-/* PyObjectCall2Args.proto */
-static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
-
-/* PyObjectCallMethO.proto */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg);
-#endif
-
-/* PyObjectCallOneArg.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
-
 /* PyObjectSetAttrStr.proto */
 #if CYTHON_USE_TYPE_SLOTS
 #define __Pyx_PyObject_DelAttrStr(o,n) __Pyx_PyObject_SetAttrStr(o, n, NULL)
@@ -1143,14 +1218,6 @@ static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr
 #define __Pyx_PyObject_DelAttrStr(o,n)   PyObject_DelAttr(o,n)
 #define __Pyx_PyObject_SetAttrStr(o,n,v) PyObject_SetAttr(o,n,v)
 #endif
-
-/* PyObjectFormatAndDecref.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyObject_FormatSimpleAndDecref(PyObject* s, PyObject* f);
-static CYTHON_INLINE PyObject* __Pyx_PyObject_FormatAndDecref(PyObject* s, PyObject* f);
-
-/* JoinPyUnicode.proto */
-static PyObject* __Pyx_PyUnicode_Join(PyObject* value_tuple, Py_ssize_t value_count, Py_ssize_t result_ulength,
-                                      Py_UCS4 max_char);
 
 /* PyObject_GenericGetAttrNoDict.proto */
 #if CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP && PY_VERSION_HEX < 0x03070000
@@ -1168,14 +1235,6 @@ static PyObject* __Pyx_PyObject_GenericGetAttr(PyObject* obj, PyObject* attr_nam
 
 /* SetVTable.proto */
 static int __Pyx_SetVtable(PyObject *dict, void *vtable);
-
-/* PyErrExceptionMatches.proto */
-#if CYTHON_FAST_THREAD_STATE
-#define __Pyx_PyErr_ExceptionMatches(err) __Pyx_PyErr_ExceptionMatchesInState(__pyx_tstate, err)
-static CYTHON_INLINE int __Pyx_PyErr_ExceptionMatchesInState(PyThreadState* tstate, PyObject* err);
-#else
-#define __Pyx_PyErr_ExceptionMatches(err)  PyErr_ExceptionMatches(err)
-#endif
 
 /* PyObjectGetAttrStrNoError.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyObject_GetAttrStrNoError(PyObject* obj, PyObject* attr_name);
@@ -1293,13 +1352,16 @@ static void __Pyx_AddTraceback(const char *funcname, int c_line,
                                int py_line, const char *filename);
 
 /* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_tibemsMsgType(tibemsMsgType value);
 
 /* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_tibemsMsgType(tibemsMsgType value);
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
 /* CIntFromPy.proto */
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
+
+/* CIntFromPy.proto */
+static CYTHON_INLINE tibemsMsgType __Pyx_PyInt_As_tibemsMsgType(PyObject *);
 
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
@@ -1327,13 +1389,21 @@ static int __Pyx_check_binary_version(void);
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
 static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__check_status(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, struct __pyx_opt_args_9tibemsMsg_10emsSession_10EmsSession__check_status *__pyx_optional_args); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__check_conn(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self); /* proto*/
+static void __pyx_f_9tibemsMsg_10emsSession_10EmsSession__getMsgTypeName(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, tibemsMsgType __pyx_v_msgType); /* proto*/
 static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_serverUrl, char *__pyx_v_userName, char *__pyx_v_password); /* proto*/
 static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self); /* proto*/
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create_dest(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_name, int __pyx_v_useTopic); /* proto*/
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__destroy_dest(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self); /* proto*/
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__producer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_name, int __pyx_v_useTopic, char *__pyx_v_data); /* proto*/
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_name, int __pyx_v_useTopic, int __pyx_v_timeout); /* proto*/
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__requester(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_name, int __pyx_v_useTopic, char *__pyx_v_data); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create_dest(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, tibemsDestination *__pyx_v_destination, char *__pyx_v_dest, int __pyx_v_useTopic); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__destroy_dest(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, tibemsDestination __pyx_v_destination); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__get_msg(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, tibemsMsg __pyx_v_msg); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__producer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_dest, int __pyx_v_useTopic, char *__pyx_v_data, tibemsMsgType __pyx_v_msgType, char *__pyx_v_name); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_dest, int __pyx_v_useTopic, int __pyx_v_timeout); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__requester(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_dest, int __pyx_v_useTopic, char *__pyx_v_data); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__listener(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_dest, int __pyx_v_useTopic, tibemsMsgCallback __pyx_v_callback, void *__pyx_v_closure); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__unsubscribe(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_name); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__subscriber(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_topic, char *__pyx_v_name, char *__pyx_v_selector, int __pyx_v_timeout); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__shared_consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_topic, char *__pyx_v_name, char *__pyx_v_selector, int __pyx_v_timeout); /* proto*/
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__shared_subscriber(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_topic, char *__pyx_v_name, char *__pyx_v_selector, int __pyx_v_timeout); /* proto*/
 
 /* Module declarations from 'tibemsMsg' */
 
@@ -1341,35 +1411,51 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__requester(struct __pyx_
 
 /* Module declarations from 'tibemsMsg.emsSession' */
 static PyTypeObject *__pyx_ptype_9tibemsMsg_10emsSession_EmsSession = 0;
+static void __pyx_f_9tibemsMsg_10emsSession_callback(tibemsMsgConsumer, tibemsMsg, void *); /*proto*/
 #define __Pyx_MODULE_NAME "tibemsMsg.emsSession"
 extern int __pyx_module_is_main_tibemsMsg__emsSession;
 int __pyx_module_is_main_tibemsMsg__emsSession = 0;
 
 /* Implementation of 'tibemsMsg.emsSession' */
+static PyObject *__pyx_builtin_print;
 static PyObject *__pyx_builtin_TypeError;
 static const char __pyx_k_[] = "";
-static const char __pyx_k__4[] = "\n";
+static const char __pyx_k__4[] = "{}\n{}\n{}";
 static const char __pyx_k_tb[] = "tb";
+static const char __pyx_k_MAP[] = "MAP";
 static const char __pyx_k_doc[] = "__doc__";
 static const char __pyx_k_msg[] = "msg";
 static const char __pyx_k_str[] = "__str__";
+static const char __pyx_k_TEXT[] = "TEXT";
 static const char __pyx_k_data[] = "data";
+static const char __pyx_k_dest[] = "dest";
+static const char __pyx_k_func[] = "func";
 static const char __pyx_k_init[] = "__init__";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "name";
 static const char __pyx_k_self[] = "self";
 static const char __pyx_k_test[] = "__test__";
+static const char __pyx_k_BYTES[] = "BYTES";
 static const char __pyx_k_debug[] = "debug";
-static const char __pyx_k_create[] = "create";
+static const char __pyx_k_print[] = "print";
+static const char __pyx_k_topic[] = "topic";
+static const char __pyx_k_upper[] = "upper";
+static const char __pyx_k_OBJECT[] = "OBJECT";
+static const char __pyx_k_STREAM[] = "STREAM";
+static const char __pyx_k_encode[] = "encode";
+static const char __pyx_k_format[] = "format";
 static const char __pyx_k_module[] = "__module__";
 static const char __pyx_k_name_2[] = "__name__";
 static const char __pyx_k_reduce[] = "__reduce__";
 static const char __pyx_k_status[] = "status";
+static const char __pyx_k_msgType[] = "msgType";
 static const char __pyx_k_prepare[] = "__prepare__";
+static const char __pyx_k_receive[] = "receive:";
 static const char __pyx_k_timeout[] = "timeout";
 static const char __pyx_k_getstate[] = "__getstate__";
 static const char __pyx_k_password[] = "password";
 static const char __pyx_k_qualname[] = "__qualname__";
+static const char __pyx_k_selector[] = "selector";
 static const char __pyx_k_setstate[] = "__setstate__";
 static const char __pyx_k_useTopic[] = "useTopic";
 static const char __pyx_k_userName[] = "userName";
@@ -1380,44 +1466,58 @@ static const char __pyx_k_serverUrl[] = "serverUrl";
 static const char __pyx_k_EmsSession[] = "EmsSession";
 static const char __pyx_k_TibcoError[] = "TibcoError";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
+static const char __pyx_k_Not_Connected[] = "Not Connected.";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
-static const char __pyx_k_Message_Type_s[] = "Message Type: %s";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
 static const char __pyx_k_TibcoError___str[] = "TibcoError.__str__";
 static const char __pyx_k_TibcoError___init[] = "TibcoError.__init__";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_tibemsMsg_emsSession[] = "tibemsMsg.emsSession";
+static const char __pyx_k_Listener_callback_error[] = "Listener callback error:";
 static const char __pyx_k_tibemsMsg_emsSession_pyx[] = "tibemsMsg\\emsSession.pyx";
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static PyObject *__pyx_kp_u_;
+static PyObject *__pyx_n_u_BYTES;
 static PyObject *__pyx_n_s_EmsSession;
-static PyObject *__pyx_kp_u_Message_Type_s;
+static PyObject *__pyx_kp_u_Listener_callback_error;
+static PyObject *__pyx_n_u_MAP;
+static PyObject *__pyx_kp_u_Not_Connected;
+static PyObject *__pyx_n_u_OBJECT;
+static PyObject *__pyx_n_u_STREAM;
+static PyObject *__pyx_n_u_TEXT;
 static PyObject *__pyx_n_s_TibcoError;
 static PyObject *__pyx_n_s_TibcoError___init;
 static PyObject *__pyx_n_s_TibcoError___str;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_kp_u__4;
 static PyObject *__pyx_n_s_cline_in_traceback;
-static PyObject *__pyx_n_s_create;
 static PyObject *__pyx_n_s_data;
 static PyObject *__pyx_n_s_debug;
+static PyObject *__pyx_n_s_dest;
 static PyObject *__pyx_n_s_doc;
+static PyObject *__pyx_n_s_encode;
+static PyObject *__pyx_n_s_format;
+static PyObject *__pyx_n_s_func;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_init;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_metaclass;
 static PyObject *__pyx_n_s_module;
 static PyObject *__pyx_n_s_msg;
+static PyObject *__pyx_n_s_msgType;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_name_2;
 static PyObject *__pyx_kp_s_no_default___reduce___due_to_non;
 static PyObject *__pyx_n_s_password;
 static PyObject *__pyx_n_s_prepare;
+static PyObject *__pyx_n_s_print;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_qualname;
+static PyObject *__pyx_kp_u_receive;
 static PyObject *__pyx_n_s_reduce;
 static PyObject *__pyx_n_s_reduce_cython;
 static PyObject *__pyx_n_s_reduce_ex;
+static PyObject *__pyx_n_s_selector;
 static PyObject *__pyx_n_s_self;
 static PyObject *__pyx_n_s_serverUrl;
 static PyObject *__pyx_n_s_setstate;
@@ -1429,17 +1529,26 @@ static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_tibemsMsg_emsSession;
 static PyObject *__pyx_kp_s_tibemsMsg_emsSession_pyx;
 static PyObject *__pyx_n_s_timeout;
+static PyObject *__pyx_n_s_topic;
+static PyObject *__pyx_n_s_upper;
 static PyObject *__pyx_n_s_useTopic;
 static PyObject *__pyx_n_s_userName;
 static int __pyx_pf_9tibemsMsg_10emsSession_10EmsSession___cinit__(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_serverUrl, PyObject *__pyx_v_userName, PyObject *__pyx_v_password, int __pyx_v_debug); /* proto */
 static void __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_2__dealloc__(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_4create(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_serverUrl, PyObject *__pyx_v_userName, PyObject *__pyx_v_password); /* proto */
 static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_6close(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_8producer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_name, PyObject *__pyx_v_data, int __pyx_v_useTopic); /* proto */
-static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_10consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_name, int __pyx_v_useTopic, int __pyx_v_timeout); /* proto */
-static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_12requester(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_name, PyObject *__pyx_v_data, int __pyx_v_useTopic); /* proto */
-static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_14__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_16__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_8producer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_dest, PyObject *__pyx_v_data, int __pyx_v_useTopic, PyObject *__pyx_v_msgType, PyObject *__pyx_v_name); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_10consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_dest, int __pyx_v_useTopic, int __pyx_v_timeout); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_12requester(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_dest, PyObject *__pyx_v_data, int __pyx_v_useTopic); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_14listener(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_dest, PyObject *__pyx_v_func, int __pyx_v_useTopic); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_16subscriber(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_topic, PyObject *__pyx_v_name, PyObject *__pyx_v_selector, int __pyx_v_timeout); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_18shared_consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_topic, PyObject *__pyx_v_name, PyObject *__pyx_v_selector, int __pyx_v_timeout); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_20shared_subscriber(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_topic, PyObject *__pyx_v_name, PyObject *__pyx_v_selector, int __pyx_v_timeout); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_22unsubscribe(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_name); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_9connected___get__(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self); /* proto */
+static int __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_9connected_2__set__(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_24__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_26__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10TibcoError___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_status, PyObject *__pyx_v_msg, PyObject *__pyx_v_tb); /* proto */
 static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10TibcoError_2__str__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self); /* proto */
 static PyObject *__pyx_tp_new_9tibemsMsg_10emsSession_EmsSession(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -1452,8 +1561,310 @@ static PyObject *__pyx_codeobj__6;
 static PyObject *__pyx_codeobj__9;
 /* Late includes */
 
-/* "tibemsMsg/emsSession.pyx":19
- *         int debug
+/* "tibemsMsg/emsSession.pyx":12
+ * 
+ * 
+ * cdef void callback(ctibco.tibemsMsgConsumer msgConsumer, ctibco.tibemsMsg msg, void* closure):             # <<<<<<<<<<<<<<
+ *     cdef:
+ *         const char* txt
+ */
+
+static void __pyx_f_9tibemsMsg_10emsSession_callback(CYTHON_UNUSED tibemsMsgConsumer __pyx_v_msgConsumer, tibemsMsg __pyx_v_msg, void *__pyx_v_closure) {
+  char const *__pyx_v_txt;
+  PyGILState_STATE __pyx_v_state;
+  PyObject *__pyx_v_func = 0;
+  PyObject *__pyx_v_e = 0;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  int __pyx_t_8;
+  PyObject *__pyx_t_9 = NULL;
+  PyObject *__pyx_t_10 = NULL;
+  int __pyx_t_11;
+  char const *__pyx_t_12;
+  PyObject *__pyx_t_13 = NULL;
+  PyObject *__pyx_t_14 = NULL;
+  PyObject *__pyx_t_15 = NULL;
+  PyObject *__pyx_t_16 = NULL;
+  PyObject *__pyx_t_17 = NULL;
+  PyObject *__pyx_t_18 = NULL;
+  __Pyx_RefNannySetupContext("callback", 0);
+
+  /* "tibemsMsg/emsSession.pyx":16
+ *         const char* txt
+ *         PyGILState_STATE state
+ *     ctibco.tibemsTextMsg_GetText(msg, &txt)             # <<<<<<<<<<<<<<
+ *     state = PyGILState_Ensure()
+ *     func = <object>closure
+ */
+  (void)(tibemsTextMsg_GetText(__pyx_v_msg, (&__pyx_v_txt)));
+
+  /* "tibemsMsg/emsSession.pyx":17
+ *         PyGILState_STATE state
+ *     ctibco.tibemsTextMsg_GetText(msg, &txt)
+ *     state = PyGILState_Ensure()             # <<<<<<<<<<<<<<
+ *     func = <object>closure
+ *     try:
+ */
+  __pyx_v_state = PyGILState_Ensure();
+
+  /* "tibemsMsg/emsSession.pyx":18
+ *     ctibco.tibemsTextMsg_GetText(msg, &txt)
+ *     state = PyGILState_Ensure()
+ *     func = <object>closure             # <<<<<<<<<<<<<<
+ *     try:
+ *         func(txt.decode())
+ */
+  __pyx_t_1 = ((PyObject *)__pyx_v_closure);
+  __Pyx_INCREF(__pyx_t_1);
+  __pyx_v_func = __pyx_t_1;
+  __pyx_t_1 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":19
+ *     state = PyGILState_Ensure()
+ *     func = <object>closure
+ *     try:             # <<<<<<<<<<<<<<
+ *         func(txt.decode())
+ *     except Exception as e:
+ */
+  {
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ExceptionSave(&__pyx_t_2, &__pyx_t_3, &__pyx_t_4);
+    __Pyx_XGOTREF(__pyx_t_2);
+    __Pyx_XGOTREF(__pyx_t_3);
+    __Pyx_XGOTREF(__pyx_t_4);
+    /*try:*/ {
+
+      /* "tibemsMsg/emsSession.pyx":20
+ *     func = <object>closure
+ *     try:
+ *         func(txt.decode())             # <<<<<<<<<<<<<<
+ *     except Exception as e:
+ *         print('Listener callback error:', e, 'receive:', txt.encode())
+ */
+      __pyx_t_5 = __Pyx_decode_c_string(__pyx_v_txt, 0, strlen(__pyx_v_txt), NULL, NULL, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 20, __pyx_L3_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __Pyx_INCREF(__pyx_v_func);
+      __pyx_t_6 = __pyx_v_func; __pyx_t_7 = NULL;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
+        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_6);
+        if (likely(__pyx_t_7)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+          __Pyx_INCREF(__pyx_t_7);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_6, function);
+        }
+      }
+      __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_7, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_5);
+      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L3_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "tibemsMsg/emsSession.pyx":19
+ *     state = PyGILState_Ensure()
+ *     func = <object>closure
+ *     try:             # <<<<<<<<<<<<<<
+ *         func(txt.decode())
+ *     except Exception as e:
+ */
+    }
+    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    goto __pyx_L8_try_end;
+    __pyx_L3_error:;
+    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+    /* "tibemsMsg/emsSession.pyx":21
+ *     try:
+ *         func(txt.decode())
+ *     except Exception as e:             # <<<<<<<<<<<<<<
+ *         print('Listener callback error:', e, 'receive:', txt.encode())
+ *     PyGILState_Release(state)
+ */
+    __pyx_t_8 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
+    if (__pyx_t_8) {
+      __Pyx_AddTraceback("tibemsMsg.emsSession.callback", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      if (__Pyx_GetException(&__pyx_t_1, &__pyx_t_6, &__pyx_t_5) < 0) __PYX_ERR(0, 21, __pyx_L5_except_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_GOTREF(__pyx_t_5);
+      __Pyx_INCREF(__pyx_t_6);
+      __pyx_v_e = __pyx_t_6;
+      /*try:*/ {
+
+        /* "tibemsMsg/emsSession.pyx":22
+ *         func(txt.decode())
+ *     except Exception as e:
+ *         print('Listener callback error:', e, 'receive:', txt.encode())             # <<<<<<<<<<<<<<
+ *     PyGILState_Release(state)
+ * 
+ */
+        __pyx_t_9 = __Pyx_PyBytes_FromString(__pyx_v_txt); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 22, __pyx_L14_error)
+        __Pyx_GOTREF(__pyx_t_9);
+        __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_encode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 22, __pyx_L14_error)
+        __Pyx_GOTREF(__pyx_t_10);
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __pyx_t_9 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_10))) {
+          __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_10);
+          if (likely(__pyx_t_9)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_10);
+            __Pyx_INCREF(__pyx_t_9);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_10, function);
+          }
+        }
+        __pyx_t_7 = (__pyx_t_9) ? __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_t_9) : __Pyx_PyObject_CallNoArg(__pyx_t_10);
+        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 22, __pyx_L14_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+        __pyx_t_10 = PyTuple_New(4); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 22, __pyx_L14_error)
+        __Pyx_GOTREF(__pyx_t_10);
+        __Pyx_INCREF(__pyx_kp_u_Listener_callback_error);
+        __Pyx_GIVEREF(__pyx_kp_u_Listener_callback_error);
+        PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_kp_u_Listener_callback_error);
+        __Pyx_INCREF(__pyx_v_e);
+        __Pyx_GIVEREF(__pyx_v_e);
+        PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_v_e);
+        __Pyx_INCREF(__pyx_kp_u_receive);
+        __Pyx_GIVEREF(__pyx_kp_u_receive);
+        PyTuple_SET_ITEM(__pyx_t_10, 2, __pyx_kp_u_receive);
+        __Pyx_GIVEREF(__pyx_t_7);
+        PyTuple_SET_ITEM(__pyx_t_10, 3, __pyx_t_7);
+        __pyx_t_7 = 0;
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_t_10, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 22, __pyx_L14_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      }
+
+      /* "tibemsMsg/emsSession.pyx":21
+ *     try:
+ *         func(txt.decode())
+ *     except Exception as e:             # <<<<<<<<<<<<<<
+ *         print('Listener callback error:', e, 'receive:', txt.encode())
+ *     PyGILState_Release(state)
+ */
+      /*finally:*/ {
+        /*normal exit:*/{
+          __Pyx_DECREF(__pyx_v_e);
+          __pyx_v_e = NULL;
+          goto __pyx_L15;
+        }
+        __pyx_L14_error:;
+        /*exception exit:*/{
+          __Pyx_PyThreadState_declare
+          __Pyx_PyThreadState_assign
+          __pyx_t_13 = 0; __pyx_t_14 = 0; __pyx_t_15 = 0; __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0;
+          __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+          __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
+          if (PY_MAJOR_VERSION >= 3) __Pyx_ExceptionSwap(&__pyx_t_16, &__pyx_t_17, &__pyx_t_18);
+          if ((PY_MAJOR_VERSION < 3) || unlikely(__Pyx_GetException(&__pyx_t_13, &__pyx_t_14, &__pyx_t_15) < 0)) __Pyx_ErrFetch(&__pyx_t_13, &__pyx_t_14, &__pyx_t_15);
+          __Pyx_XGOTREF(__pyx_t_13);
+          __Pyx_XGOTREF(__pyx_t_14);
+          __Pyx_XGOTREF(__pyx_t_15);
+          __Pyx_XGOTREF(__pyx_t_16);
+          __Pyx_XGOTREF(__pyx_t_17);
+          __Pyx_XGOTREF(__pyx_t_18);
+          __pyx_t_8 = __pyx_lineno; __pyx_t_11 = __pyx_clineno; __pyx_t_12 = __pyx_filename;
+          {
+            __Pyx_DECREF(__pyx_v_e);
+            __pyx_v_e = NULL;
+          }
+          if (PY_MAJOR_VERSION >= 3) {
+            __Pyx_XGIVEREF(__pyx_t_16);
+            __Pyx_XGIVEREF(__pyx_t_17);
+            __Pyx_XGIVEREF(__pyx_t_18);
+            __Pyx_ExceptionReset(__pyx_t_16, __pyx_t_17, __pyx_t_18);
+          }
+          __Pyx_XGIVEREF(__pyx_t_13);
+          __Pyx_XGIVEREF(__pyx_t_14);
+          __Pyx_XGIVEREF(__pyx_t_15);
+          __Pyx_ErrRestore(__pyx_t_13, __pyx_t_14, __pyx_t_15);
+          __pyx_t_13 = 0; __pyx_t_14 = 0; __pyx_t_15 = 0; __pyx_t_16 = 0; __pyx_t_17 = 0; __pyx_t_18 = 0;
+          __pyx_lineno = __pyx_t_8; __pyx_clineno = __pyx_t_11; __pyx_filename = __pyx_t_12;
+          goto __pyx_L5_except_error;
+        }
+        __pyx_L15:;
+      }
+      __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+      goto __pyx_L4_exception_handled;
+    }
+    goto __pyx_L5_except_error;
+    __pyx_L5_except_error:;
+
+    /* "tibemsMsg/emsSession.pyx":19
+ *     state = PyGILState_Ensure()
+ *     func = <object>closure
+ *     try:             # <<<<<<<<<<<<<<
+ *         func(txt.decode())
+ *     except Exception as e:
+ */
+    __Pyx_XGIVEREF(__pyx_t_2);
+    __Pyx_XGIVEREF(__pyx_t_3);
+    __Pyx_XGIVEREF(__pyx_t_4);
+    __Pyx_ExceptionReset(__pyx_t_2, __pyx_t_3, __pyx_t_4);
+    goto __pyx_L1_error;
+    __pyx_L4_exception_handled:;
+    __Pyx_XGIVEREF(__pyx_t_2);
+    __Pyx_XGIVEREF(__pyx_t_3);
+    __Pyx_XGIVEREF(__pyx_t_4);
+    __Pyx_ExceptionReset(__pyx_t_2, __pyx_t_3, __pyx_t_4);
+    __pyx_L8_try_end:;
+  }
+
+  /* "tibemsMsg/emsSession.pyx":23
+ *     except Exception as e:
+ *         print('Listener callback error:', e, 'receive:', txt.encode())
+ *     PyGILState_Release(state)             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  PyGILState_Release(__pyx_v_state);
+
+  /* "tibemsMsg/emsSession.pyx":12
+ * 
+ * 
+ * cdef void callback(ctibco.tibemsMsgConsumer msgConsumer, ctibco.tibemsMsg msg, void* closure):             # <<<<<<<<<<<<<<
+ *     cdef:
+ *         const char* txt
+ */
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_10);
+  __Pyx_WriteUnraisable("tibemsMsg.emsSession.callback", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_func);
+  __Pyx_XDECREF(__pyx_v_e);
+  __Pyx_RefNannyFinishContext();
+}
+
+/* "tibemsMsg/emsSession.pyx":43
+ *             int connected
  * 
  *     def __cinit__(self, str serverUrl='', str userName='', str password='', int debug=0):             # <<<<<<<<<<<<<<
  *         self.debug = debug
@@ -1518,7 +1929,7 @@ static int __pyx_pw_9tibemsMsg_10emsSession_10EmsSession_1__cinit__(PyObject *__
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(1, 19, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 43, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -1538,22 +1949,22 @@ static int __pyx_pw_9tibemsMsg_10emsSession_10EmsSession_1__cinit__(PyObject *__
     __pyx_v_userName = ((PyObject*)values[1]);
     __pyx_v_password = ((PyObject*)values[2]);
     if (values[3]) {
-      __pyx_v_debug = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_debug == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 19, __pyx_L3_error)
+      __pyx_v_debug = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_debug == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 43, __pyx_L3_error)
     } else {
       __pyx_v_debug = ((int)0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 19, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 43, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_serverUrl), (&PyUnicode_Type), 1, "serverUrl", 1))) __PYX_ERR(1, 19, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_userName), (&PyUnicode_Type), 1, "userName", 1))) __PYX_ERR(1, 19, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_password), (&PyUnicode_Type), 1, "password", 1))) __PYX_ERR(1, 19, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_serverUrl), (&PyUnicode_Type), 1, "serverUrl", 1))) __PYX_ERR(0, 43, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_userName), (&PyUnicode_Type), 1, "userName", 1))) __PYX_ERR(0, 43, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_password), (&PyUnicode_Type), 1, "password", 1))) __PYX_ERR(0, 43, __pyx_L1_error)
   __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession___cinit__(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_serverUrl, __pyx_v_userName, __pyx_v_password, __pyx_v_debug);
 
   /* function exit code */
@@ -1568,15 +1979,18 @@ static int __pyx_pw_9tibemsMsg_10emsSession_10EmsSession_1__cinit__(PyObject *__
 static int __pyx_pf_9tibemsMsg_10emsSession_10EmsSession___cinit__(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_serverUrl, PyObject *__pyx_v_userName, PyObject *__pyx_v_password, int __pyx_v_debug) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
-  int __pyx_t_1;
+  PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  int __pyx_t_5;
-  PyObject *__pyx_t_6 = NULL;
+  int __pyx_t_3;
+  int __pyx_t_4;
+  char *__pyx_t_5;
+  char *__pyx_t_6;
+  PyObject *__pyx_t_7 = NULL;
+  char *__pyx_t_8;
+  int __pyx_t_9;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "tibemsMsg/emsSession.pyx":20
+  /* "tibemsMsg/emsSession.pyx":44
  * 
  *     def __cinit__(self, str serverUrl='', str userName='', str password='', int debug=0):
  *         self.debug = debug             # <<<<<<<<<<<<<<
@@ -1585,7 +1999,7 @@ static int __pyx_pf_9tibemsMsg_10emsSession_10EmsSession___cinit__(struct __pyx_
  */
   __pyx_v_self->debug = __pyx_v_debug;
 
-  /* "tibemsMsg/emsSession.pyx":21
+  /* "tibemsMsg/emsSession.pyx":45
  *     def __cinit__(self, str serverUrl='', str userName='', str password='', int debug=0):
  *         self.debug = debug
  *         self.errorContext = NULL             # <<<<<<<<<<<<<<
@@ -1594,7 +2008,7 @@ static int __pyx_pf_9tibemsMsg_10emsSession_10EmsSession___cinit__(struct __pyx_
  */
   __pyx_v_self->errorContext = NULL;
 
-  /* "tibemsMsg/emsSession.pyx":22
+  /* "tibemsMsg/emsSession.pyx":46
  *         self.debug = debug
  *         self.errorContext = NULL
  *         self.factory = NULL             # <<<<<<<<<<<<<<
@@ -1603,122 +2017,163 @@ static int __pyx_pf_9tibemsMsg_10emsSession_10EmsSession___cinit__(struct __pyx_
  */
   __pyx_v_self->factory = NULL;
 
-  /* "tibemsMsg/emsSession.pyx":23
+  /* "tibemsMsg/emsSession.pyx":47
  *         self.errorContext = NULL
  *         self.factory = NULL
  *         self.connection = NULL             # <<<<<<<<<<<<<<
  *         self.session = NULL
- *         self.destination = NULL
+ *         self.status = ctibco.TIBEMS_OK
  */
   __pyx_v_self->connection = NULL;
 
-  /* "tibemsMsg/emsSession.pyx":24
+  /* "tibemsMsg/emsSession.pyx":48
  *         self.factory = NULL
  *         self.connection = NULL
  *         self.session = NULL             # <<<<<<<<<<<<<<
- *         self.destination = NULL
  *         self.status = ctibco.TIBEMS_OK
+ *         self.msgTypeMap = {
  */
   __pyx_v_self->session = NULL;
 
-  /* "tibemsMsg/emsSession.pyx":25
+  /* "tibemsMsg/emsSession.pyx":49
  *         self.connection = NULL
  *         self.session = NULL
- *         self.destination = NULL             # <<<<<<<<<<<<<<
- *         self.status = ctibco.TIBEMS_OK
- *         if serverUrl:
- */
-  __pyx_v_self->destination = NULL;
-
-  /* "tibemsMsg/emsSession.pyx":26
- *         self.session = NULL
- *         self.destination = NULL
  *         self.status = ctibco.TIBEMS_OK             # <<<<<<<<<<<<<<
- *         if serverUrl:
- *             self.create(serverUrl, userName, password)
+ *         self.msgTypeMap = {
+ *             'BYTES': ctibco.TIBEMS_BYTES_MESSAGE,
  */
   __pyx_v_self->status = TIBEMS_OK;
 
-  /* "tibemsMsg/emsSession.pyx":27
- *         self.destination = NULL
+  /* "tibemsMsg/emsSession.pyx":51
  *         self.status = ctibco.TIBEMS_OK
- *         if serverUrl:             # <<<<<<<<<<<<<<
- *             self.create(serverUrl, userName, password)
+ *         self.msgTypeMap = {
+ *             'BYTES': ctibco.TIBEMS_BYTES_MESSAGE,             # <<<<<<<<<<<<<<
+ *             'MAP': ctibco.TIBEMS_MAP_MESSAGE,
+ *             'OBJECT': ctibco.TIBEMS_OBJECT_MESSAGE,
+ */
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_From_tibemsMsgType(TIBEMS_BYTES_MESSAGE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_BYTES, __pyx_t_2) < 0) __PYX_ERR(0, 51, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":52
+ *         self.msgTypeMap = {
+ *             'BYTES': ctibco.TIBEMS_BYTES_MESSAGE,
+ *             'MAP': ctibco.TIBEMS_MAP_MESSAGE,             # <<<<<<<<<<<<<<
+ *             'OBJECT': ctibco.TIBEMS_OBJECT_MESSAGE,
+ *             'STREAM': ctibco.TIBEMS_STREAM_MESSAGE,
+ */
+  __pyx_t_2 = __Pyx_PyInt_From_tibemsMsgType(TIBEMS_MAP_MESSAGE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_MAP, __pyx_t_2) < 0) __PYX_ERR(0, 51, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":53
+ *             'BYTES': ctibco.TIBEMS_BYTES_MESSAGE,
+ *             'MAP': ctibco.TIBEMS_MAP_MESSAGE,
+ *             'OBJECT': ctibco.TIBEMS_OBJECT_MESSAGE,             # <<<<<<<<<<<<<<
+ *             'STREAM': ctibco.TIBEMS_STREAM_MESSAGE,
+ *             'TEXT': ctibco.TIBEMS_TEXT_MESSAGE,
+ */
+  __pyx_t_2 = __Pyx_PyInt_From_tibemsMsgType(TIBEMS_OBJECT_MESSAGE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_OBJECT, __pyx_t_2) < 0) __PYX_ERR(0, 51, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":54
+ *             'MAP': ctibco.TIBEMS_MAP_MESSAGE,
+ *             'OBJECT': ctibco.TIBEMS_OBJECT_MESSAGE,
+ *             'STREAM': ctibco.TIBEMS_STREAM_MESSAGE,             # <<<<<<<<<<<<<<
+ *             'TEXT': ctibco.TIBEMS_TEXT_MESSAGE,
+ *         }
+ */
+  __pyx_t_2 = __Pyx_PyInt_From_tibemsMsgType(TIBEMS_STREAM_MESSAGE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_STREAM, __pyx_t_2) < 0) __PYX_ERR(0, 51, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":55
+ *             'OBJECT': ctibco.TIBEMS_OBJECT_MESSAGE,
+ *             'STREAM': ctibco.TIBEMS_STREAM_MESSAGE,
+ *             'TEXT': ctibco.TIBEMS_TEXT_MESSAGE,             # <<<<<<<<<<<<<<
+ *         }
+ *         if serverUrl != '':
+ */
+  __pyx_t_2 = __Pyx_PyInt_From_tibemsMsgType(TIBEMS_TEXT_MESSAGE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_u_TEXT, __pyx_t_2) < 0) __PYX_ERR(0, 51, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":50
+ *         self.session = NULL
+ *         self.status = ctibco.TIBEMS_OK
+ *         self.msgTypeMap = {             # <<<<<<<<<<<<<<
+ *             'BYTES': ctibco.TIBEMS_BYTES_MESSAGE,
+ *             'MAP': ctibco.TIBEMS_MAP_MESSAGE,
+ */
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->msgTypeMap);
+  __Pyx_DECREF(__pyx_v_self->msgTypeMap);
+  __pyx_v_self->msgTypeMap = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":57
+ *             'TEXT': ctibco.TIBEMS_TEXT_MESSAGE,
+ *         }
+ *         if serverUrl != '':             # <<<<<<<<<<<<<<
+ *             self._create(serverUrl.encode(), userName.encode(), password.encode())
  * 
  */
-  __pyx_t_1 = (__pyx_v_serverUrl != Py_None)&&(__Pyx_PyUnicode_IS_TRUE(__pyx_v_serverUrl) != 0);
-  if (__pyx_t_1) {
+  __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_v_serverUrl, __pyx_kp_u_, Py_NE)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 57, __pyx_L1_error)
+  __pyx_t_4 = (__pyx_t_3 != 0);
+  if (__pyx_t_4) {
 
-    /* "tibemsMsg/emsSession.pyx":28
- *         self.status = ctibco.TIBEMS_OK
- *         if serverUrl:
- *             self.create(serverUrl, userName, password)             # <<<<<<<<<<<<<<
+    /* "tibemsMsg/emsSession.pyx":58
+ *         }
+ *         if serverUrl != '':
+ *             self._create(serverUrl.encode(), userName.encode(), password.encode())             # <<<<<<<<<<<<<<
  * 
  *     def __dealloc__(self):
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_create); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 28, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = NULL;
-    __pyx_t_5 = 0;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-      if (likely(__pyx_t_4)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-        __Pyx_INCREF(__pyx_t_4);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_3, function);
-        __pyx_t_5 = 1;
-      }
+    if (unlikely(__pyx_v_serverUrl == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+      __PYX_ERR(0, 58, __pyx_L1_error)
     }
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(__pyx_t_3)) {
-      PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_v_serverUrl, __pyx_v_userName, __pyx_v_password};
-      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 28, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_GOTREF(__pyx_t_2);
-    } else
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-      PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_v_serverUrl, __pyx_v_userName, __pyx_v_password};
-      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 28, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_GOTREF(__pyx_t_2);
-    } else
-    #endif
-    {
-      __pyx_t_6 = PyTuple_New(3+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 28, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      if (__pyx_t_4) {
-        __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
-      }
-      __Pyx_INCREF(__pyx_v_serverUrl);
-      __Pyx_GIVEREF(__pyx_v_serverUrl);
-      PyTuple_SET_ITEM(__pyx_t_6, 0+__pyx_t_5, __pyx_v_serverUrl);
-      __Pyx_INCREF(__pyx_v_userName);
-      __Pyx_GIVEREF(__pyx_v_userName);
-      PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, __pyx_v_userName);
-      __Pyx_INCREF(__pyx_v_password);
-      __Pyx_GIVEREF(__pyx_v_password);
-      PyTuple_SET_ITEM(__pyx_t_6, 2+__pyx_t_5, __pyx_v_password);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 28, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_1 = PyUnicode_AsEncodedString(__pyx_v_serverUrl, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 58, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_5 = __Pyx_PyBytes_AsWritableString(__pyx_t_1); if (unlikely((!__pyx_t_5) && PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L1_error)
+    if (unlikely(__pyx_v_userName == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+      __PYX_ERR(0, 58, __pyx_L1_error)
     }
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_2 = PyUnicode_AsEncodedString(__pyx_v_userName, NULL, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 58, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_6 = __Pyx_PyBytes_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L1_error)
+    if (unlikely(__pyx_v_password == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+      __PYX_ERR(0, 58, __pyx_L1_error)
+    }
+    __pyx_t_7 = PyUnicode_AsEncodedString(__pyx_v_password, NULL, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 58, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_8 = __Pyx_PyBytes_AsWritableString(__pyx_t_7); if (unlikely((!__pyx_t_8) && PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L1_error)
+    __pyx_t_9 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create(__pyx_v_self, __pyx_t_5, __pyx_t_6, __pyx_t_8); if (unlikely(__pyx_t_9 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "tibemsMsg/emsSession.pyx":27
- *         self.destination = NULL
- *         self.status = ctibco.TIBEMS_OK
- *         if serverUrl:             # <<<<<<<<<<<<<<
- *             self.create(serverUrl, userName, password)
+    /* "tibemsMsg/emsSession.pyx":57
+ *             'TEXT': ctibco.TIBEMS_TEXT_MESSAGE,
+ *         }
+ *         if serverUrl != '':             # <<<<<<<<<<<<<<
+ *             self._create(serverUrl.encode(), userName.encode(), password.encode())
  * 
  */
   }
 
-  /* "tibemsMsg/emsSession.pyx":19
- *         int debug
+  /* "tibemsMsg/emsSession.pyx":43
+ *             int connected
  * 
  *     def __cinit__(self, str serverUrl='', str userName='', str password='', int debug=0):             # <<<<<<<<<<<<<<
  *         self.debug = debug
@@ -1729,10 +2184,9 @@ static int __pyx_pf_9tibemsMsg_10emsSession_10EmsSession___cinit__(struct __pyx_
   __pyx_r = 0;
   goto __pyx_L0;
   __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_7);
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
@@ -1740,8 +2194,8 @@ static int __pyx_pf_9tibemsMsg_10emsSession_10EmsSession___cinit__(struct __pyx_
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":30
- *             self.create(serverUrl, userName, password)
+/* "tibemsMsg/emsSession.pyx":60
+ *             self._create(serverUrl.encode(), userName.encode(), password.encode())
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
  *         self._close()
@@ -1764,17 +2218,17 @@ static void __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_2__dealloc__(struct __
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "tibemsMsg/emsSession.pyx":31
+  /* "tibemsMsg/emsSession.pyx":61
  * 
  *     def __dealloc__(self):
  *         self._close()             # <<<<<<<<<<<<<<
  * 
  *     def create(self, str serverUrl, str userName, str password):
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_close(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 31, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_close(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 61, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":30
- *             self.create(serverUrl, userName, password)
+  /* "tibemsMsg/emsSession.pyx":60
+ *             self._create(serverUrl.encode(), userName.encode(), password.encode())
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
  *         self._close()
@@ -1789,7 +2243,7 @@ static void __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_2__dealloc__(struct __
   __Pyx_RefNannyFinishContext();
 }
 
-/* "tibemsMsg/emsSession.pyx":33
+/* "tibemsMsg/emsSession.pyx":63
  *         self._close()
  * 
  *     def create(self, str serverUrl, str userName, str password):             # <<<<<<<<<<<<<<
@@ -1831,17 +2285,17 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_5create(PyObject 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_userName)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("create", 1, 3, 3, 1); __PYX_ERR(1, 33, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("create", 1, 3, 3, 1); __PYX_ERR(0, 63, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_password)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("create", 1, 3, 3, 2); __PYX_ERR(1, 33, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("create", 1, 3, 3, 2); __PYX_ERR(0, 63, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "create") < 0)) __PYX_ERR(1, 33, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "create") < 0)) __PYX_ERR(0, 63, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -1856,15 +2310,15 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_5create(PyObject 
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("create", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 33, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("create", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 63, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.create", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_serverUrl), (&PyUnicode_Type), 1, "serverUrl", 1))) __PYX_ERR(1, 33, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_userName), (&PyUnicode_Type), 1, "userName", 1))) __PYX_ERR(1, 33, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_password), (&PyUnicode_Type), 1, "password", 1))) __PYX_ERR(1, 33, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_serverUrl), (&PyUnicode_Type), 1, "serverUrl", 1))) __PYX_ERR(0, 63, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_userName), (&PyUnicode_Type), 1, "userName", 1))) __PYX_ERR(0, 63, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_password), (&PyUnicode_Type), 1, "password", 1))) __PYX_ERR(0, 63, __pyx_L1_error)
   __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_4create(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_serverUrl, __pyx_v_userName, __pyx_v_password);
 
   /* function exit code */
@@ -1888,7 +2342,7 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_4create(struct __
   int __pyx_t_7;
   __Pyx_RefNannySetupContext("create", 0);
 
-  /* "tibemsMsg/emsSession.pyx":34
+  /* "tibemsMsg/emsSession.pyx":64
  * 
  *     def create(self, str serverUrl, str userName, str password):
  *         self._create(serverUrl.encode(), userName.encode(), password.encode())             # <<<<<<<<<<<<<<
@@ -1897,31 +2351,31 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_4create(struct __
  */
   if (unlikely(__pyx_v_serverUrl == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
-    __PYX_ERR(1, 34, __pyx_L1_error)
+    __PYX_ERR(0, 64, __pyx_L1_error)
   }
-  __pyx_t_1 = PyUnicode_AsEncodedString(__pyx_v_serverUrl, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 34, __pyx_L1_error)
+  __pyx_t_1 = PyUnicode_AsEncodedString(__pyx_v_serverUrl, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyBytes_AsWritableString(__pyx_t_1); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(1, 34, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyBytes_AsWritableString(__pyx_t_1); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L1_error)
   if (unlikely(__pyx_v_userName == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
-    __PYX_ERR(1, 34, __pyx_L1_error)
+    __PYX_ERR(0, 64, __pyx_L1_error)
   }
-  __pyx_t_3 = PyUnicode_AsEncodedString(__pyx_v_userName, NULL, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 34, __pyx_L1_error)
+  __pyx_t_3 = PyUnicode_AsEncodedString(__pyx_v_userName, NULL, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyBytes_AsWritableString(__pyx_t_3); if (unlikely((!__pyx_t_4) && PyErr_Occurred())) __PYX_ERR(1, 34, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyBytes_AsWritableString(__pyx_t_3); if (unlikely((!__pyx_t_4) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L1_error)
   if (unlikely(__pyx_v_password == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
-    __PYX_ERR(1, 34, __pyx_L1_error)
+    __PYX_ERR(0, 64, __pyx_L1_error)
   }
-  __pyx_t_5 = PyUnicode_AsEncodedString(__pyx_v_password, NULL, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 34, __pyx_L1_error)
+  __pyx_t_5 = PyUnicode_AsEncodedString(__pyx_v_password, NULL, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyBytes_AsWritableString(__pyx_t_5); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(1, 34, __pyx_L1_error)
-  __pyx_t_7 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create(__pyx_v_self, __pyx_t_2, __pyx_t_4, __pyx_t_6); if (unlikely(__pyx_t_7 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 34, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyBytes_AsWritableString(__pyx_t_5); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L1_error)
+  __pyx_t_7 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create(__pyx_v_self, __pyx_t_2, __pyx_t_4, __pyx_t_6); if (unlikely(__pyx_t_7 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "tibemsMsg/emsSession.pyx":33
+  /* "tibemsMsg/emsSession.pyx":63
  *         self._close()
  * 
  *     def create(self, str serverUrl, str userName, str password):             # <<<<<<<<<<<<<<
@@ -1944,7 +2398,7 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_4create(struct __
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":36
+/* "tibemsMsg/emsSession.pyx":66
  *         self._create(serverUrl.encode(), userName.encode(), password.encode())
  * 
  *     def close(self):             # <<<<<<<<<<<<<<
@@ -1971,16 +2425,16 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_6close(struct __p
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("close", 0);
 
-  /* "tibemsMsg/emsSession.pyx":37
+  /* "tibemsMsg/emsSession.pyx":67
  * 
  *     def close(self):
  *         self._close()             # <<<<<<<<<<<<<<
  * 
- *     def producer(self, str name, str data, int useTopic=1):
+ *     def producer(self, str dest, str data, int useTopic=1, str msgType='TEXT', str name=''):
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_close(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 37, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_close(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":36
+  /* "tibemsMsg/emsSession.pyx":66
  *         self._create(serverUrl.encode(), userName.encode(), password.encode())
  * 
  *     def close(self):             # <<<<<<<<<<<<<<
@@ -2000,30 +2454,38 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_6close(struct __p
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":39
+/* "tibemsMsg/emsSession.pyx":69
  *         self._close()
  * 
- *     def producer(self, str name, str data, int useTopic=1):             # <<<<<<<<<<<<<<
- *         self._producer(name.encode(), useTopic, data.encode())
- * 
+ *     def producer(self, str dest, str data, int useTopic=1, str msgType='TEXT', str name=''):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._producer(dest.encode(), useTopic, data.encode(), self.msgTypeMap[msgType.upper()], name.encode())
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9producer(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9producer(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_name = 0;
+  PyObject *__pyx_v_dest = 0;
   PyObject *__pyx_v_data = 0;
   int __pyx_v_useTopic;
+  PyObject *__pyx_v_msgType = 0;
+  PyObject *__pyx_v_name = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("producer (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_name,&__pyx_n_s_data,&__pyx_n_s_useTopic,0};
-    PyObject* values[3] = {0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_dest,&__pyx_n_s_data,&__pyx_n_s_useTopic,&__pyx_n_s_msgType,&__pyx_n_s_name,0};
+    PyObject* values[5] = {0,0,0,0,0};
+    values[3] = ((PyObject*)__pyx_n_u_TEXT);
+    values[4] = ((PyObject*)__pyx_kp_u_);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         CYTHON_FALLTHROUGH;
         case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
@@ -2036,13 +2498,13 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9producer(PyObjec
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_name)) != 0)) kw_args--;
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dest)) != 0)) kw_args--;
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("producer", 0, 2, 3, 1); __PYX_ERR(1, 39, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("producer", 0, 2, 5, 1); __PYX_ERR(0, 69, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -2050,12 +2512,28 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9producer(PyObjec
           PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_useTopic);
           if (value) { values[2] = value; kw_args--; }
         }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_msgType);
+          if (value) { values[3] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  4:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_name);
+          if (value) { values[4] = value; kw_args--; }
+        }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "producer") < 0)) __PYX_ERR(1, 39, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "producer") < 0)) __PYX_ERR(0, 69, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
         case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         CYTHON_FALLTHROUGH;
         case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
@@ -2064,25 +2542,29 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9producer(PyObjec
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_name = ((PyObject*)values[0]);
+    __pyx_v_dest = ((PyObject*)values[0]);
     __pyx_v_data = ((PyObject*)values[1]);
     if (values[2]) {
-      __pyx_v_useTopic = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_useTopic == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 39, __pyx_L3_error)
+      __pyx_v_useTopic = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_useTopic == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 69, __pyx_L3_error)
     } else {
       __pyx_v_useTopic = ((int)1);
     }
+    __pyx_v_msgType = ((PyObject*)values[3]);
+    __pyx_v_name = ((PyObject*)values[4]);
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("producer", 0, 2, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 39, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("producer", 0, 2, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 69, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.producer", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(1, 39, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_data), (&PyUnicode_Type), 1, "data", 1))) __PYX_ERR(1, 39, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_8producer(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_name, __pyx_v_data, __pyx_v_useTopic);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_dest), (&PyUnicode_Type), 1, "dest", 1))) __PYX_ERR(0, 69, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_data), (&PyUnicode_Type), 1, "data", 1))) __PYX_ERR(0, 69, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_msgType), (&PyUnicode_Type), 1, "msgType", 1))) __PYX_ERR(0, 69, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(0, 69, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_8producer(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_dest, __pyx_v_data, __pyx_v_useTopic, __pyx_v_msgType, __pyx_v_name);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2093,55 +2575,106 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9producer(PyObjec
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_8producer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_name, PyObject *__pyx_v_data, int __pyx_v_useTopic) {
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_8producer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_dest, PyObject *__pyx_v_data, int __pyx_v_useTopic, PyObject *__pyx_v_msgType, PyObject *__pyx_v_name) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  char *__pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
-  char *__pyx_t_4;
-  int __pyx_t_5;
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  char *__pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  char *__pyx_t_5;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  tibemsMsgType __pyx_t_9;
+  char *__pyx_t_10;
   __Pyx_RefNannySetupContext("producer", 0);
 
-  /* "tibemsMsg/emsSession.pyx":40
+  /* "tibemsMsg/emsSession.pyx":70
  * 
- *     def producer(self, str name, str data, int useTopic=1):
- *         self._producer(name.encode(), useTopic, data.encode())             # <<<<<<<<<<<<<<
+ *     def producer(self, str dest, str data, int useTopic=1, str msgType='TEXT', str name=''):
+ *         self._check_conn()             # <<<<<<<<<<<<<<
+ *         self._producer(dest.encode(), useTopic, data.encode(), self.msgTypeMap[msgType.upper()], name.encode())
  * 
- *     def consumer(self, str name, int useTopic=1, int timeout=10):
  */
-  if (unlikely(__pyx_v_name == Py_None)) {
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_conn(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 70, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":71
+ *     def producer(self, str dest, str data, int useTopic=1, str msgType='TEXT', str name=''):
+ *         self._check_conn()
+ *         self._producer(dest.encode(), useTopic, data.encode(), self.msgTypeMap[msgType.upper()], name.encode())             # <<<<<<<<<<<<<<
+ * 
+ *     def consumer(self, str dest, int useTopic=1, int timeout=120):
+ */
+  if (unlikely(__pyx_v_dest == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
-    __PYX_ERR(1, 40, __pyx_L1_error)
+    __PYX_ERR(0, 71, __pyx_L1_error)
   }
-  __pyx_t_1 = PyUnicode_AsEncodedString(__pyx_v_name, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 40, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyBytes_AsWritableString(__pyx_t_1); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(1, 40, __pyx_L1_error)
+  __pyx_t_2 = PyUnicode_AsEncodedString(__pyx_v_dest, NULL, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyBytes_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_3) && PyErr_Occurred())) __PYX_ERR(0, 71, __pyx_L1_error)
   if (unlikely(__pyx_v_data == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
-    __PYX_ERR(1, 40, __pyx_L1_error)
+    __PYX_ERR(0, 71, __pyx_L1_error)
   }
-  __pyx_t_3 = PyUnicode_AsEncodedString(__pyx_v_data, NULL, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 40, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyBytes_AsWritableString(__pyx_t_3); if (unlikely((!__pyx_t_4) && PyErr_Occurred())) __PYX_ERR(1, 40, __pyx_L1_error)
-  __pyx_t_5 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_producer(__pyx_v_self, __pyx_t_2, __pyx_v_useTopic, __pyx_t_4); if (unlikely(__pyx_t_5 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 40, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_4 = PyUnicode_AsEncodedString(__pyx_v_data, NULL, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyBytes_AsWritableString(__pyx_t_4); if (unlikely((!__pyx_t_5) && PyErr_Occurred())) __PYX_ERR(0, 71, __pyx_L1_error)
+  if (unlikely(__pyx_v_self->msgTypeMap == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(0, 71, __pyx_L1_error)
+  }
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_msgType, __pyx_n_s_upper); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_8 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
+    if (likely(__pyx_t_8)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+      __Pyx_INCREF(__pyx_t_8);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_7, function);
+    }
+  }
+  __pyx_t_6 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+  if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = __Pyx_PyDict_GetItem(__pyx_v_self->msgTypeMap, __pyx_t_6); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_9 = ((tibemsMsgType)__Pyx_PyInt_As_tibemsMsgType(__pyx_t_7)); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  if (unlikely(__pyx_v_name == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 71, __pyx_L1_error)
+  }
+  __pyx_t_7 = PyUnicode_AsEncodedString(__pyx_v_name, NULL, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_10 = __Pyx_PyBytes_AsWritableString(__pyx_t_7); if (unlikely((!__pyx_t_10) && PyErr_Occurred())) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_producer(__pyx_v_self, __pyx_t_3, __pyx_v_useTopic, __pyx_t_5, __pyx_t_9, __pyx_t_10); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 71, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "tibemsMsg/emsSession.pyx":39
+  /* "tibemsMsg/emsSession.pyx":69
  *         self._close()
  * 
- *     def producer(self, str name, str data, int useTopic=1):             # <<<<<<<<<<<<<<
- *         self._producer(name.encode(), useTopic, data.encode())
- * 
+ *     def producer(self, str dest, str data, int useTopic=1, str msgType='TEXT', str name=''):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._producer(dest.encode(), useTopic, data.encode(), self.msgTypeMap[msgType.upper()], name.encode())
  */
 
   /* function exit code */
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_8);
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.producer", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -2150,25 +2683,25 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_8producer(struct 
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":42
- *         self._producer(name.encode(), useTopic, data.encode())
+/* "tibemsMsg/emsSession.pyx":73
+ *         self._producer(dest.encode(), useTopic, data.encode(), self.msgTypeMap[msgType.upper()], name.encode())
  * 
- *     def consumer(self, str name, int useTopic=1, int timeout=10):             # <<<<<<<<<<<<<<
- *         self._consumer(name.encode(), useTopic, timeout * 1000)
- *         return self.txt.decode()
+ *     def consumer(self, str dest, int useTopic=1, int timeout=120):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._consumer(dest.encode(), useTopic, timeout * 1000)
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_11consumer(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_11consumer(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_name = 0;
+  PyObject *__pyx_v_dest = 0;
   int __pyx_v_useTopic;
   int __pyx_v_timeout;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("consumer (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_name,&__pyx_n_s_useTopic,&__pyx_n_s_timeout,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_dest,&__pyx_n_s_useTopic,&__pyx_n_s_timeout,0};
     PyObject* values[3] = {0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -2186,7 +2719,7 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_11consumer(PyObje
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_name)) != 0)) kw_args--;
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dest)) != 0)) kw_args--;
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -2202,7 +2735,7 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_11consumer(PyObje
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "consumer") < 0)) __PYX_ERR(1, 42, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "consumer") < 0)) __PYX_ERR(0, 73, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -2215,28 +2748,28 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_11consumer(PyObje
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_name = ((PyObject*)values[0]);
+    __pyx_v_dest = ((PyObject*)values[0]);
     if (values[1]) {
-      __pyx_v_useTopic = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_useTopic == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 42, __pyx_L3_error)
+      __pyx_v_useTopic = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_useTopic == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 73, __pyx_L3_error)
     } else {
       __pyx_v_useTopic = ((int)1);
     }
     if (values[2]) {
-      __pyx_v_timeout = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_timeout == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 42, __pyx_L3_error)
+      __pyx_v_timeout = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_timeout == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 73, __pyx_L3_error)
     } else {
-      __pyx_v_timeout = ((int)10);
+      __pyx_v_timeout = ((int)0x78);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("consumer", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 42, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("consumer", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 73, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.consumer", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(1, 42, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_10consumer(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_name, __pyx_v_useTopic, __pyx_v_timeout);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_dest), (&PyUnicode_Type), 1, "dest", 1))) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_10consumer(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_dest, __pyx_v_useTopic, __pyx_v_timeout);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2247,59 +2780,63 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_11consumer(PyObje
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_10consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_name, int __pyx_v_useTopic, int __pyx_v_timeout) {
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_10consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_dest, int __pyx_v_useTopic, int __pyx_v_timeout) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  char *__pyx_t_2;
-  int __pyx_t_3;
-  char const *__pyx_t_4;
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  char *__pyx_t_3;
   __Pyx_RefNannySetupContext("consumer", 0);
 
-  /* "tibemsMsg/emsSession.pyx":43
+  /* "tibemsMsg/emsSession.pyx":74
  * 
- *     def consumer(self, str name, int useTopic=1, int timeout=10):
- *         self._consumer(name.encode(), useTopic, timeout * 1000)             # <<<<<<<<<<<<<<
- *         return self.txt.decode()
+ *     def consumer(self, str dest, int useTopic=1, int timeout=120):
+ *         self._check_conn()             # <<<<<<<<<<<<<<
+ *         self._consumer(dest.encode(), useTopic, timeout * 1000)
+ *         return self.msg
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_conn(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 74, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":75
+ *     def consumer(self, str dest, int useTopic=1, int timeout=120):
+ *         self._check_conn()
+ *         self._consumer(dest.encode(), useTopic, timeout * 1000)             # <<<<<<<<<<<<<<
+ *         return self.msg
  * 
  */
-  if (unlikely(__pyx_v_name == Py_None)) {
+  if (unlikely(__pyx_v_dest == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
-    __PYX_ERR(1, 43, __pyx_L1_error)
+    __PYX_ERR(0, 75, __pyx_L1_error)
   }
-  __pyx_t_1 = PyUnicode_AsEncodedString(__pyx_v_name, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 43, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyBytes_AsWritableString(__pyx_t_1); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(1, 43, __pyx_L1_error)
-  __pyx_t_3 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_consumer(__pyx_v_self, __pyx_t_2, __pyx_v_useTopic, (__pyx_v_timeout * 0x3E8)); if (unlikely(__pyx_t_3 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 43, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = PyUnicode_AsEncodedString(__pyx_v_dest, NULL, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 75, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyBytes_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_3) && PyErr_Occurred())) __PYX_ERR(0, 75, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_consumer(__pyx_v_self, __pyx_t_3, __pyx_v_useTopic, (__pyx_v_timeout * 0x3E8)); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 75, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "tibemsMsg/emsSession.pyx":44
- *     def consumer(self, str name, int useTopic=1, int timeout=10):
- *         self._consumer(name.encode(), useTopic, timeout * 1000)
- *         return self.txt.decode()             # <<<<<<<<<<<<<<
+  /* "tibemsMsg/emsSession.pyx":76
+ *         self._check_conn()
+ *         self._consumer(dest.encode(), useTopic, timeout * 1000)
+ *         return self.msg             # <<<<<<<<<<<<<<
  * 
- *     def requester(self, str name, str data, int useTopic=1):
+ *     def requester(self, str dest, str data, int useTopic=1):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = __pyx_v_self->txt;
-  __pyx_t_1 = __Pyx_decode_c_string(__pyx_t_4, 0, strlen(__pyx_t_4), NULL, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 44, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_INCREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_INCREF(__pyx_v_self->msg);
+  __pyx_r = __pyx_v_self->msg;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":42
- *         self._producer(name.encode(), useTopic, data.encode())
+  /* "tibemsMsg/emsSession.pyx":73
+ *         self._producer(dest.encode(), useTopic, data.encode(), self.msgTypeMap[msgType.upper()], name.encode())
  * 
- *     def consumer(self, str name, int useTopic=1, int timeout=10):             # <<<<<<<<<<<<<<
- *         self._consumer(name.encode(), useTopic, timeout * 1000)
- *         return self.txt.decode()
+ *     def consumer(self, str dest, int useTopic=1, int timeout=120):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._consumer(dest.encode(), useTopic, timeout * 1000)
  */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.consumer", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -2308,25 +2845,25 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_10consumer(struct
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":46
- *         return self.txt.decode()
+/* "tibemsMsg/emsSession.pyx":78
+ *         return self.msg
  * 
- *     def requester(self, str name, str data, int useTopic=1):             # <<<<<<<<<<<<<<
- *         self._requester(name.encode(), useTopic, data.encode())
- *         return self.txt.decode()
+ *     def requester(self, str dest, str data, int useTopic=1):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._requester(dest.encode(), useTopic, data.encode())
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_13requester(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_13requester(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_name = 0;
+  PyObject *__pyx_v_dest = 0;
   PyObject *__pyx_v_data = 0;
   int __pyx_v_useTopic;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("requester (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_name,&__pyx_n_s_data,&__pyx_n_s_useTopic,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_dest,&__pyx_n_s_data,&__pyx_n_s_useTopic,0};
     PyObject* values[3] = {0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
@@ -2344,13 +2881,13 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_13requester(PyObj
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_name)) != 0)) kw_args--;
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dest)) != 0)) kw_args--;
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("requester", 0, 2, 3, 1); __PYX_ERR(1, 46, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("requester", 0, 2, 3, 1); __PYX_ERR(0, 78, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -2360,7 +2897,7 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_13requester(PyObj
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "requester") < 0)) __PYX_ERR(1, 46, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "requester") < 0)) __PYX_ERR(0, 78, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -2372,25 +2909,25 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_13requester(PyObj
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_name = ((PyObject*)values[0]);
+    __pyx_v_dest = ((PyObject*)values[0]);
     __pyx_v_data = ((PyObject*)values[1]);
     if (values[2]) {
-      __pyx_v_useTopic = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_useTopic == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 46, __pyx_L3_error)
+      __pyx_v_useTopic = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_useTopic == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 78, __pyx_L3_error)
     } else {
       __pyx_v_useTopic = ((int)1);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("requester", 0, 2, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 46, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("requester", 0, 2, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 78, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.requester", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(1, 46, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_data), (&PyUnicode_Type), 1, "data", 1))) __PYX_ERR(1, 46, __pyx_L1_error)
-  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_12requester(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_name, __pyx_v_data, __pyx_v_useTopic);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_dest), (&PyUnicode_Type), 1, "dest", 1))) __PYX_ERR(0, 78, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_data), (&PyUnicode_Type), 1, "data", 1))) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_12requester(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_dest, __pyx_v_data, __pyx_v_useTopic);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2401,70 +2938,74 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_13requester(PyObj
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_12requester(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_name, PyObject *__pyx_v_data, int __pyx_v_useTopic) {
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_12requester(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_dest, PyObject *__pyx_v_data, int __pyx_v_useTopic) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  char *__pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
-  char *__pyx_t_4;
-  int __pyx_t_5;
-  char const *__pyx_t_6;
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  char *__pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  char *__pyx_t_5;
   __Pyx_RefNannySetupContext("requester", 0);
 
-  /* "tibemsMsg/emsSession.pyx":47
+  /* "tibemsMsg/emsSession.pyx":79
  * 
- *     def requester(self, str name, str data, int useTopic=1):
- *         self._requester(name.encode(), useTopic, data.encode())             # <<<<<<<<<<<<<<
- *         return self.txt.decode()
+ *     def requester(self, str dest, str data, int useTopic=1):
+ *         self._check_conn()             # <<<<<<<<<<<<<<
+ *         self._requester(dest.encode(), useTopic, data.encode())
+ *         return self.msg
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_conn(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":80
+ *     def requester(self, str dest, str data, int useTopic=1):
+ *         self._check_conn()
+ *         self._requester(dest.encode(), useTopic, data.encode())             # <<<<<<<<<<<<<<
+ *         return self.msg
  * 
  */
-  if (unlikely(__pyx_v_name == Py_None)) {
+  if (unlikely(__pyx_v_dest == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
-    __PYX_ERR(1, 47, __pyx_L1_error)
+    __PYX_ERR(0, 80, __pyx_L1_error)
   }
-  __pyx_t_1 = PyUnicode_AsEncodedString(__pyx_v_name, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 47, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyBytes_AsWritableString(__pyx_t_1); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(1, 47, __pyx_L1_error)
+  __pyx_t_2 = PyUnicode_AsEncodedString(__pyx_v_dest, NULL, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 80, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyBytes_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_3) && PyErr_Occurred())) __PYX_ERR(0, 80, __pyx_L1_error)
   if (unlikely(__pyx_v_data == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
-    __PYX_ERR(1, 47, __pyx_L1_error)
+    __PYX_ERR(0, 80, __pyx_L1_error)
   }
-  __pyx_t_3 = PyUnicode_AsEncodedString(__pyx_v_data, NULL, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 47, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyBytes_AsWritableString(__pyx_t_3); if (unlikely((!__pyx_t_4) && PyErr_Occurred())) __PYX_ERR(1, 47, __pyx_L1_error)
-  __pyx_t_5 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_requester(__pyx_v_self, __pyx_t_2, __pyx_v_useTopic, __pyx_t_4); if (unlikely(__pyx_t_5 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 47, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_4 = PyUnicode_AsEncodedString(__pyx_v_data, NULL, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 80, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyBytes_AsWritableString(__pyx_t_4); if (unlikely((!__pyx_t_5) && PyErr_Occurred())) __PYX_ERR(0, 80, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_requester(__pyx_v_self, __pyx_t_3, __pyx_v_useTopic, __pyx_t_5); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 80, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "tibemsMsg/emsSession.pyx":48
- *     def requester(self, str name, str data, int useTopic=1):
- *         self._requester(name.encode(), useTopic, data.encode())
- *         return self.txt.decode()             # <<<<<<<<<<<<<<
+  /* "tibemsMsg/emsSession.pyx":81
+ *         self._check_conn()
+ *         self._requester(dest.encode(), useTopic, data.encode())
+ *         return self.msg             # <<<<<<<<<<<<<<
  * 
- *     cdef int _check_status(self, int error=0) except ? -1:
+ *     def listener(self, str dest, object func, int useTopic=1):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_6 = __pyx_v_self->txt;
-  __pyx_t_3 = __Pyx_decode_c_string(__pyx_t_6, 0, strlen(__pyx_t_6), NULL, NULL, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 48, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_INCREF(__pyx_t_3);
-  __pyx_r = __pyx_t_3;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_INCREF(__pyx_v_self->msg);
+  __pyx_r = __pyx_v_self->msg;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":46
- *         return self.txt.decode()
+  /* "tibemsMsg/emsSession.pyx":78
+ *         return self.msg
  * 
- *     def requester(self, str name, str data, int useTopic=1):             # <<<<<<<<<<<<<<
- *         self._requester(name.encode(), useTopic, data.encode())
- *         return self.txt.decode()
+ *     def requester(self, str dest, str data, int useTopic=1):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._requester(dest.encode(), useTopic, data.encode())
  */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_4);
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.requester", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -2473,16 +3014,829 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_12requester(struc
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":50
- *         return self.txt.decode()
+/* "tibemsMsg/emsSession.pyx":83
+ *         return self.msg
  * 
- *     cdef int _check_status(self, int error=0) except ? -1:             # <<<<<<<<<<<<<<
- *         cdef const char* status_text
- *         if self.status != ctibco.TIBEMS_OK or error:
+ *     def listener(self, str dest, object func, int useTopic=1):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._listener(dest.encode(), useTopic, <ctibco.tibemsMsgCallback>callback, <void *>func)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_15listener(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_15listener(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_dest = 0;
+  PyObject *__pyx_v_func = 0;
+  int __pyx_v_useTopic;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("listener (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_dest,&__pyx_n_s_func,&__pyx_n_s_useTopic,0};
+    PyObject* values[3] = {0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dest)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_func)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("listener", 0, 2, 3, 1); __PYX_ERR(0, 83, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_useTopic);
+          if (value) { values[2] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "listener") < 0)) __PYX_ERR(0, 83, __pyx_L3_error)
+      }
+    } else {
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    __pyx_v_dest = ((PyObject*)values[0]);
+    __pyx_v_func = values[1];
+    if (values[2]) {
+      __pyx_v_useTopic = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_useTopic == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 83, __pyx_L3_error)
+    } else {
+      __pyx_v_useTopic = ((int)1);
+    }
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("listener", 0, 2, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 83, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.listener", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_dest), (&PyUnicode_Type), 1, "dest", 1))) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_14listener(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_dest, __pyx_v_func, __pyx_v_useTopic);
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_14listener(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_dest, PyObject *__pyx_v_func, int __pyx_v_useTopic) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  char *__pyx_t_3;
+  __Pyx_RefNannySetupContext("listener", 0);
+
+  /* "tibemsMsg/emsSession.pyx":84
+ * 
+ *     def listener(self, str dest, object func, int useTopic=1):
+ *         self._check_conn()             # <<<<<<<<<<<<<<
+ *         self._listener(dest.encode(), useTopic, <ctibco.tibemsMsgCallback>callback, <void *>func)
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_conn(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 84, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":85
+ *     def listener(self, str dest, object func, int useTopic=1):
+ *         self._check_conn()
+ *         self._listener(dest.encode(), useTopic, <ctibco.tibemsMsgCallback>callback, <void *>func)             # <<<<<<<<<<<<<<
+ * 
+ *     def subscriber(self, str topic, str name, str selector='', int timeout=120):
+ */
+  if (unlikely(__pyx_v_dest == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 85, __pyx_L1_error)
+  }
+  __pyx_t_2 = PyUnicode_AsEncodedString(__pyx_v_dest, NULL, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyBytes_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_3) && PyErr_Occurred())) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_listener(__pyx_v_self, __pyx_t_3, __pyx_v_useTopic, ((tibemsMsgCallback)__pyx_f_9tibemsMsg_10emsSession_callback), ((void *)__pyx_v_func)); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 85, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":83
+ *         return self.msg
+ * 
+ *     def listener(self, str dest, object func, int useTopic=1):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._listener(dest.encode(), useTopic, <ctibco.tibemsMsgCallback>callback, <void *>func)
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.listener", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":87
+ *         self._listener(dest.encode(), useTopic, <ctibco.tibemsMsgCallback>callback, <void *>func)
+ * 
+ *     def subscriber(self, str topic, str name, str selector='', int timeout=120):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._subscriber(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_17subscriber(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_17subscriber(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_topic = 0;
+  PyObject *__pyx_v_name = 0;
+  PyObject *__pyx_v_selector = 0;
+  int __pyx_v_timeout;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("subscriber (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_topic,&__pyx_n_s_name,&__pyx_n_s_selector,&__pyx_n_s_timeout,0};
+    PyObject* values[4] = {0,0,0,0};
+    values[2] = ((PyObject*)__pyx_kp_u_);
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_topic)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_name)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("subscriber", 0, 2, 4, 1); __PYX_ERR(0, 87, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_selector);
+          if (value) { values[2] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_timeout);
+          if (value) { values[3] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "subscriber") < 0)) __PYX_ERR(0, 87, __pyx_L3_error)
+      }
+    } else {
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    __pyx_v_topic = ((PyObject*)values[0]);
+    __pyx_v_name = ((PyObject*)values[1]);
+    __pyx_v_selector = ((PyObject*)values[2]);
+    if (values[3]) {
+      __pyx_v_timeout = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_timeout == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 87, __pyx_L3_error)
+    } else {
+      __pyx_v_timeout = ((int)0x78);
+    }
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("subscriber", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 87, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.subscriber", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_topic), (&PyUnicode_Type), 1, "topic", 1))) __PYX_ERR(0, 87, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(0, 87, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_selector), (&PyUnicode_Type), 1, "selector", 1))) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_16subscriber(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_topic, __pyx_v_name, __pyx_v_selector, __pyx_v_timeout);
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_16subscriber(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_topic, PyObject *__pyx_v_name, PyObject *__pyx_v_selector, int __pyx_v_timeout) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  char *__pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  char *__pyx_t_5;
+  PyObject *__pyx_t_6 = NULL;
+  char *__pyx_t_7;
+  __Pyx_RefNannySetupContext("subscriber", 0);
+
+  /* "tibemsMsg/emsSession.pyx":88
+ * 
+ *     def subscriber(self, str topic, str name, str selector='', int timeout=120):
+ *         self._check_conn()             # <<<<<<<<<<<<<<
+ *         self._subscriber(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ *         return self.msg
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_conn(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 88, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":89
+ *     def subscriber(self, str topic, str name, str selector='', int timeout=120):
+ *         self._check_conn()
+ *         self._subscriber(topic.encode(), name.encode(), selector.encode(), timeout * 1000)             # <<<<<<<<<<<<<<
+ *         return self.msg
+ * 
+ */
+  if (unlikely(__pyx_v_topic == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 89, __pyx_L1_error)
+  }
+  __pyx_t_2 = PyUnicode_AsEncodedString(__pyx_v_topic, NULL, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyBytes_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_3) && PyErr_Occurred())) __PYX_ERR(0, 89, __pyx_L1_error)
+  if (unlikely(__pyx_v_name == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 89, __pyx_L1_error)
+  }
+  __pyx_t_4 = PyUnicode_AsEncodedString(__pyx_v_name, NULL, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyBytes_AsWritableString(__pyx_t_4); if (unlikely((!__pyx_t_5) && PyErr_Occurred())) __PYX_ERR(0, 89, __pyx_L1_error)
+  if (unlikely(__pyx_v_selector == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 89, __pyx_L1_error)
+  }
+  __pyx_t_6 = PyUnicode_AsEncodedString(__pyx_v_selector, NULL, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = __Pyx_PyBytes_AsWritableString(__pyx_t_6); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_subscriber(__pyx_v_self, __pyx_t_3, __pyx_t_5, __pyx_t_7, (__pyx_v_timeout * 0x3E8)); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 89, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":90
+ *         self._check_conn()
+ *         self._subscriber(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ *         return self.msg             # <<<<<<<<<<<<<<
+ * 
+ *     def shared_consumer(self, str topic, str name, str selector='', int timeout=120):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(__pyx_v_self->msg);
+  __pyx_r = __pyx_v_self->msg;
+  goto __pyx_L0;
+
+  /* "tibemsMsg/emsSession.pyx":87
+ *         self._listener(dest.encode(), useTopic, <ctibco.tibemsMsgCallback>callback, <void *>func)
+ * 
+ *     def subscriber(self, str topic, str name, str selector='', int timeout=120):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._subscriber(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.subscriber", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":92
+ *         return self.msg
+ * 
+ *     def shared_consumer(self, str topic, str name, str selector='', int timeout=120):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._shared_consumer(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_19shared_consumer(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_19shared_consumer(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_topic = 0;
+  PyObject *__pyx_v_name = 0;
+  PyObject *__pyx_v_selector = 0;
+  int __pyx_v_timeout;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("shared_consumer (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_topic,&__pyx_n_s_name,&__pyx_n_s_selector,&__pyx_n_s_timeout,0};
+    PyObject* values[4] = {0,0,0,0};
+    values[2] = ((PyObject*)__pyx_kp_u_);
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_topic)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_name)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("shared_consumer", 0, 2, 4, 1); __PYX_ERR(0, 92, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_selector);
+          if (value) { values[2] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_timeout);
+          if (value) { values[3] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "shared_consumer") < 0)) __PYX_ERR(0, 92, __pyx_L3_error)
+      }
+    } else {
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    __pyx_v_topic = ((PyObject*)values[0]);
+    __pyx_v_name = ((PyObject*)values[1]);
+    __pyx_v_selector = ((PyObject*)values[2]);
+    if (values[3]) {
+      __pyx_v_timeout = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_timeout == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 92, __pyx_L3_error)
+    } else {
+      __pyx_v_timeout = ((int)0x78);
+    }
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("shared_consumer", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 92, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.shared_consumer", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_topic), (&PyUnicode_Type), 1, "topic", 1))) __PYX_ERR(0, 92, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(0, 92, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_selector), (&PyUnicode_Type), 1, "selector", 1))) __PYX_ERR(0, 92, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_18shared_consumer(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_topic, __pyx_v_name, __pyx_v_selector, __pyx_v_timeout);
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_18shared_consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_topic, PyObject *__pyx_v_name, PyObject *__pyx_v_selector, int __pyx_v_timeout) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  char *__pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  char *__pyx_t_5;
+  PyObject *__pyx_t_6 = NULL;
+  char *__pyx_t_7;
+  __Pyx_RefNannySetupContext("shared_consumer", 0);
+
+  /* "tibemsMsg/emsSession.pyx":93
+ * 
+ *     def shared_consumer(self, str topic, str name, str selector='', int timeout=120):
+ *         self._check_conn()             # <<<<<<<<<<<<<<
+ *         self._shared_consumer(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ *         return self.msg
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_conn(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 93, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":94
+ *     def shared_consumer(self, str topic, str name, str selector='', int timeout=120):
+ *         self._check_conn()
+ *         self._shared_consumer(topic.encode(), name.encode(), selector.encode(), timeout * 1000)             # <<<<<<<<<<<<<<
+ *         return self.msg
+ * 
+ */
+  if (unlikely(__pyx_v_topic == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 94, __pyx_L1_error)
+  }
+  __pyx_t_2 = PyUnicode_AsEncodedString(__pyx_v_topic, NULL, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyBytes_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_3) && PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L1_error)
+  if (unlikely(__pyx_v_name == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 94, __pyx_L1_error)
+  }
+  __pyx_t_4 = PyUnicode_AsEncodedString(__pyx_v_name, NULL, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyBytes_AsWritableString(__pyx_t_4); if (unlikely((!__pyx_t_5) && PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L1_error)
+  if (unlikely(__pyx_v_selector == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 94, __pyx_L1_error)
+  }
+  __pyx_t_6 = PyUnicode_AsEncodedString(__pyx_v_selector, NULL, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = __Pyx_PyBytes_AsWritableString(__pyx_t_6); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_shared_consumer(__pyx_v_self, __pyx_t_3, __pyx_t_5, __pyx_t_7, (__pyx_v_timeout * 0x3E8)); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 94, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":95
+ *         self._check_conn()
+ *         self._shared_consumer(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ *         return self.msg             # <<<<<<<<<<<<<<
+ * 
+ *     def shared_subscriber(self, str topic, str name, str selector='', int timeout=120):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(__pyx_v_self->msg);
+  __pyx_r = __pyx_v_self->msg;
+  goto __pyx_L0;
+
+  /* "tibemsMsg/emsSession.pyx":92
+ *         return self.msg
+ * 
+ *     def shared_consumer(self, str topic, str name, str selector='', int timeout=120):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._shared_consumer(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.shared_consumer", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":97
+ *         return self.msg
+ * 
+ *     def shared_subscriber(self, str topic, str name, str selector='', int timeout=120):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._shared_subscriber(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_21shared_subscriber(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_21shared_subscriber(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_topic = 0;
+  PyObject *__pyx_v_name = 0;
+  PyObject *__pyx_v_selector = 0;
+  int __pyx_v_timeout;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("shared_subscriber (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_topic,&__pyx_n_s_name,&__pyx_n_s_selector,&__pyx_n_s_timeout,0};
+    PyObject* values[4] = {0,0,0,0};
+    values[2] = ((PyObject*)__pyx_kp_u_);
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_topic)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_name)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("shared_subscriber", 0, 2, 4, 1); __PYX_ERR(0, 97, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_selector);
+          if (value) { values[2] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_timeout);
+          if (value) { values[3] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "shared_subscriber") < 0)) __PYX_ERR(0, 97, __pyx_L3_error)
+      }
+    } else {
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    __pyx_v_topic = ((PyObject*)values[0]);
+    __pyx_v_name = ((PyObject*)values[1]);
+    __pyx_v_selector = ((PyObject*)values[2]);
+    if (values[3]) {
+      __pyx_v_timeout = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_timeout == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 97, __pyx_L3_error)
+    } else {
+      __pyx_v_timeout = ((int)0x78);
+    }
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("shared_subscriber", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 97, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.shared_subscriber", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_topic), (&PyUnicode_Type), 1, "topic", 1))) __PYX_ERR(0, 97, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(0, 97, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_selector), (&PyUnicode_Type), 1, "selector", 1))) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_20shared_subscriber(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), __pyx_v_topic, __pyx_v_name, __pyx_v_selector, __pyx_v_timeout);
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_20shared_subscriber(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_topic, PyObject *__pyx_v_name, PyObject *__pyx_v_selector, int __pyx_v_timeout) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  char *__pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  char *__pyx_t_5;
+  PyObject *__pyx_t_6 = NULL;
+  char *__pyx_t_7;
+  __Pyx_RefNannySetupContext("shared_subscriber", 0);
+
+  /* "tibemsMsg/emsSession.pyx":98
+ * 
+ *     def shared_subscriber(self, str topic, str name, str selector='', int timeout=120):
+ *         self._check_conn()             # <<<<<<<<<<<<<<
+ *         self._shared_subscriber(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ *         return self.msg
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_conn(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 98, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":99
+ *     def shared_subscriber(self, str topic, str name, str selector='', int timeout=120):
+ *         self._check_conn()
+ *         self._shared_subscriber(topic.encode(), name.encode(), selector.encode(), timeout * 1000)             # <<<<<<<<<<<<<<
+ *         return self.msg
+ * 
+ */
+  if (unlikely(__pyx_v_topic == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 99, __pyx_L1_error)
+  }
+  __pyx_t_2 = PyUnicode_AsEncodedString(__pyx_v_topic, NULL, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyBytes_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_3) && PyErr_Occurred())) __PYX_ERR(0, 99, __pyx_L1_error)
+  if (unlikely(__pyx_v_name == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 99, __pyx_L1_error)
+  }
+  __pyx_t_4 = PyUnicode_AsEncodedString(__pyx_v_name, NULL, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = __Pyx_PyBytes_AsWritableString(__pyx_t_4); if (unlikely((!__pyx_t_5) && PyErr_Occurred())) __PYX_ERR(0, 99, __pyx_L1_error)
+  if (unlikely(__pyx_v_selector == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 99, __pyx_L1_error)
+  }
+  __pyx_t_6 = PyUnicode_AsEncodedString(__pyx_v_selector, NULL, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = __Pyx_PyBytes_AsWritableString(__pyx_t_6); if (unlikely((!__pyx_t_7) && PyErr_Occurred())) __PYX_ERR(0, 99, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_shared_subscriber(__pyx_v_self, __pyx_t_3, __pyx_t_5, __pyx_t_7, (__pyx_v_timeout * 0x3E8)); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 99, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":100
+ *         self._check_conn()
+ *         self._shared_subscriber(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ *         return self.msg             # <<<<<<<<<<<<<<
+ * 
+ *     def unsubscribe(self, str name):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(__pyx_v_self->msg);
+  __pyx_r = __pyx_v_self->msg;
+  goto __pyx_L0;
+
+  /* "tibemsMsg/emsSession.pyx":97
+ *         return self.msg
+ * 
+ *     def shared_subscriber(self, str topic, str name, str selector='', int timeout=120):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._shared_subscriber(topic.encode(), name.encode(), selector.encode(), timeout * 1000)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.shared_subscriber", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":102
+ *         return self.msg
+ * 
+ *     def unsubscribe(self, str name):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._unsubscribe(name.encode())
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_23unsubscribe(PyObject *__pyx_v_self, PyObject *__pyx_v_name); /*proto*/
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_23unsubscribe(PyObject *__pyx_v_self, PyObject *__pyx_v_name) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("unsubscribe (wrapper)", 0);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_22unsubscribe(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), ((PyObject*)__pyx_v_name));
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_22unsubscribe(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_name) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  char *__pyx_t_3;
+  __Pyx_RefNannySetupContext("unsubscribe", 0);
+
+  /* "tibemsMsg/emsSession.pyx":103
+ * 
+ *     def unsubscribe(self, str name):
+ *         self._check_conn()             # <<<<<<<<<<<<<<
+ *         self._unsubscribe(name.encode())
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_conn(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 103, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":104
+ *     def unsubscribe(self, str name):
+ *         self._check_conn()
+ *         self._unsubscribe(name.encode())             # <<<<<<<<<<<<<<
+ * 
+ *     cdef int _check_status(self, int error=0, char* msg=NULL) except ? -1:
+ */
+  if (unlikely(__pyx_v_name == Py_None)) {
+    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "encode");
+    __PYX_ERR(0, 104, __pyx_L1_error)
+  }
+  __pyx_t_2 = PyUnicode_AsEncodedString(__pyx_v_name, NULL, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyBytes_AsWritableString(__pyx_t_2); if (unlikely((!__pyx_t_3) && PyErr_Occurred())) __PYX_ERR(0, 104, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_unsubscribe(__pyx_v_self, __pyx_t_3); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 104, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":102
+ *         return self.msg
+ * 
+ *     def unsubscribe(self, str name):             # <<<<<<<<<<<<<<
+ *         self._check_conn()
+ *         self._unsubscribe(name.encode())
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.unsubscribe", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":106
+ *         self._unsubscribe(name.encode())
+ * 
+ *     cdef int _check_status(self, int error=0, char* msg=NULL) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             const char* errMsg
  */
 
 static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__check_status(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, struct __pyx_opt_args_9tibemsMsg_10emsSession_10EmsSession__check_status *__pyx_optional_args) {
   int __pyx_v_error = ((int)0);
+  char *__pyx_v_msg = ((char *)NULL);
+  char const *__pyx_v_errMsg;
+  char const *__pyx_v_errTraceback;
   char const *__pyx_v_status_text;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
@@ -2491,167 +3845,173 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__check_status(struct __p
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
-  char const *__pyx_t_6;
+  PyObject *__pyx_t_6 = NULL;
   PyObject *__pyx_t_7 = NULL;
-  char const *__pyx_t_8;
-  PyObject *__pyx_t_9 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  int __pyx_t_9;
   PyObject *__pyx_t_10 = NULL;
-  int __pyx_t_11;
-  PyObject *__pyx_t_12 = NULL;
   __Pyx_RefNannySetupContext("_check_status", 0);
   if (__pyx_optional_args) {
     if (__pyx_optional_args->__pyx_n > 0) {
       __pyx_v_error = __pyx_optional_args->error;
+      if (__pyx_optional_args->__pyx_n > 1) {
+        __pyx_v_msg = __pyx_optional_args->msg;
+      }
     }
   }
 
-  /* "tibemsMsg/emsSession.pyx":52
- *     cdef int _check_status(self, int error=0) except ? -1:
- *         cdef const char* status_text
- *         if self.status != ctibco.TIBEMS_OK or error:             # <<<<<<<<<<<<<<
+  /* "tibemsMsg/emsSession.pyx":111
+ *             const char* errTraceback
+ *             const char* status_text
+ *         if error or self.status != ctibco.TIBEMS_OK:             # <<<<<<<<<<<<<<
  *             status_text = ctibco.tibemsStatus_GetText(self.status)
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &self.errMsg)
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &errMsg)
  */
-  __pyx_t_2 = ((__pyx_v_self->status != TIBEMS_OK) != 0);
+  __pyx_t_2 = (__pyx_v_error != 0);
   if (!__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
     goto __pyx_L4_bool_binop_done;
   }
-  __pyx_t_2 = (__pyx_v_error != 0);
+  __pyx_t_2 = ((__pyx_v_self->status != TIBEMS_OK) != 0);
   __pyx_t_1 = __pyx_t_2;
   __pyx_L4_bool_binop_done:;
   if (unlikely(__pyx_t_1)) {
 
-    /* "tibemsMsg/emsSession.pyx":53
- *         cdef const char* status_text
- *         if self.status != ctibco.TIBEMS_OK or error:
+    /* "tibemsMsg/emsSession.pyx":112
+ *             const char* status_text
+ *         if error or self.status != ctibco.TIBEMS_OK:
  *             status_text = ctibco.tibemsStatus_GetText(self.status)             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &self.errMsg)
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorStackTrace(self.errorContext, &self.errTraceback)
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &errMsg)
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorStackTrace(self.errorContext, &errTraceback)
  */
     __pyx_v_status_text = tibemsStatus_GetText(__pyx_v_self->status);
 
-    /* "tibemsMsg/emsSession.pyx":54
- *         if self.status != ctibco.TIBEMS_OK or error:
+    /* "tibemsMsg/emsSession.pyx":113
+ *         if error or self.status != ctibco.TIBEMS_OK:
  *             status_text = ctibco.tibemsStatus_GetText(self.status)
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &self.errMsg)             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorStackTrace(self.errorContext, &self.errTraceback)
- *             raise TibcoError(status_text.decode(), self.errMsg.decode(), self.errTraceback.decode())
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &errMsg)             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorStackTrace(self.errorContext, &errTraceback)
+ *             raise TibcoError(status_text.decode(), msg.decode() if msg != NULL else errMsg.decode(), errTraceback.decode())
  */
-    __pyx_v_self->status = tibemsErrorContext_GetLastErrorString(__pyx_v_self->errorContext, (&__pyx_v_self->errMsg));
+    __pyx_v_self->status = tibemsErrorContext_GetLastErrorString(__pyx_v_self->errorContext, (&__pyx_v_errMsg));
 
-    /* "tibemsMsg/emsSession.pyx":55
+    /* "tibemsMsg/emsSession.pyx":114
  *             status_text = ctibco.tibemsStatus_GetText(self.status)
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &self.errMsg)
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorStackTrace(self.errorContext, &self.errTraceback)             # <<<<<<<<<<<<<<
- *             raise TibcoError(status_text.decode(), self.errMsg.decode(), self.errTraceback.decode())
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &errMsg)
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorStackTrace(self.errorContext, &errTraceback)             # <<<<<<<<<<<<<<
+ *             raise TibcoError(status_text.decode(), msg.decode() if msg != NULL else errMsg.decode(), errTraceback.decode())
  *         return 0
  */
-    __pyx_v_self->status = tibemsErrorContext_GetLastErrorStackTrace(__pyx_v_self->errorContext, (&__pyx_v_self->errTraceback));
+    __pyx_v_self->status = tibemsErrorContext_GetLastErrorStackTrace(__pyx_v_self->errorContext, (&__pyx_v_errTraceback));
 
-    /* "tibemsMsg/emsSession.pyx":56
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &self.errMsg)
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorStackTrace(self.errorContext, &self.errTraceback)
- *             raise TibcoError(status_text.decode(), self.errMsg.decode(), self.errTraceback.decode())             # <<<<<<<<<<<<<<
+    /* "tibemsMsg/emsSession.pyx":115
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &errMsg)
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorStackTrace(self.errorContext, &errTraceback)
+ *             raise TibcoError(status_text.decode(), msg.decode() if msg != NULL else errMsg.decode(), errTraceback.decode())             # <<<<<<<<<<<<<<
  *         return 0
  * 
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_TibcoError); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 56, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_TibcoError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_decode_c_string(__pyx_v_status_text, 0, strlen(__pyx_v_status_text), NULL, NULL, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 56, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_decode_c_string(__pyx_v_status_text, 0, strlen(__pyx_v_status_text), NULL, NULL, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 115, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = __pyx_v_self->errMsg;
-    __pyx_t_7 = __Pyx_decode_c_string(__pyx_t_6, 0, strlen(__pyx_t_6), NULL, NULL, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 56, __pyx_L1_error)
+    if (((__pyx_v_msg != NULL) != 0)) {
+      __pyx_t_7 = __Pyx_decode_c_string(__pyx_v_msg, 0, strlen(__pyx_v_msg), NULL, NULL, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 115, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __pyx_t_6 = __pyx_t_7;
+      __pyx_t_7 = 0;
+    } else {
+      __pyx_t_7 = __Pyx_decode_c_string(__pyx_v_errMsg, 0, strlen(__pyx_v_errMsg), NULL, NULL, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 115, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __pyx_t_6 = __pyx_t_7;
+      __pyx_t_7 = 0;
+    }
+    __pyx_t_7 = __Pyx_decode_c_string(__pyx_v_errTraceback, 0, strlen(__pyx_v_errTraceback), NULL, NULL, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 115, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = __pyx_v_self->errTraceback;
-    __pyx_t_9 = __Pyx_decode_c_string(__pyx_t_8, 0, strlen(__pyx_t_8), NULL, NULL, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 56, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_9);
-    __pyx_t_10 = NULL;
-    __pyx_t_11 = 0;
+    __pyx_t_8 = NULL;
+    __pyx_t_9 = 0;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
-      __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_4);
-      if (likely(__pyx_t_10)) {
+      __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_4);
+      if (likely(__pyx_t_8)) {
         PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-        __Pyx_INCREF(__pyx_t_10);
+        __Pyx_INCREF(__pyx_t_8);
         __Pyx_INCREF(function);
         __Pyx_DECREF_SET(__pyx_t_4, function);
-        __pyx_t_11 = 1;
+        __pyx_t_9 = 1;
       }
     }
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_4)) {
-      PyObject *__pyx_temp[4] = {__pyx_t_10, __pyx_t_5, __pyx_t_7, __pyx_t_9};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_11, 3+__pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 56, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+      PyObject *__pyx_temp[4] = {__pyx_t_8, __pyx_t_5, __pyx_t_6, __pyx_t_7};
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
+      __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     } else
     #endif
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
-      PyObject *__pyx_temp[4] = {__pyx_t_10, __pyx_t_5, __pyx_t_7, __pyx_t_9};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_11, 3+__pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 56, __pyx_L1_error)
-      __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+      PyObject *__pyx_temp[4] = {__pyx_t_8, __pyx_t_5, __pyx_t_6, __pyx_t_7};
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
+      __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     } else
     #endif
     {
-      __pyx_t_12 = PyTuple_New(3+__pyx_t_11); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 56, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_12);
-      if (__pyx_t_10) {
-        __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_10); __pyx_t_10 = NULL;
+      __pyx_t_10 = PyTuple_New(3+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 115, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_10);
+      if (__pyx_t_8) {
+        __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8); __pyx_t_8 = NULL;
       }
       __Pyx_GIVEREF(__pyx_t_5);
-      PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_11, __pyx_t_5);
-      __Pyx_INCREF(__pyx_t_7);
+      PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_t_5);
+      __Pyx_GIVEREF(__pyx_t_6);
+      PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_7);
-      PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_11, __pyx_t_7);
-      __Pyx_INCREF(__pyx_t_9);
-      __Pyx_GIVEREF(__pyx_t_9);
-      PyTuple_SET_ITEM(__pyx_t_12, 2+__pyx_t_11, __pyx_t_9);
+      PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_t_7);
       __pyx_t_5 = 0;
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 56, __pyx_L1_error)
+      __pyx_t_6 = 0;
+      __pyx_t_7 = 0;
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
     }
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(1, 56, __pyx_L1_error)
+    __PYX_ERR(0, 115, __pyx_L1_error)
 
-    /* "tibemsMsg/emsSession.pyx":52
- *     cdef int _check_status(self, int error=0) except ? -1:
- *         cdef const char* status_text
- *         if self.status != ctibco.TIBEMS_OK or error:             # <<<<<<<<<<<<<<
+    /* "tibemsMsg/emsSession.pyx":111
+ *             const char* errTraceback
+ *             const char* status_text
+ *         if error or self.status != ctibco.TIBEMS_OK:             # <<<<<<<<<<<<<<
  *             status_text = ctibco.tibemsStatus_GetText(self.status)
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &self.errMsg)
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorString(self.errorContext, &errMsg)
  */
   }
 
-  /* "tibemsMsg/emsSession.pyx":57
- *             self.status = ctibco.tibemsErrorContext_GetLastErrorStackTrace(self.errorContext, &self.errTraceback)
- *             raise TibcoError(status_text.decode(), self.errMsg.decode(), self.errTraceback.decode())
+  /* "tibemsMsg/emsSession.pyx":116
+ *             self.status = ctibco.tibemsErrorContext_GetLastErrorStackTrace(self.errorContext, &errTraceback)
+ *             raise TibcoError(status_text.decode(), msg.decode() if msg != NULL else errMsg.decode(), errTraceback.decode())
  *         return 0             # <<<<<<<<<<<<<<
  * 
- *     cdef int _create(self, char* serverUrl, char* userName, char* password) except ? -1:
+ *     cdef int _check_conn(self) except ? -1:
  */
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":50
- *         return self.txt.decode()
+  /* "tibemsMsg/emsSession.pyx":106
+ *         self._unsubscribe(name.encode())
  * 
- *     cdef int _check_status(self, int error=0) except ? -1:             # <<<<<<<<<<<<<<
- *         cdef const char* status_text
- *         if self.status != ctibco.TIBEMS_OK or error:
+ *     cdef int _check_status(self, int error=0, char* msg=NULL) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             const char* errMsg
  */
 
   /* function exit code */
@@ -2659,10 +4019,10 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__check_status(struct __p
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_8);
   __Pyx_XDECREF(__pyx_t_10);
-  __Pyx_XDECREF(__pyx_t_12);
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._check_status", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
@@ -2670,117 +4030,317 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__check_status(struct __p
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":59
+/* "tibemsMsg/emsSession.pyx":118
  *         return 0
  * 
- *     cdef int _create(self, char* serverUrl, char* userName, char* password) except ? -1:             # <<<<<<<<<<<<<<
- *         self.status = ctibco.tibemsErrorContext_Create(&self.errorContext)
- *         if self.status != ctibco.TIBEMS_OK:
+ *     cdef int _check_conn(self) except ? -1:             # <<<<<<<<<<<<<<
+ *         if self.connected != 1:
+ *             raise TibcoError('Not Connected.')
  */
 
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_serverUrl, char *__pyx_v_userName, char *__pyx_v_password) {
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__check_conn(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  int __pyx_t_6;
-  struct __pyx_opt_args_9tibemsMsg_10emsSession_10EmsSession__check_status __pyx_t_7;
-  __Pyx_RefNannySetupContext("_create", 0);
+  __Pyx_RefNannySetupContext("_check_conn", 0);
 
-  /* "tibemsMsg/emsSession.pyx":60
+  /* "tibemsMsg/emsSession.pyx":119
  * 
- *     cdef int _create(self, char* serverUrl, char* userName, char* password) except ? -1:
- *         self.status = ctibco.tibemsErrorContext_Create(&self.errorContext)             # <<<<<<<<<<<<<<
- *         if self.status != ctibco.TIBEMS_OK:
- *             raise TibcoError(ctibco.tibemsStatus_GetText(self.status))
+ *     cdef int _check_conn(self) except ? -1:
+ *         if self.connected != 1:             # <<<<<<<<<<<<<<
+ *             raise TibcoError('Not Connected.')
+ * 
  */
-  __pyx_v_self->status = tibemsErrorContext_Create((&__pyx_v_self->errorContext));
-
-  /* "tibemsMsg/emsSession.pyx":61
- *     cdef int _create(self, char* serverUrl, char* userName, char* password) except ? -1:
- *         self.status = ctibco.tibemsErrorContext_Create(&self.errorContext)
- *         if self.status != ctibco.TIBEMS_OK:             # <<<<<<<<<<<<<<
- *             raise TibcoError(ctibco.tibemsStatus_GetText(self.status))
- *         self.factory = ctibco.tibemsConnectionFactory_Create()
- */
-  __pyx_t_1 = ((__pyx_v_self->status != TIBEMS_OK) != 0);
+  __pyx_t_1 = ((__pyx_v_self->connected != 1) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "tibemsMsg/emsSession.pyx":62
- *         self.status = ctibco.tibemsErrorContext_Create(&self.errorContext)
- *         if self.status != ctibco.TIBEMS_OK:
- *             raise TibcoError(ctibco.tibemsStatus_GetText(self.status))             # <<<<<<<<<<<<<<
- *         self.factory = ctibco.tibemsConnectionFactory_Create()
- *         if self.factory == NULL:
+    /* "tibemsMsg/emsSession.pyx":120
+ *     cdef int _check_conn(self) except ? -1:
+ *         if self.connected != 1:
+ *             raise TibcoError('Not Connected.')             # <<<<<<<<<<<<<<
+ * 
+ *     cdef void _getMsgTypeName(self, ctibco.tibemsMsgType msgType):
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_TibcoError); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 62, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_TibcoError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 120, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyBytes_FromString(tibemsStatus_GetText(__pyx_v_self->status)); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 62, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = NULL;
+    __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_3);
-      if (likely(__pyx_t_5)) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+      if (likely(__pyx_t_4)) {
         PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-        __Pyx_INCREF(__pyx_t_5);
+        __Pyx_INCREF(__pyx_t_4);
         __Pyx_INCREF(function);
         __Pyx_DECREF_SET(__pyx_t_3, function);
       }
     }
-    __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4);
-    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 62, __pyx_L1_error)
+    __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_kp_u_Not_Connected) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_kp_u_Not_Connected);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 120, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(1, 62, __pyx_L1_error)
+    __PYX_ERR(0, 120, __pyx_L1_error)
 
-    /* "tibemsMsg/emsSession.pyx":61
- *     cdef int _create(self, char* serverUrl, char* userName, char* password) except ? -1:
- *         self.status = ctibco.tibemsErrorContext_Create(&self.errorContext)
- *         if self.status != ctibco.TIBEMS_OK:             # <<<<<<<<<<<<<<
- *             raise TibcoError(ctibco.tibemsStatus_GetText(self.status))
- *         self.factory = ctibco.tibemsConnectionFactory_Create()
+    /* "tibemsMsg/emsSession.pyx":119
+ * 
+ *     cdef int _check_conn(self) except ? -1:
+ *         if self.connected != 1:             # <<<<<<<<<<<<<<
+ *             raise TibcoError('Not Connected.')
+ * 
  */
   }
 
-  /* "tibemsMsg/emsSession.pyx":63
- *         if self.status != ctibco.TIBEMS_OK:
- *             raise TibcoError(ctibco.tibemsStatus_GetText(self.status))
+  /* "tibemsMsg/emsSession.pyx":118
+ *         return 0
+ * 
+ *     cdef int _check_conn(self) except ? -1:             # <<<<<<<<<<<<<<
+ *         if self.connected != 1:
+ *             raise TibcoError('Not Connected.')
+ */
+
+  /* function exit code */
+  __pyx_r = 0;
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._check_conn", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":122
+ *             raise TibcoError('Not Connected.')
+ * 
+ *     cdef void _getMsgTypeName(self, ctibco.tibemsMsgType msgType):             # <<<<<<<<<<<<<<
+ *         if msgType == ctibco.TIBEMS_MESSAGE:
+ *             self.msgTypeName = 'MESSAGE'
+ */
+
+static void __pyx_f_9tibemsMsg_10emsSession_10EmsSession__getMsgTypeName(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, tibemsMsgType __pyx_v_msgType) {
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("_getMsgTypeName", 0);
+
+  /* "tibemsMsg/emsSession.pyx":123
+ * 
+ *     cdef void _getMsgTypeName(self, ctibco.tibemsMsgType msgType):
+ *         if msgType == ctibco.TIBEMS_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.msgTypeName = 'MESSAGE'
+ *         elif msgType == ctibco.TIBEMS_BYTES_MESSAGE:
+ */
+  switch (__pyx_v_msgType) {
+    case TIBEMS_MESSAGE:
+
+    /* "tibemsMsg/emsSession.pyx":124
+ *     cdef void _getMsgTypeName(self, ctibco.tibemsMsgType msgType):
+ *         if msgType == ctibco.TIBEMS_MESSAGE:
+ *             self.msgTypeName = 'MESSAGE'             # <<<<<<<<<<<<<<
+ *         elif msgType == ctibco.TIBEMS_BYTES_MESSAGE:
+ *             self.msgTypeName = 'BYTES'
+ */
+    __pyx_v_self->msgTypeName = ((char *)"MESSAGE");
+
+    /* "tibemsMsg/emsSession.pyx":123
+ * 
+ *     cdef void _getMsgTypeName(self, ctibco.tibemsMsgType msgType):
+ *         if msgType == ctibco.TIBEMS_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.msgTypeName = 'MESSAGE'
+ *         elif msgType == ctibco.TIBEMS_BYTES_MESSAGE:
+ */
+    break;
+    case TIBEMS_BYTES_MESSAGE:
+
+    /* "tibemsMsg/emsSession.pyx":126
+ *             self.msgTypeName = 'MESSAGE'
+ *         elif msgType == ctibco.TIBEMS_BYTES_MESSAGE:
+ *             self.msgTypeName = 'BYTES'             # <<<<<<<<<<<<<<
+ *         elif msgType == ctibco.TIBEMS_OBJECT_MESSAGE:
+ *             self.msgTypeName = 'OBJECT'
+ */
+    __pyx_v_self->msgTypeName = ((char *)"BYTES");
+
+    /* "tibemsMsg/emsSession.pyx":125
+ *         if msgType == ctibco.TIBEMS_MESSAGE:
+ *             self.msgTypeName = 'MESSAGE'
+ *         elif msgType == ctibco.TIBEMS_BYTES_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.msgTypeName = 'BYTES'
+ *         elif msgType == ctibco.TIBEMS_OBJECT_MESSAGE:
+ */
+    break;
+    case TIBEMS_OBJECT_MESSAGE:
+
+    /* "tibemsMsg/emsSession.pyx":128
+ *             self.msgTypeName = 'BYTES'
+ *         elif msgType == ctibco.TIBEMS_OBJECT_MESSAGE:
+ *             self.msgTypeName = 'OBJECT'             # <<<<<<<<<<<<<<
+ *         elif msgType == ctibco.TIBEMS_STREAM_MESSAGE:
+ *             self.msgTypeName = 'STREAM'
+ */
+    __pyx_v_self->msgTypeName = ((char *)"OBJECT");
+
+    /* "tibemsMsg/emsSession.pyx":127
+ *         elif msgType == ctibco.TIBEMS_BYTES_MESSAGE:
+ *             self.msgTypeName = 'BYTES'
+ *         elif msgType == ctibco.TIBEMS_OBJECT_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.msgTypeName = 'OBJECT'
+ *         elif msgType == ctibco.TIBEMS_STREAM_MESSAGE:
+ */
+    break;
+    case TIBEMS_STREAM_MESSAGE:
+
+    /* "tibemsMsg/emsSession.pyx":130
+ *             self.msgTypeName = 'OBJECT'
+ *         elif msgType == ctibco.TIBEMS_STREAM_MESSAGE:
+ *             self.msgTypeName = 'STREAM'             # <<<<<<<<<<<<<<
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ *             self.msgTypeName = 'MAP'
+ */
+    __pyx_v_self->msgTypeName = ((char *)"STREAM");
+
+    /* "tibemsMsg/emsSession.pyx":129
+ *         elif msgType == ctibco.TIBEMS_OBJECT_MESSAGE:
+ *             self.msgTypeName = 'OBJECT'
+ *         elif msgType == ctibco.TIBEMS_STREAM_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.msgTypeName = 'STREAM'
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ */
+    break;
+    case TIBEMS_MAP_MESSAGE:
+
+    /* "tibemsMsg/emsSession.pyx":132
+ *             self.msgTypeName = 'STREAM'
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ *             self.msgTypeName = 'MAP'             # <<<<<<<<<<<<<<
+ *         elif msgType == ctibco.TIBEMS_TEXT_MESSAGE:
+ *             self.msgTypeName = 'TEXT'
+ */
+    __pyx_v_self->msgTypeName = ((char *)"MAP");
+
+    /* "tibemsMsg/emsSession.pyx":131
+ *         elif msgType == ctibco.TIBEMS_STREAM_MESSAGE:
+ *             self.msgTypeName = 'STREAM'
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.msgTypeName = 'MAP'
+ *         elif msgType == ctibco.TIBEMS_TEXT_MESSAGE:
+ */
+    break;
+    case TIBEMS_TEXT_MESSAGE:
+
+    /* "tibemsMsg/emsSession.pyx":134
+ *             self.msgTypeName = 'MAP'
+ *         elif msgType == ctibco.TIBEMS_TEXT_MESSAGE:
+ *             self.msgTypeName = 'TEXT'             # <<<<<<<<<<<<<<
+ *         else:
+ *             self.msgTypeName = 'UNKNOWN'
+ */
+    __pyx_v_self->msgTypeName = ((char *)"TEXT");
+
+    /* "tibemsMsg/emsSession.pyx":133
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ *             self.msgTypeName = 'MAP'
+ *         elif msgType == ctibco.TIBEMS_TEXT_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.msgTypeName = 'TEXT'
+ *         else:
+ */
+    break;
+    default:
+
+    /* "tibemsMsg/emsSession.pyx":136
+ *             self.msgTypeName = 'TEXT'
+ *         else:
+ *             self.msgTypeName = 'UNKNOWN'             # <<<<<<<<<<<<<<
+ * 
+ *     cdef int _create(self, char* serverUrl, char* userName, char* password) except ? -1:
+ */
+    __pyx_v_self->msgTypeName = ((char *)"UNKNOWN");
+    break;
+  }
+
+  /* "tibemsMsg/emsSession.pyx":122
+ *             raise TibcoError('Not Connected.')
+ * 
+ *     cdef void _getMsgTypeName(self, ctibco.tibemsMsgType msgType):             # <<<<<<<<<<<<<<
+ *         if msgType == ctibco.TIBEMS_MESSAGE:
+ *             self.msgTypeName = 'MESSAGE'
+ */
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+}
+
+/* "tibemsMsg/emsSession.pyx":138
+ *             self.msgTypeName = 'UNKNOWN'
+ * 
+ *     cdef int _create(self, char* serverUrl, char* userName, char* password) except ? -1:             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsErrorContext_Create(&self.errorContext)
+ *         self._check_status()
+ */
+
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_serverUrl, char *__pyx_v_userName, char *__pyx_v_password) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  int __pyx_t_2;
+  struct __pyx_opt_args_9tibemsMsg_10emsSession_10EmsSession__check_status __pyx_t_3;
+  __Pyx_RefNannySetupContext("_create", 0);
+
+  /* "tibemsMsg/emsSession.pyx":139
+ * 
+ *     cdef int _create(self, char* serverUrl, char* userName, char* password) except ? -1:
+ *         self.status = ctibco.tibemsErrorContext_Create(&self.errorContext)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.factory = ctibco.tibemsConnectionFactory_Create()
+ */
+  __pyx_v_self->status = tibemsErrorContext_Create((&__pyx_v_self->errorContext));
+
+  /* "tibemsMsg/emsSession.pyx":140
+ *     cdef int _create(self, char* serverUrl, char* userName, char* password) except ? -1:
+ *         self.status = ctibco.tibemsErrorContext_Create(&self.errorContext)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.factory = ctibco.tibemsConnectionFactory_Create()
+ *         if self.factory == NULL:
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 140, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":141
+ *         self.status = ctibco.tibemsErrorContext_Create(&self.errorContext)
+ *         self._check_status()
  *         self.factory = ctibco.tibemsConnectionFactory_Create()             # <<<<<<<<<<<<<<
  *         if self.factory == NULL:
  *             self._check_status(1)
  */
   __pyx_v_self->factory = tibemsConnectionFactory_Create();
 
-  /* "tibemsMsg/emsSession.pyx":64
- *             raise TibcoError(ctibco.tibemsStatus_GetText(self.status))
+  /* "tibemsMsg/emsSession.pyx":142
+ *         self._check_status()
  *         self.factory = ctibco.tibemsConnectionFactory_Create()
  *         if self.factory == NULL:             # <<<<<<<<<<<<<<
  *             self._check_status(1)
  *         self.status = ctibco.tibemsConnectionFactory_SetServerURL(self.factory, serverUrl)
  */
-  __pyx_t_1 = ((__pyx_v_self->factory == NULL) != 0);
-  if (__pyx_t_1) {
+  __pyx_t_2 = ((__pyx_v_self->factory == NULL) != 0);
+  if (__pyx_t_2) {
 
-    /* "tibemsMsg/emsSession.pyx":65
+    /* "tibemsMsg/emsSession.pyx":143
  *         self.factory = ctibco.tibemsConnectionFactory_Create()
  *         if self.factory == NULL:
  *             self._check_status(1)             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsConnectionFactory_SetServerURL(self.factory, serverUrl)
  *         self._check_status()
  */
-    __pyx_t_7.__pyx_n = 1;
-    __pyx_t_7.error = 1;
-    __pyx_t_6 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, &__pyx_t_7); if (unlikely(__pyx_t_6 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 65, __pyx_L1_error)
+    __pyx_t_3.__pyx_n = 1;
+    __pyx_t_3.error = 1;
+    __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, &__pyx_t_3); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 143, __pyx_L1_error)
 
-    /* "tibemsMsg/emsSession.pyx":64
- *             raise TibcoError(ctibco.tibemsStatus_GetText(self.status))
+    /* "tibemsMsg/emsSession.pyx":142
+ *         self._check_status()
  *         self.factory = ctibco.tibemsConnectionFactory_Create()
  *         if self.factory == NULL:             # <<<<<<<<<<<<<<
  *             self._check_status(1)
@@ -2788,7 +4348,7 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create(struct __pyx_obj
  */
   }
 
-  /* "tibemsMsg/emsSession.pyx":66
+  /* "tibemsMsg/emsSession.pyx":144
  *         if self.factory == NULL:
  *             self._check_status(1)
  *         self.status = ctibco.tibemsConnectionFactory_SetServerURL(self.factory, serverUrl)             # <<<<<<<<<<<<<<
@@ -2797,16 +4357,16 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create(struct __pyx_obj
  */
   __pyx_v_self->status = tibemsConnectionFactory_SetServerURL(__pyx_v_self->factory, __pyx_v_serverUrl);
 
-  /* "tibemsMsg/emsSession.pyx":67
+  /* "tibemsMsg/emsSession.pyx":145
  *             self._check_status(1)
  *         self.status = ctibco.tibemsConnectionFactory_SetServerURL(self.factory, serverUrl)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsConnectionFactory_CreateConnection(self.factory, &self.connection, userName, password)
  *         self._check_status()
  */
-  __pyx_t_6 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_6 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 67, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 145, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":68
+  /* "tibemsMsg/emsSession.pyx":146
  *         self.status = ctibco.tibemsConnectionFactory_SetServerURL(self.factory, serverUrl)
  *         self._check_status()
  *         self.status = ctibco.tibemsConnectionFactory_CreateConnection(self.factory, &self.connection, userName, password)             # <<<<<<<<<<<<<<
@@ -2815,36 +4375,45 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create(struct __pyx_obj
  */
   __pyx_v_self->status = tibemsConnectionFactory_CreateConnection(__pyx_v_self->factory, (&__pyx_v_self->connection), __pyx_v_userName, __pyx_v_password);
 
-  /* "tibemsMsg/emsSession.pyx":69
+  /* "tibemsMsg/emsSession.pyx":147
  *         self._check_status()
  *         self.status = ctibco.tibemsConnectionFactory_CreateConnection(self.factory, &self.connection, userName, password)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsConnection_CreateSession(self.connection, &self.session, ctibco.TIBEMS_FALSE, ctibco.TIBEMS_AUTO_ACKNOWLEDGE)
  *         self._check_status()
  */
-  __pyx_t_6 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_6 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 69, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":70
+  /* "tibemsMsg/emsSession.pyx":148
  *         self.status = ctibco.tibemsConnectionFactory_CreateConnection(self.factory, &self.connection, userName, password)
  *         self._check_status()
  *         self.status = ctibco.tibemsConnection_CreateSession(self.connection, &self.session, ctibco.TIBEMS_FALSE, ctibco.TIBEMS_AUTO_ACKNOWLEDGE)             # <<<<<<<<<<<<<<
  *         self._check_status()
- *         return 0
+ *         self.connected = 1
  */
   __pyx_v_self->status = tibemsConnection_CreateSession(__pyx_v_self->connection, (&__pyx_v_self->session), TIBEMS_FALSE, TIBEMS_AUTO_ACKNOWLEDGE);
 
-  /* "tibemsMsg/emsSession.pyx":71
+  /* "tibemsMsg/emsSession.pyx":149
  *         self._check_status()
  *         self.status = ctibco.tibemsConnection_CreateSession(self.connection, &self.session, ctibco.TIBEMS_FALSE, ctibco.TIBEMS_AUTO_ACKNOWLEDGE)
  *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.connected = 1
+ *         return 0
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":150
+ *         self.status = ctibco.tibemsConnection_CreateSession(self.connection, &self.session, ctibco.TIBEMS_FALSE, ctibco.TIBEMS_AUTO_ACKNOWLEDGE)
+ *         self._check_status()
+ *         self.connected = 1             # <<<<<<<<<<<<<<
  *         return 0
  * 
  */
-  __pyx_t_6 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_6 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 71, __pyx_L1_error)
+  __pyx_v_self->connected = 1;
 
-  /* "tibemsMsg/emsSession.pyx":72
- *         self.status = ctibco.tibemsConnection_CreateSession(self.connection, &self.session, ctibco.TIBEMS_FALSE, ctibco.TIBEMS_AUTO_ACKNOWLEDGE)
+  /* "tibemsMsg/emsSession.pyx":151
  *         self._check_status()
+ *         self.connected = 1
  *         return 0             # <<<<<<<<<<<<<<
  * 
  *     cdef int _close(self) except ? -1:
@@ -2852,20 +4421,16 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create(struct __pyx_obj
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":59
- *         return 0
+  /* "tibemsMsg/emsSession.pyx":138
+ *             self.msgTypeName = 'UNKNOWN'
  * 
  *     cdef int _create(self, char* serverUrl, char* userName, char* password) except ? -1:             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsErrorContext_Create(&self.errorContext)
- *         if self.status != ctibco.TIBEMS_OK:
+ *         self._check_status()
  */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._create", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
@@ -2873,12 +4438,12 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":74
+/* "tibemsMsg/emsSession.pyx":153
  *         return 0
  * 
  *     cdef int _close(self) except ? -1:             # <<<<<<<<<<<<<<
- *         if self.destination != NULL:
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
+ *         if self.session != NULL:
+ *             self.status = ctibco.tibemsSession_Close(self.session)
  */
 
 static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self) {
@@ -2888,55 +4453,9 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("_close", 0);
 
-  /* "tibemsMsg/emsSession.pyx":75
+  /* "tibemsMsg/emsSession.pyx":154
  * 
  *     cdef int _close(self) except ? -1:
- *         if self.destination != NULL:             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
- *             self._check_status()
- */
-  __pyx_t_1 = ((__pyx_v_self->destination != NULL) != 0);
-  if (__pyx_t_1) {
-
-    /* "tibemsMsg/emsSession.pyx":76
- *     cdef int _close(self) except ? -1:
- *         if self.destination != NULL:
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)             # <<<<<<<<<<<<<<
- *             self._check_status()
- *             self.destination = NULL
- */
-    __pyx_v_self->status = tibemsDestination_Destroy(__pyx_v_self->destination);
-
-    /* "tibemsMsg/emsSession.pyx":77
- *         if self.destination != NULL:
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
- *             self._check_status()             # <<<<<<<<<<<<<<
- *             self.destination = NULL
- *         if self.session != NULL:
- */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 77, __pyx_L1_error)
-
-    /* "tibemsMsg/emsSession.pyx":78
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
- *             self._check_status()
- *             self.destination = NULL             # <<<<<<<<<<<<<<
- *         if self.session != NULL:
- *             self.status = ctibco.tibemsSession_Close(self.session)
- */
-    __pyx_v_self->destination = NULL;
-
-    /* "tibemsMsg/emsSession.pyx":75
- * 
- *     cdef int _close(self) except ? -1:
- *         if self.destination != NULL:             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
- *             self._check_status()
- */
-  }
-
-  /* "tibemsMsg/emsSession.pyx":79
- *             self._check_status()
- *             self.destination = NULL
  *         if self.session != NULL:             # <<<<<<<<<<<<<<
  *             self.status = ctibco.tibemsSession_Close(self.session)
  *             self._check_status()
@@ -2944,8 +4463,8 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
   __pyx_t_1 = ((__pyx_v_self->session != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "tibemsMsg/emsSession.pyx":80
- *             self.destination = NULL
+    /* "tibemsMsg/emsSession.pyx":155
+ *     cdef int _close(self) except ? -1:
  *         if self.session != NULL:
  *             self.status = ctibco.tibemsSession_Close(self.session)             # <<<<<<<<<<<<<<
  *             self._check_status()
@@ -2953,16 +4472,16 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
  */
     __pyx_v_self->status = tibemsSession_Close(__pyx_v_self->session);
 
-    /* "tibemsMsg/emsSession.pyx":81
+    /* "tibemsMsg/emsSession.pyx":156
  *         if self.session != NULL:
  *             self.status = ctibco.tibemsSession_Close(self.session)
  *             self._check_status()             # <<<<<<<<<<<<<<
  *             self.session = NULL
  *         if self.connection != NULL:
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 81, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L1_error)
 
-    /* "tibemsMsg/emsSession.pyx":82
+    /* "tibemsMsg/emsSession.pyx":157
  *             self.status = ctibco.tibemsSession_Close(self.session)
  *             self._check_status()
  *             self.session = NULL             # <<<<<<<<<<<<<<
@@ -2971,16 +4490,16 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
  */
     __pyx_v_self->session = NULL;
 
-    /* "tibemsMsg/emsSession.pyx":79
- *             self._check_status()
- *             self.destination = NULL
+    /* "tibemsMsg/emsSession.pyx":154
+ * 
+ *     cdef int _close(self) except ? -1:
  *         if self.session != NULL:             # <<<<<<<<<<<<<<
  *             self.status = ctibco.tibemsSession_Close(self.session)
  *             self._check_status()
  */
   }
 
-  /* "tibemsMsg/emsSession.pyx":83
+  /* "tibemsMsg/emsSession.pyx":158
  *             self._check_status()
  *             self.session = NULL
  *         if self.connection != NULL:             # <<<<<<<<<<<<<<
@@ -2990,7 +4509,7 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
   __pyx_t_1 = ((__pyx_v_self->connection != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "tibemsMsg/emsSession.pyx":84
+    /* "tibemsMsg/emsSession.pyx":159
  *             self.session = NULL
  *         if self.connection != NULL:
  *             self.status = ctibco.tibemsConnection_Close(self.connection)             # <<<<<<<<<<<<<<
@@ -2999,16 +4518,16 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
  */
     __pyx_v_self->status = tibemsConnection_Close(__pyx_v_self->connection);
 
-    /* "tibemsMsg/emsSession.pyx":85
+    /* "tibemsMsg/emsSession.pyx":160
  *         if self.connection != NULL:
  *             self.status = ctibco.tibemsConnection_Close(self.connection)
  *             self._check_status()             # <<<<<<<<<<<<<<
  *             self.connection = NULL
  *         if self.factory != NULL:
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 85, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 160, __pyx_L1_error)
 
-    /* "tibemsMsg/emsSession.pyx":86
+    /* "tibemsMsg/emsSession.pyx":161
  *             self.status = ctibco.tibemsConnection_Close(self.connection)
  *             self._check_status()
  *             self.connection = NULL             # <<<<<<<<<<<<<<
@@ -3017,7 +4536,7 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
  */
     __pyx_v_self->connection = NULL;
 
-    /* "tibemsMsg/emsSession.pyx":83
+    /* "tibemsMsg/emsSession.pyx":158
  *             self._check_status()
  *             self.session = NULL
  *         if self.connection != NULL:             # <<<<<<<<<<<<<<
@@ -3026,7 +4545,7 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
  */
   }
 
-  /* "tibemsMsg/emsSession.pyx":87
+  /* "tibemsMsg/emsSession.pyx":162
  *             self._check_status()
  *             self.connection = NULL
  *         if self.factory != NULL:             # <<<<<<<<<<<<<<
@@ -3036,7 +4555,7 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
   __pyx_t_1 = ((__pyx_v_self->factory != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "tibemsMsg/emsSession.pyx":88
+    /* "tibemsMsg/emsSession.pyx":163
  *             self.connection = NULL
  *         if self.factory != NULL:
  *             self.status = ctibco.tibemsConnectionFactory_Destroy(self.factory)             # <<<<<<<<<<<<<<
@@ -3045,16 +4564,16 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
  */
     __pyx_v_self->status = tibemsConnectionFactory_Destroy(__pyx_v_self->factory);
 
-    /* "tibemsMsg/emsSession.pyx":89
+    /* "tibemsMsg/emsSession.pyx":164
  *         if self.factory != NULL:
  *             self.status = ctibco.tibemsConnectionFactory_Destroy(self.factory)
  *             self._check_status()             # <<<<<<<<<<<<<<
  *             self.factory = NULL
  *         if self.errorContext != NULL:
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 89, __pyx_L1_error)
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 164, __pyx_L1_error)
 
-    /* "tibemsMsg/emsSession.pyx":90
+    /* "tibemsMsg/emsSession.pyx":165
  *             self.status = ctibco.tibemsConnectionFactory_Destroy(self.factory)
  *             self._check_status()
  *             self.factory = NULL             # <<<<<<<<<<<<<<
@@ -3063,7 +4582,7 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
  */
     __pyx_v_self->factory = NULL;
 
-    /* "tibemsMsg/emsSession.pyx":87
+    /* "tibemsMsg/emsSession.pyx":162
  *             self._check_status()
  *             self.connection = NULL
  *         if self.factory != NULL:             # <<<<<<<<<<<<<<
@@ -3072,7 +4591,7 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
  */
   }
 
-  /* "tibemsMsg/emsSession.pyx":91
+  /* "tibemsMsg/emsSession.pyx":166
  *             self._check_status()
  *             self.factory = NULL
  *         if self.errorContext != NULL:             # <<<<<<<<<<<<<<
@@ -3082,25 +4601,25 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
   __pyx_t_1 = ((__pyx_v_self->errorContext != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "tibemsMsg/emsSession.pyx":92
+    /* "tibemsMsg/emsSession.pyx":167
  *             self.factory = NULL
  *         if self.errorContext != NULL:
  *             self.status = ctibco.tibemsErrorContext_Close(self.errorContext)             # <<<<<<<<<<<<<<
  *             self.errorContext = NULL
- *         return 0
+ *         self.connected = 0
  */
     __pyx_v_self->status = tibemsErrorContext_Close(__pyx_v_self->errorContext);
 
-    /* "tibemsMsg/emsSession.pyx":93
+    /* "tibemsMsg/emsSession.pyx":168
  *         if self.errorContext != NULL:
  *             self.status = ctibco.tibemsErrorContext_Close(self.errorContext)
  *             self.errorContext = NULL             # <<<<<<<<<<<<<<
+ *         self.connected = 0
  *         return 0
- * 
  */
     __pyx_v_self->errorContext = NULL;
 
-    /* "tibemsMsg/emsSession.pyx":91
+    /* "tibemsMsg/emsSession.pyx":166
  *             self._check_status()
  *             self.factory = NULL
  *         if self.errorContext != NULL:             # <<<<<<<<<<<<<<
@@ -3109,22 +4628,31 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
  */
   }
 
-  /* "tibemsMsg/emsSession.pyx":94
+  /* "tibemsMsg/emsSession.pyx":169
  *             self.status = ctibco.tibemsErrorContext_Close(self.errorContext)
  *             self.errorContext = NULL
+ *         self.connected = 0             # <<<<<<<<<<<<<<
+ *         return 0
+ * 
+ */
+  __pyx_v_self->connected = 0;
+
+  /* "tibemsMsg/emsSession.pyx":170
+ *             self.errorContext = NULL
+ *         self.connected = 0
  *         return 0             # <<<<<<<<<<<<<<
  * 
- *     cdef int _create_dest(self, char* name, int useTopic) except ? -1:
+ *     cdef int _create_dest(self, ctibco.tibemsDestination* destination, char* dest, int useTopic) except ? -1:
  */
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":74
+  /* "tibemsMsg/emsSession.pyx":153
  *         return 0
  * 
  *     cdef int _close(self) except ? -1:             # <<<<<<<<<<<<<<
- *         if self.destination != NULL:
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
+ *         if self.session != NULL:
+ *             self.status = ctibco.tibemsSession_Close(self.session)
  */
 
   /* function exit code */
@@ -3136,87 +4664,87 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__close(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":96
+/* "tibemsMsg/emsSession.pyx":172
  *         return 0
  * 
- *     cdef int _create_dest(self, char* name, int useTopic) except ? -1:             # <<<<<<<<<<<<<<
- *         if useTopic:
- *             self.status = ctibco.tibemsTopic_Create(&self.destination, name)
+ *     cdef int _create_dest(self, ctibco.tibemsDestination* destination, char* dest, int useTopic) except ? -1:             # <<<<<<<<<<<<<<
+ *         if useTopic != 0:
+ *             self.status = ctibco.tibemsDestination_Create(destination, ctibco.TIBEMS_TOPIC, dest)
  */
 
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create_dest(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_name, int __pyx_v_useTopic) {
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create_dest(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, tibemsDestination *__pyx_v_destination, char *__pyx_v_dest, int __pyx_v_useTopic) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("_create_dest", 0);
 
-  /* "tibemsMsg/emsSession.pyx":97
+  /* "tibemsMsg/emsSession.pyx":173
  * 
- *     cdef int _create_dest(self, char* name, int useTopic) except ? -1:
- *         if useTopic:             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsTopic_Create(&self.destination, name)
+ *     cdef int _create_dest(self, ctibco.tibemsDestination* destination, char* dest, int useTopic) except ? -1:
+ *         if useTopic != 0:             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsDestination_Create(destination, ctibco.TIBEMS_TOPIC, dest)
  *         else:
  */
-  __pyx_t_1 = (__pyx_v_useTopic != 0);
+  __pyx_t_1 = ((__pyx_v_useTopic != 0) != 0);
   if (__pyx_t_1) {
 
-    /* "tibemsMsg/emsSession.pyx":98
- *     cdef int _create_dest(self, char* name, int useTopic) except ? -1:
- *         if useTopic:
- *             self.status = ctibco.tibemsTopic_Create(&self.destination, name)             # <<<<<<<<<<<<<<
+    /* "tibemsMsg/emsSession.pyx":174
+ *     cdef int _create_dest(self, ctibco.tibemsDestination* destination, char* dest, int useTopic) except ? -1:
+ *         if useTopic != 0:
+ *             self.status = ctibco.tibemsDestination_Create(destination, ctibco.TIBEMS_TOPIC, dest)             # <<<<<<<<<<<<<<
  *         else:
- *             self.status = ctibco.tibemsQueue_Create(&self.destination, name)
+ *             self.status = ctibco.tibemsDestination_Create(destination, ctibco.TIBEMS_QUEUE, dest)
  */
-    __pyx_v_self->status = tibemsTopic_Create((&__pyx_v_self->destination), __pyx_v_name);
+    __pyx_v_self->status = tibemsDestination_Create(__pyx_v_destination, TIBEMS_TOPIC, __pyx_v_dest);
 
-    /* "tibemsMsg/emsSession.pyx":97
+    /* "tibemsMsg/emsSession.pyx":173
  * 
- *     cdef int _create_dest(self, char* name, int useTopic) except ? -1:
- *         if useTopic:             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsTopic_Create(&self.destination, name)
+ *     cdef int _create_dest(self, ctibco.tibemsDestination* destination, char* dest, int useTopic) except ? -1:
+ *         if useTopic != 0:             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsDestination_Create(destination, ctibco.TIBEMS_TOPIC, dest)
  *         else:
  */
     goto __pyx_L3;
   }
 
-  /* "tibemsMsg/emsSession.pyx":100
- *             self.status = ctibco.tibemsTopic_Create(&self.destination, name)
+  /* "tibemsMsg/emsSession.pyx":176
+ *             self.status = ctibco.tibemsDestination_Create(destination, ctibco.TIBEMS_TOPIC, dest)
  *         else:
- *             self.status = ctibco.tibemsQueue_Create(&self.destination, name)             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsDestination_Create(destination, ctibco.TIBEMS_QUEUE, dest)             # <<<<<<<<<<<<<<
  *         self._check_status()
  *         return 0
  */
   /*else*/ {
-    __pyx_v_self->status = tibemsQueue_Create((&__pyx_v_self->destination), __pyx_v_name);
+    __pyx_v_self->status = tibemsDestination_Create(__pyx_v_destination, TIBEMS_QUEUE, __pyx_v_dest);
   }
   __pyx_L3:;
 
-  /* "tibemsMsg/emsSession.pyx":101
+  /* "tibemsMsg/emsSession.pyx":177
  *         else:
- *             self.status = ctibco.tibemsQueue_Create(&self.destination, name)
+ *             self.status = ctibco.tibemsDestination_Create(destination, ctibco.TIBEMS_QUEUE, dest)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         return 0
  * 
  */
-  __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 101, __pyx_L1_error)
+  __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 177, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":102
- *             self.status = ctibco.tibemsQueue_Create(&self.destination, name)
+  /* "tibemsMsg/emsSession.pyx":178
+ *             self.status = ctibco.tibemsDestination_Create(destination, ctibco.TIBEMS_QUEUE, dest)
  *         self._check_status()
  *         return 0             # <<<<<<<<<<<<<<
  * 
- *     cdef int _destroy_dest(self) except ? -1:
+ *     cdef int _destroy_dest(self, ctibco.tibemsDestination destination) except ? -1:
  */
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":96
+  /* "tibemsMsg/emsSession.pyx":172
  *         return 0
  * 
- *     cdef int _create_dest(self, char* name, int useTopic) except ? -1:             # <<<<<<<<<<<<<<
- *         if useTopic:
- *             self.status = ctibco.tibemsTopic_Create(&self.destination, name)
+ *     cdef int _create_dest(self, ctibco.tibemsDestination* destination, char* dest, int useTopic) except ? -1:             # <<<<<<<<<<<<<<
+ *         if useTopic != 0:
+ *             self.status = ctibco.tibemsDestination_Create(destination, ctibco.TIBEMS_TOPIC, dest)
  */
 
   /* function exit code */
@@ -3228,83 +4756,54 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__create_dest(struct __py
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":104
+/* "tibemsMsg/emsSession.pyx":180
  *         return 0
  * 
- *     cdef int _destroy_dest(self) except ? -1:             # <<<<<<<<<<<<<<
- *         if self.destination != NULL:
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
+ *     cdef int _destroy_dest(self, ctibco.tibemsDestination destination) except ? -1:             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsDestination_Destroy(destination)
+ *         self._check_status()
  */
 
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__destroy_dest(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self) {
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__destroy_dest(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, tibemsDestination __pyx_v_destination) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  int __pyx_t_2;
   __Pyx_RefNannySetupContext("_destroy_dest", 0);
 
-  /* "tibemsMsg/emsSession.pyx":105
+  /* "tibemsMsg/emsSession.pyx":181
  * 
- *     cdef int _destroy_dest(self) except ? -1:
- *         if self.destination != NULL:             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
- *             self._check_status()
- */
-  __pyx_t_1 = ((__pyx_v_self->destination != NULL) != 0);
-  if (__pyx_t_1) {
-
-    /* "tibemsMsg/emsSession.pyx":106
- *     cdef int _destroy_dest(self) except ? -1:
- *         if self.destination != NULL:
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)             # <<<<<<<<<<<<<<
- *             self._check_status()
- *             self.destination = NULL
- */
-    __pyx_v_self->status = tibemsDestination_Destroy(__pyx_v_self->destination);
-
-    /* "tibemsMsg/emsSession.pyx":107
- *         if self.destination != NULL:
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
- *             self._check_status()             # <<<<<<<<<<<<<<
- *             self.destination = NULL
+ *     cdef int _destroy_dest(self, ctibco.tibemsDestination destination) except ? -1:
+ *         self.status = ctibco.tibemsDestination_Destroy(destination)             # <<<<<<<<<<<<<<
+ *         self._check_status()
  *         return 0
  */
-    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 107, __pyx_L1_error)
+  __pyx_v_self->status = tibemsDestination_Destroy(__pyx_v_destination);
 
-    /* "tibemsMsg/emsSession.pyx":108
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
- *             self._check_status()
- *             self.destination = NULL             # <<<<<<<<<<<<<<
+  /* "tibemsMsg/emsSession.pyx":182
+ *     cdef int _destroy_dest(self, ctibco.tibemsDestination destination) except ? -1:
+ *         self.status = ctibco.tibemsDestination_Destroy(destination)
+ *         self._check_status()             # <<<<<<<<<<<<<<
  *         return 0
  * 
  */
-    __pyx_v_self->destination = NULL;
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 182, __pyx_L1_error)
 
-    /* "tibemsMsg/emsSession.pyx":105
- * 
- *     cdef int _destroy_dest(self) except ? -1:
- *         if self.destination != NULL:             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
- *             self._check_status()
- */
-  }
-
-  /* "tibemsMsg/emsSession.pyx":109
- *             self._check_status()
- *             self.destination = NULL
+  /* "tibemsMsg/emsSession.pyx":183
+ *         self.status = ctibco.tibemsDestination_Destroy(destination)
+ *         self._check_status()
  *         return 0             # <<<<<<<<<<<<<<
  * 
- *     cdef int _producer(self, char* name, int useTopic, char* data) except ? -1:
+ *     cdef int _get_msg(self, ctibco.tibemsMsg msg) except ? -1:
  */
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":104
+  /* "tibemsMsg/emsSession.pyx":180
  *         return 0
  * 
- *     cdef int _destroy_dest(self) except ? -1:             # <<<<<<<<<<<<<<
- *         if self.destination != NULL:
- *             self.status = ctibco.tibemsDestination_Destroy(self.destination)
+ *     cdef int _destroy_dest(self, ctibco.tibemsDestination destination) except ? -1:             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsDestination_Destroy(destination)
+ *         self._check_status()
  */
 
   /* function exit code */
@@ -3316,15 +4815,272 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__destroy_dest(struct __p
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":111
+/* "tibemsMsg/emsSession.pyx":185
  *         return 0
  * 
- *     cdef int _producer(self, char* name, int useTopic, char* data) except ? -1:             # <<<<<<<<<<<<<<
+ *     cdef int _get_msg(self, ctibco.tibemsMsg msg) except ? -1:             # <<<<<<<<<<<<<<
  *         cdef:
- *             ctibco.tibemsMsgProducer msgProducer
+ *             ctibco.tibemsMsgType msgType
  */
 
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__producer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_name, int __pyx_v_useTopic, char *__pyx_v_data) {
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__get_msg(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, tibemsMsg __pyx_v_msg) {
+  tibemsMsgType __pyx_v_msgType;
+  tibemsMsgEnum __pyx_v_enumeration;
+  char const *__pyx_v_name;
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  int __pyx_t_2;
+  struct __pyx_opt_args_9tibemsMsg_10emsSession_10EmsSession__check_status __pyx_t_3;
+  char const *__pyx_t_4;
+  PyObject *__pyx_t_5 = NULL;
+  __Pyx_RefNannySetupContext("_get_msg", 0);
+
+  /* "tibemsMsg/emsSession.pyx":190
+ *             ctibco.tibemsMsgEnum enumeration
+ *             const char* name
+ *         if self.debug != 0:             # <<<<<<<<<<<<<<
+ *             ctibco.tibemsMsg_Print(msg)
+ *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
+ */
+  __pyx_t_1 = ((__pyx_v_self->debug != 0) != 0);
+  if (__pyx_t_1) {
+
+    /* "tibemsMsg/emsSession.pyx":191
+ *             const char* name
+ *         if self.debug != 0:
+ *             ctibco.tibemsMsg_Print(msg)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
+ *         self._check_status()
+ */
+    tibemsMsg_Print(__pyx_v_msg);
+
+    /* "tibemsMsg/emsSession.pyx":190
+ *             ctibco.tibemsMsgEnum enumeration
+ *             const char* name
+ *         if self.debug != 0:             # <<<<<<<<<<<<<<
+ *             ctibco.tibemsMsg_Print(msg)
+ *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
+ */
+  }
+
+  /* "tibemsMsg/emsSession.pyx":192
+ *         if self.debug != 0:
+ *             ctibco.tibemsMsg_Print(msg)
+ *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
+ */
+  __pyx_v_self->status = tibemsMsg_GetBodyType(__pyx_v_msg, (&__pyx_v_msgType));
+
+  /* "tibemsMsg/emsSession.pyx":193
+ *             ctibco.tibemsMsg_Print(msg)
+ *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
+ *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)
+ */
+  __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 193, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":194
+ *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
+ *         self._check_status()
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)
+ *             self._check_status()
+ */
+  switch (__pyx_v_msgType) {
+    case TIBEMS_TEXT_MESSAGE:
+
+    /* "tibemsMsg/emsSession.pyx":195
+ *         self._check_status()
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
+ *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)             # <<<<<<<<<<<<<<
+ *             self._check_status()
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ */
+    __pyx_v_self->status = tibemsTextMsg_GetText(__pyx_v_msg, (&__pyx_v_self->txt));
+
+    /* "tibemsMsg/emsSession.pyx":196
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
+ *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)
+ *             self._check_status()             # <<<<<<<<<<<<<<
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ *             self.status = ctibco.tibemsMapMsg_GetMapNames(msg, &enumeration)
+ */
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 196, __pyx_L1_error)
+
+    /* "tibemsMsg/emsSession.pyx":194
+ *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
+ *         self._check_status()
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)
+ *             self._check_status()
+ */
+    break;
+    case TIBEMS_MAP_MESSAGE:
+
+    /* "tibemsMsg/emsSession.pyx":198
+ *             self._check_status()
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ *             self.status = ctibco.tibemsMapMsg_GetMapNames(msg, &enumeration)             # <<<<<<<<<<<<<<
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMsgEnum_GetNextName(enumeration, &name)
+ */
+    __pyx_v_self->status = tibemsMapMsg_GetMapNames(__pyx_v_msg, (&__pyx_v_enumeration));
+
+    /* "tibemsMsg/emsSession.pyx":199
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ *             self.status = ctibco.tibemsMapMsg_GetMapNames(msg, &enumeration)
+ *             self._check_status()             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsMsgEnum_GetNextName(enumeration, &name)
+ *             self._check_status()
+ */
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 199, __pyx_L1_error)
+
+    /* "tibemsMsg/emsSession.pyx":200
+ *             self.status = ctibco.tibemsMapMsg_GetMapNames(msg, &enumeration)
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMsgEnum_GetNextName(enumeration, &name)             # <<<<<<<<<<<<<<
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMapMsg_GetString(msg, name, &self.txt)
+ */
+    __pyx_v_self->status = tibemsMsgEnum_GetNextName(__pyx_v_enumeration, (&__pyx_v_name));
+
+    /* "tibemsMsg/emsSession.pyx":201
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMsgEnum_GetNextName(enumeration, &name)
+ *             self._check_status()             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsMapMsg_GetString(msg, name, &self.txt)
+ *             self._check_status()
+ */
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 201, __pyx_L1_error)
+
+    /* "tibemsMsg/emsSession.pyx":202
+ *             self.status = ctibco.tibemsMsgEnum_GetNextName(enumeration, &name)
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMapMsg_GetString(msg, name, &self.txt)             # <<<<<<<<<<<<<<
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMsgEnum_Destroy(enumeration)
+ */
+    __pyx_v_self->status = tibemsMapMsg_GetString(__pyx_v_msg, __pyx_v_name, (&__pyx_v_self->txt));
+
+    /* "tibemsMsg/emsSession.pyx":203
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMapMsg_GetString(msg, name, &self.txt)
+ *             self._check_status()             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsMsgEnum_Destroy(enumeration)
+ *             self._check_status()
+ */
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 203, __pyx_L1_error)
+
+    /* "tibemsMsg/emsSession.pyx":204
+ *             self.status = ctibco.tibemsMapMsg_GetString(msg, name, &self.txt)
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMsgEnum_Destroy(enumeration)             # <<<<<<<<<<<<<<
+ *             self._check_status()
+ *         else:
+ */
+    __pyx_v_self->status = tibemsMsgEnum_Destroy(__pyx_v_enumeration);
+
+    /* "tibemsMsg/emsSession.pyx":205
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMsgEnum_Destroy(enumeration)
+ *             self._check_status()             # <<<<<<<<<<<<<<
+ *         else:
+ *             self._getMsgTypeName(msgType)
+ */
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 205, __pyx_L1_error)
+
+    /* "tibemsMsg/emsSession.pyx":197
+ *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)
+ *             self._check_status()
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsMapMsg_GetMapNames(msg, &enumeration)
+ *             self._check_status()
+ */
+    break;
+    default:
+
+    /* "tibemsMsg/emsSession.pyx":207
+ *             self._check_status()
+ *         else:
+ *             self._getMsgTypeName(msgType)             # <<<<<<<<<<<<<<
+ *             self._check_status(1, self.msgTypeName)
+ *         self.msg = self.txt.decode()
+ */
+    ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_getMsgTypeName(__pyx_v_self, __pyx_v_msgType);
+
+    /* "tibemsMsg/emsSession.pyx":208
+ *         else:
+ *             self._getMsgTypeName(msgType)
+ *             self._check_status(1, self.msgTypeName)             # <<<<<<<<<<<<<<
+ *         self.msg = self.txt.decode()
+ *         return 0
+ */
+    __pyx_t_3.__pyx_n = 2;
+    __pyx_t_3.error = 1;
+    __pyx_t_3.msg = __pyx_v_self->msgTypeName;
+    __pyx_t_2 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, &__pyx_t_3); if (unlikely(__pyx_t_2 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 208, __pyx_L1_error)
+    break;
+  }
+
+  /* "tibemsMsg/emsSession.pyx":209
+ *             self._getMsgTypeName(msgType)
+ *             self._check_status(1, self.msgTypeName)
+ *         self.msg = self.txt.decode()             # <<<<<<<<<<<<<<
+ *         return 0
+ * 
+ */
+  __pyx_t_4 = __pyx_v_self->txt;
+  __pyx_t_5 = __Pyx_decode_c_string(__pyx_t_4, 0, strlen(__pyx_t_4), NULL, NULL, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 209, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  if (!(likely(PyUnicode_CheckExact(__pyx_t_5))||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "unicode", Py_TYPE(__pyx_t_5)->tp_name), 0))) __PYX_ERR(0, 209, __pyx_L1_error)
+  __Pyx_INCREF(__pyx_t_5);
+  __Pyx_GIVEREF(__pyx_t_5);
+  __Pyx_GOTREF(__pyx_v_self->msg);
+  __Pyx_DECREF(__pyx_v_self->msg);
+  __pyx_v_self->msg = ((PyObject*)__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+  /* "tibemsMsg/emsSession.pyx":210
+ *             self._check_status(1, self.msgTypeName)
+ *         self.msg = self.txt.decode()
+ *         return 0             # <<<<<<<<<<<<<<
+ * 
+ *     cdef int _producer(self, char* dest, int useTopic, char* data, ctibco.tibemsMsgType msgType, char* name) except ? -1:
+ */
+  __pyx_r = 0;
+  goto __pyx_L0;
+
+  /* "tibemsMsg/emsSession.pyx":185
+ *         return 0
+ * 
+ *     cdef int _get_msg(self, ctibco.tibemsMsg msg) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             ctibco.tibemsMsgType msgType
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._get_msg", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":212
+ *         return 0
+ * 
+ *     cdef int _producer(self, char* dest, int useTopic, char* data, ctibco.tibemsMsgType msgType, char* name) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             ctibco.tibemsDestination destination
+ */
+
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__producer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_dest, int __pyx_v_useTopic, char *__pyx_v_data, tibemsMsgType __pyx_v_msgType, char *__pyx_v_name) {
+  tibemsDestination __pyx_v_destination;
   tibemsMsgProducer __pyx_v_msgProducer;
   tibemsMsg __pyx_v_msg;
   int __pyx_r;
@@ -3333,99 +5089,166 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__producer(struct __pyx_o
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("_producer", 0);
 
-  /* "tibemsMsg/emsSession.pyx":115
+  /* "tibemsMsg/emsSession.pyx":217
  *             ctibco.tibemsMsgProducer msgProducer
  *             ctibco.tibemsMsg msg
- *         self._create_dest(name, useTopic)             # <<<<<<<<<<<<<<
- *         self.status = ctibco.tibemsSession_CreateProducer(self.session, &msgProducer, self.destination)
+ *         self._create_dest(&destination, dest, useTopic)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsSession_CreateProducer(self.session, &msgProducer, destination)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create_dest(__pyx_v_self, __pyx_v_name, __pyx_v_useTopic); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 115, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create_dest(__pyx_v_self, (&__pyx_v_destination), __pyx_v_dest, __pyx_v_useTopic); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 217, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":116
+  /* "tibemsMsg/emsSession.pyx":218
  *             ctibco.tibemsMsg msg
- *         self._create_dest(name, useTopic)
- *         self.status = ctibco.tibemsSession_CreateProducer(self.session, &msgProducer, self.destination)             # <<<<<<<<<<<<<<
+ *         self._create_dest(&destination, dest, useTopic)
+ *         self.status = ctibco.tibemsSession_CreateProducer(self.session, &msgProducer, destination)             # <<<<<<<<<<<<<<
  *         self._check_status()
- *         self.status = ctibco.tibemsTextMsg_Create(&msg)
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
  */
-  __pyx_v_self->status = tibemsSession_CreateProducer(__pyx_v_self->session, (&__pyx_v_msgProducer), __pyx_v_self->destination);
+  __pyx_v_self->status = tibemsSession_CreateProducer(__pyx_v_self->session, (&__pyx_v_msgProducer), __pyx_v_destination);
 
-  /* "tibemsMsg/emsSession.pyx":117
- *         self._create_dest(name, useTopic)
- *         self.status = ctibco.tibemsSession_CreateProducer(self.session, &msgProducer, self.destination)
+  /* "tibemsMsg/emsSession.pyx":219
+ *         self._create_dest(&destination, dest, useTopic)
+ *         self.status = ctibco.tibemsSession_CreateProducer(self.session, &msgProducer, destination)
  *         self._check_status()             # <<<<<<<<<<<<<<
- *         self.status = ctibco.tibemsTextMsg_Create(&msg)
- *         self._check_status()
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
+ *             self.status = ctibco.tibemsTextMsg_Create(&msg)
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 117, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 219, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":118
- *         self.status = ctibco.tibemsSession_CreateProducer(self.session, &msgProducer, self.destination)
+  /* "tibemsMsg/emsSession.pyx":220
+ *         self.status = ctibco.tibemsSession_CreateProducer(self.session, &msgProducer, destination)
  *         self._check_status()
- *         self.status = ctibco.tibemsTextMsg_Create(&msg)             # <<<<<<<<<<<<<<
- *         self._check_status()
- *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsTextMsg_Create(&msg)
+ *             self._check_status()
  */
-  __pyx_v_self->status = tibemsTextMsg_Create((&__pyx_v_msg));
+  switch (__pyx_v_msgType) {
+    case TIBEMS_TEXT_MESSAGE:
 
-  /* "tibemsMsg/emsSession.pyx":119
+    /* "tibemsMsg/emsSession.pyx":221
  *         self._check_status()
- *         self.status = ctibco.tibemsTextMsg_Create(&msg)
- *         self._check_status()             # <<<<<<<<<<<<<<
- *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)
- *         self._check_status()
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
+ *             self.status = ctibco.tibemsTextMsg_Create(&msg)             # <<<<<<<<<<<<<<
+ *             self._check_status()
+ *             self.status = ctibco.tibemsTextMsg_SetText(msg, data)
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 119, __pyx_L1_error)
+    __pyx_v_self->status = tibemsTextMsg_Create((&__pyx_v_msg));
 
-  /* "tibemsMsg/emsSession.pyx":120
- *         self.status = ctibco.tibemsTextMsg_Create(&msg)
- *         self._check_status()
- *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)             # <<<<<<<<<<<<<<
- *         self._check_status()
- *         if self.debug:
+    /* "tibemsMsg/emsSession.pyx":222
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
+ *             self.status = ctibco.tibemsTextMsg_Create(&msg)
+ *             self._check_status()             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsTextMsg_SetText(msg, data)
+ *             self._check_status()
  */
-  __pyx_v_self->status = tibemsTextMsg_SetText(__pyx_v_msg, __pyx_v_data);
+    __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 222, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":121
+    /* "tibemsMsg/emsSession.pyx":223
+ *             self.status = ctibco.tibemsTextMsg_Create(&msg)
+ *             self._check_status()
+ *             self.status = ctibco.tibemsTextMsg_SetText(msg, data)             # <<<<<<<<<<<<<<
+ *             self._check_status()
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ */
+    __pyx_v_self->status = tibemsTextMsg_SetText(__pyx_v_msg, __pyx_v_data);
+
+    /* "tibemsMsg/emsSession.pyx":224
+ *             self._check_status()
+ *             self.status = ctibco.tibemsTextMsg_SetText(msg, data)
+ *             self._check_status()             # <<<<<<<<<<<<<<
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ *             self.status = ctibco.tibemsMapMsg_Create(&msg)
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 224, __pyx_L1_error)
+
+    /* "tibemsMsg/emsSession.pyx":220
+ *         self.status = ctibco.tibemsSession_CreateProducer(self.session, &msgProducer, destination)
  *         self._check_status()
- *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)
- *         self._check_status()             # <<<<<<<<<<<<<<
- *         if self.debug:
+ *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsTextMsg_Create(&msg)
+ *             self._check_status()
+ */
+    break;
+    case TIBEMS_MAP_MESSAGE:
+
+    /* "tibemsMsg/emsSession.pyx":226
+ *             self._check_status()
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ *             self.status = ctibco.tibemsMapMsg_Create(&msg)             # <<<<<<<<<<<<<<
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMapMsg_SetString(msg, name, data)
+ */
+    __pyx_v_self->status = tibemsMapMsg_Create((&__pyx_v_msg));
+
+    /* "tibemsMsg/emsSession.pyx":227
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:
+ *             self.status = ctibco.tibemsMapMsg_Create(&msg)
+ *             self._check_status()             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsMapMsg_SetString(msg, name, data)
+ *             self._check_status()
+ */
+    __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 227, __pyx_L1_error)
+
+    /* "tibemsMsg/emsSession.pyx":228
+ *             self.status = ctibco.tibemsMapMsg_Create(&msg)
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMapMsg_SetString(msg, name, data)             # <<<<<<<<<<<<<<
+ *             self._check_status()
+ *         if self.debug != 0:
+ */
+    __pyx_v_self->status = tibemsMapMsg_SetString(__pyx_v_msg, __pyx_v_name, __pyx_v_data);
+
+    /* "tibemsMsg/emsSession.pyx":229
+ *             self._check_status()
+ *             self.status = ctibco.tibemsMapMsg_SetString(msg, name, data)
+ *             self._check_status()             # <<<<<<<<<<<<<<
+ *         if self.debug != 0:
  *             ctibco.tibemsMsg_Print(msg)
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 121, __pyx_L1_error)
+    __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 229, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":122
- *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)
- *         self._check_status()
- *         if self.debug:             # <<<<<<<<<<<<<<
+    /* "tibemsMsg/emsSession.pyx":225
+ *             self.status = ctibco.tibemsTextMsg_SetText(msg, data)
+ *             self._check_status()
+ *         elif msgType == ctibco.TIBEMS_MAP_MESSAGE:             # <<<<<<<<<<<<<<
+ *             self.status = ctibco.tibemsMapMsg_Create(&msg)
+ *             self._check_status()
+ */
+    break;
+    default: break;
+  }
+
+  /* "tibemsMsg/emsSession.pyx":230
+ *             self.status = ctibco.tibemsMapMsg_SetString(msg, name, data)
+ *             self._check_status()
+ *         if self.debug != 0:             # <<<<<<<<<<<<<<
  *             ctibco.tibemsMsg_Print(msg)
  *         self.status = ctibco.tibemsMsgProducer_Send(msgProducer, msg)
  */
-  __pyx_t_2 = (__pyx_v_self->debug != 0);
+  __pyx_t_2 = ((__pyx_v_self->debug != 0) != 0);
   if (__pyx_t_2) {
 
-    /* "tibemsMsg/emsSession.pyx":123
- *         self._check_status()
- *         if self.debug:
+    /* "tibemsMsg/emsSession.pyx":231
+ *             self._check_status()
+ *         if self.debug != 0:
  *             ctibco.tibemsMsg_Print(msg)             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsMsgProducer_Send(msgProducer, msg)
  *         self._check_status()
  */
     tibemsMsg_Print(__pyx_v_msg);
 
-    /* "tibemsMsg/emsSession.pyx":122
- *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)
- *         self._check_status()
- *         if self.debug:             # <<<<<<<<<<<<<<
+    /* "tibemsMsg/emsSession.pyx":230
+ *             self.status = ctibco.tibemsMapMsg_SetString(msg, name, data)
+ *             self._check_status()
+ *         if self.debug != 0:             # <<<<<<<<<<<<<<
  *             ctibco.tibemsMsg_Print(msg)
  *         self.status = ctibco.tibemsMsgProducer_Send(msgProducer, msg)
  */
   }
 
-  /* "tibemsMsg/emsSession.pyx":124
- *         if self.debug:
+  /* "tibemsMsg/emsSession.pyx":232
+ *         if self.debug != 0:
  *             ctibco.tibemsMsg_Print(msg)
  *         self.status = ctibco.tibemsMsgProducer_Send(msgProducer, msg)             # <<<<<<<<<<<<<<
  *         self._check_status()
@@ -3433,16 +5256,16 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__producer(struct __pyx_o
  */
   __pyx_v_self->status = tibemsMsgProducer_Send(__pyx_v_msgProducer, __pyx_v_msg);
 
-  /* "tibemsMsg/emsSession.pyx":125
+  /* "tibemsMsg/emsSession.pyx":233
  *             ctibco.tibemsMsg_Print(msg)
  *         self.status = ctibco.tibemsMsgProducer_Send(msgProducer, msg)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsMsg_Destroy(msg)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 125, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 233, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":126
+  /* "tibemsMsg/emsSession.pyx":234
  *         self.status = ctibco.tibemsMsgProducer_Send(msgProducer, msg)
  *         self._check_status()
  *         self.status = ctibco.tibemsMsg_Destroy(msg)             # <<<<<<<<<<<<<<
@@ -3451,58 +5274,58 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__producer(struct __pyx_o
  */
   __pyx_v_self->status = tibemsMsg_Destroy(__pyx_v_msg);
 
-  /* "tibemsMsg/emsSession.pyx":127
+  /* "tibemsMsg/emsSession.pyx":235
  *         self._check_status()
  *         self.status = ctibco.tibemsMsg_Destroy(msg)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsMsgProducer_Close(msgProducer)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 127, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 235, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":128
+  /* "tibemsMsg/emsSession.pyx":236
  *         self.status = ctibco.tibemsMsg_Destroy(msg)
  *         self._check_status()
  *         self.status = ctibco.tibemsMsgProducer_Close(msgProducer)             # <<<<<<<<<<<<<<
  *         self._check_status()
- *         self._destroy_dest()
+ *         self._destroy_dest(destination)
  */
   __pyx_v_self->status = tibemsMsgProducer_Close(__pyx_v_msgProducer);
 
-  /* "tibemsMsg/emsSession.pyx":129
+  /* "tibemsMsg/emsSession.pyx":237
  *         self._check_status()
  *         self.status = ctibco.tibemsMsgProducer_Close(msgProducer)
  *         self._check_status()             # <<<<<<<<<<<<<<
- *         self._destroy_dest()
+ *         self._destroy_dest(destination)
  *         return 0
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 129, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 237, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":130
+  /* "tibemsMsg/emsSession.pyx":238
  *         self.status = ctibco.tibemsMsgProducer_Close(msgProducer)
  *         self._check_status()
- *         self._destroy_dest()             # <<<<<<<<<<<<<<
+ *         self._destroy_dest(destination)             # <<<<<<<<<<<<<<
  *         return 0
  * 
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_destroy_dest(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 130, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_destroy_dest(__pyx_v_self, __pyx_v_destination); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 238, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":131
+  /* "tibemsMsg/emsSession.pyx":239
  *         self._check_status()
- *         self._destroy_dest()
+ *         self._destroy_dest(destination)
  *         return 0             # <<<<<<<<<<<<<<
  * 
- *     cdef int _consumer(self, char* name, int useTopic, int timeout) except ? -1:
+ *     cdef int _consumer(self, char* dest, int useTopic, int timeout) except ? -1:
  */
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":111
+  /* "tibemsMsg/emsSession.pyx":212
  *         return 0
  * 
- *     cdef int _producer(self, char* name, int useTopic, char* data) except ? -1:             # <<<<<<<<<<<<<<
+ *     cdef int _producer(self, char* dest, int useTopic, char* data, ctibco.tibemsMsgType msgType, char* name) except ? -1:             # <<<<<<<<<<<<<<
  *         cdef:
- *             ctibco.tibemsMsgProducer msgProducer
+ *             ctibco.tibemsDestination destination
  */
 
   /* function exit code */
@@ -3514,57 +5337,52 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__producer(struct __pyx_o
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":133
+/* "tibemsMsg/emsSession.pyx":241
  *         return 0
  * 
- *     cdef int _consumer(self, char* name, int useTopic, int timeout) except ? -1:             # <<<<<<<<<<<<<<
+ *     cdef int _consumer(self, char* dest, int useTopic, int timeout) except ? -1:             # <<<<<<<<<<<<<<
  *         cdef:
- *             ctibco.tibemsMsgConsumer msgConsumer
+ *             ctibco.tibemsDestination destination
  */
 
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_name, int __pyx_v_useTopic, int __pyx_v_timeout) {
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_dest, int __pyx_v_useTopic, int __pyx_v_timeout) {
+  tibemsDestination __pyx_v_destination;
   tibemsMsgConsumer __pyx_v_msgConsumer;
   tibemsMsg __pyx_v_msg;
-  tibemsMsgType __pyx_v_msgType;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
-  int __pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("_consumer", 0);
 
-  /* "tibemsMsg/emsSession.pyx":138
+  /* "tibemsMsg/emsSession.pyx":246
+ *             ctibco.tibemsMsgConsumer msgConsumer
  *             ctibco.tibemsMsg msg
- *             ctibco.tibemsMsgType msgType
- *         self._create_dest(name, useTopic)             # <<<<<<<<<<<<<<
- *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, self.destination, NULL, ctibco.TIBEMS_FALSE)
+ *         self._create_dest(&destination, dest, useTopic)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, destination, NULL, ctibco.TIBEMS_FALSE)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create_dest(__pyx_v_self, __pyx_v_name, __pyx_v_useTopic); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 138, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create_dest(__pyx_v_self, (&__pyx_v_destination), __pyx_v_dest, __pyx_v_useTopic); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 246, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":139
- *             ctibco.tibemsMsgType msgType
- *         self._create_dest(name, useTopic)
- *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, self.destination, NULL, ctibco.TIBEMS_FALSE)             # <<<<<<<<<<<<<<
+  /* "tibemsMsg/emsSession.pyx":247
+ *             ctibco.tibemsMsg msg
+ *         self._create_dest(&destination, dest, useTopic)
+ *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, destination, NULL, ctibco.TIBEMS_FALSE)             # <<<<<<<<<<<<<<
  *         self._check_status()
  *         self.status = ctibco.tibemsConnection_Start(self.connection)
  */
-  __pyx_v_self->status = tibemsSession_CreateConsumer(__pyx_v_self->session, (&__pyx_v_msgConsumer), __pyx_v_self->destination, NULL, TIBEMS_FALSE);
+  __pyx_v_self->status = tibemsSession_CreateConsumer(__pyx_v_self->session, (&__pyx_v_msgConsumer), __pyx_v_destination, NULL, TIBEMS_FALSE);
 
-  /* "tibemsMsg/emsSession.pyx":140
- *         self._create_dest(name, useTopic)
- *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, self.destination, NULL, ctibco.TIBEMS_FALSE)
+  /* "tibemsMsg/emsSession.pyx":248
+ *         self._create_dest(&destination, dest, useTopic)
+ *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, destination, NULL, ctibco.TIBEMS_FALSE)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsConnection_Start(self.connection)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 140, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 248, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":141
- *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, self.destination, NULL, ctibco.TIBEMS_FALSE)
+  /* "tibemsMsg/emsSession.pyx":249
+ *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, destination, NULL, ctibco.TIBEMS_FALSE)
  *         self._check_status()
  *         self.status = ctibco.tibemsConnection_Start(self.connection)             # <<<<<<<<<<<<<<
  *         self._check_status()
@@ -3572,223 +5390,107 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__consumer(struct __pyx_o
  */
   __pyx_v_self->status = tibemsConnection_Start(__pyx_v_self->connection);
 
-  /* "tibemsMsg/emsSession.pyx":142
+  /* "tibemsMsg/emsSession.pyx":250
  *         self._check_status()
  *         self.status = ctibco.tibemsConnection_Start(self.connection)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 142, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 250, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":143
+  /* "tibemsMsg/emsSession.pyx":251
  *         self.status = ctibco.tibemsConnection_Start(self.connection)
  *         self._check_status()
  *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)             # <<<<<<<<<<<<<<
  *         self._check_status()
- *         if self.debug:
+ *         self._get_msg(msg)
  */
   __pyx_v_self->status = tibemsMsgConsumer_ReceiveTimeout(__pyx_v_msgConsumer, (&__pyx_v_msg), __pyx_v_timeout);
 
-  /* "tibemsMsg/emsSession.pyx":144
+  /* "tibemsMsg/emsSession.pyx":252
  *         self._check_status()
  *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
  *         self._check_status()             # <<<<<<<<<<<<<<
- *         if self.debug:
- *             ctibco.tibemsMsg_Print(msg)
+ *         self._get_msg(msg)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 144, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 252, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":145
+  /* "tibemsMsg/emsSession.pyx":253
  *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
  *         self._check_status()
- *         if self.debug:             # <<<<<<<<<<<<<<
- *             ctibco.tibemsMsg_Print(msg)
- *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
- */
-  __pyx_t_2 = (__pyx_v_self->debug != 0);
-  if (__pyx_t_2) {
-
-    /* "tibemsMsg/emsSession.pyx":146
- *         self._check_status()
- *         if self.debug:
- *             ctibco.tibemsMsg_Print(msg)             # <<<<<<<<<<<<<<
- *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
- *         self._check_status()
- */
-    tibemsMsg_Print(__pyx_v_msg);
-
-    /* "tibemsMsg/emsSession.pyx":145
- *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
- *         self._check_status()
- *         if self.debug:             # <<<<<<<<<<<<<<
- *             ctibco.tibemsMsg_Print(msg)
- *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
- */
-  }
-
-  /* "tibemsMsg/emsSession.pyx":147
- *         if self.debug:
- *             ctibco.tibemsMsg_Print(msg)
- *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)             # <<<<<<<<<<<<<<
- *         self._check_status()
- *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
- */
-  __pyx_v_self->status = tibemsMsg_GetBodyType(__pyx_v_msg, (&__pyx_v_msgType));
-
-  /* "tibemsMsg/emsSession.pyx":148
- *             ctibco.tibemsMsg_Print(msg)
- *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
- *         self._check_status()             # <<<<<<<<<<<<<<
- *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
- *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)
- */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 148, __pyx_L1_error)
-
-  /* "tibemsMsg/emsSession.pyx":149
- *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
- *         self._check_status()
- *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)
- *             self._check_status()
- */
-  __pyx_t_2 = ((__pyx_v_msgType == TIBEMS_TEXT_MESSAGE) != 0);
-  if (likely(__pyx_t_2)) {
-
-    /* "tibemsMsg/emsSession.pyx":150
- *         self._check_status()
- *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
- *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)             # <<<<<<<<<<<<<<
- *             self._check_status()
- *         else:
- */
-    __pyx_v_self->status = tibemsTextMsg_GetText(__pyx_v_msg, (&__pyx_v_self->txt));
-
-    /* "tibemsMsg/emsSession.pyx":151
- *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:
- *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)
- *             self._check_status()             # <<<<<<<<<<<<<<
- *         else:
- *             raise TibcoError('Message Type: %s' % msgType)
- */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 151, __pyx_L1_error)
-
-    /* "tibemsMsg/emsSession.pyx":149
- *         self.status = ctibco.tibemsMsg_GetBodyType(msg, &msgType)
- *         self._check_status()
- *         if msgType == ctibco.TIBEMS_TEXT_MESSAGE:             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsTextMsg_GetText(msg, &self.txt)
- *             self._check_status()
- */
-    goto __pyx_L4;
-  }
-
-  /* "tibemsMsg/emsSession.pyx":153
- *             self._check_status()
- *         else:
- *             raise TibcoError('Message Type: %s' % msgType)             # <<<<<<<<<<<<<<
+ *         self._get_msg(msg)             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsMsg_Destroy(msg)
  *         self._check_status()
  */
-  /*else*/ {
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_TibcoError); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 153, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyInt_From_tibemsMsgType(__pyx_v_msgType); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 153, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyUnicode_Format(__pyx_kp_u_Message_Type_s, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 153, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
-      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
-      if (likely(__pyx_t_5)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-        __Pyx_INCREF(__pyx_t_5);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_4, function);
-      }
-    }
-    __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
-    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 153, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_Raise(__pyx_t_3, 0, 0, 0);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(1, 153, __pyx_L1_error)
-  }
-  __pyx_L4:;
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_get_msg(__pyx_v_self, __pyx_v_msg); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 253, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":154
- *         else:
- *             raise TibcoError('Message Type: %s' % msgType)
+  /* "tibemsMsg/emsSession.pyx":254
+ *         self._check_status()
+ *         self._get_msg(msg)
  *         self.status = ctibco.tibemsMsg_Destroy(msg)             # <<<<<<<<<<<<<<
  *         self._check_status()
  *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
  */
   __pyx_v_self->status = tibemsMsg_Destroy(__pyx_v_msg);
 
-  /* "tibemsMsg/emsSession.pyx":155
- *             raise TibcoError('Message Type: %s' % msgType)
+  /* "tibemsMsg/emsSession.pyx":255
+ *         self._get_msg(msg)
  *         self.status = ctibco.tibemsMsg_Destroy(msg)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 155, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 255, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":156
+  /* "tibemsMsg/emsSession.pyx":256
  *         self.status = ctibco.tibemsMsg_Destroy(msg)
  *         self._check_status()
  *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)             # <<<<<<<<<<<<<<
  *         self._check_status()
- *         self._destroy_dest()
+ *         self._destroy_dest(destination)
  */
   __pyx_v_self->status = tibemsMsgConsumer_Close(__pyx_v_msgConsumer);
 
-  /* "tibemsMsg/emsSession.pyx":157
+  /* "tibemsMsg/emsSession.pyx":257
  *         self._check_status()
  *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
  *         self._check_status()             # <<<<<<<<<<<<<<
- *         self._destroy_dest()
+ *         self._destroy_dest(destination)
  *         return 0
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 157, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 257, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":158
+  /* "tibemsMsg/emsSession.pyx":258
  *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
  *         self._check_status()
- *         self._destroy_dest()             # <<<<<<<<<<<<<<
+ *         self._destroy_dest(destination)             # <<<<<<<<<<<<<<
  *         return 0
  * 
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_destroy_dest(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 158, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_destroy_dest(__pyx_v_self, __pyx_v_destination); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 258, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":159
+  /* "tibemsMsg/emsSession.pyx":259
  *         self._check_status()
- *         self._destroy_dest()
+ *         self._destroy_dest(destination)
  *         return 0             # <<<<<<<<<<<<<<
  * 
- *     cdef int _requester(self, char* name, int useTopic, char* data) except ? -1:
+ *     cdef int _requester(self, char* dest, int useTopic, char* data) except ? -1:
  */
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":133
+  /* "tibemsMsg/emsSession.pyx":241
  *         return 0
  * 
- *     cdef int _consumer(self, char* name, int useTopic, int timeout) except ? -1:             # <<<<<<<<<<<<<<
+ *     cdef int _consumer(self, char* dest, int useTopic, int timeout) except ? -1:             # <<<<<<<<<<<<<<
  *         cdef:
- *             ctibco.tibemsMsgConsumer msgConsumer
+ *             ctibco.tibemsDestination destination
  */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
   __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._consumer", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
@@ -3796,58 +5498,54 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__consumer(struct __pyx_o
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":161
+/* "tibemsMsg/emsSession.pyx":261
  *         return 0
  * 
- *     cdef int _requester(self, char* name, int useTopic, char* data) except ? -1:             # <<<<<<<<<<<<<<
+ *     cdef int _requester(self, char* dest, int useTopic, char* data) except ? -1:             # <<<<<<<<<<<<<<
  *         cdef:
- *             ctibco.tibemsMsgRequestor msgRequestor
+ *             ctibco.tibemsDestination destination
  */
 
-static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__requester(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_name, int __pyx_v_useTopic, char *__pyx_v_data) {
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__requester(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_dest, int __pyx_v_useTopic, char *__pyx_v_data) {
+  tibemsDestination __pyx_v_destination;
   tibemsMsgRequestor __pyx_v_msgRequestor;
   tibemsMsg __pyx_v_msg;
   tibemsMsg __pyx_v_reply;
-  tibemsMsgType __pyx_v_replyType;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   int __pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("_requester", 0);
 
-  /* "tibemsMsg/emsSession.pyx":167
+  /* "tibemsMsg/emsSession.pyx":267
+ *             ctibco.tibemsMsg msg
  *             ctibco.tibemsMsg reply
- *             ctibco.tibemsMsgType replyType
- *         self._create_dest(name, useTopic)             # <<<<<<<<<<<<<<
- *         self.status = ctibco.tibemsMsgRequestor_Create(self.session, &msgRequestor, self.destination)
+ *         self._create_dest(&destination, dest, useTopic)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsgRequestor_Create(self.session, &msgRequestor, destination)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create_dest(__pyx_v_self, __pyx_v_name, __pyx_v_useTopic); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 167, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create_dest(__pyx_v_self, (&__pyx_v_destination), __pyx_v_dest, __pyx_v_useTopic); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 267, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":168
- *             ctibco.tibemsMsgType replyType
- *         self._create_dest(name, useTopic)
- *         self.status = ctibco.tibemsMsgRequestor_Create(self.session, &msgRequestor, self.destination)             # <<<<<<<<<<<<<<
+  /* "tibemsMsg/emsSession.pyx":268
+ *             ctibco.tibemsMsg reply
+ *         self._create_dest(&destination, dest, useTopic)
+ *         self.status = ctibco.tibemsMsgRequestor_Create(self.session, &msgRequestor, destination)             # <<<<<<<<<<<<<<
  *         self._check_status()
  *         self.status = ctibco.tibemsTextMsg_Create(&msg)
  */
-  __pyx_v_self->status = tibemsMsgRequestor_Create(__pyx_v_self->session, (&__pyx_v_msgRequestor), __pyx_v_self->destination);
+  __pyx_v_self->status = tibemsMsgRequestor_Create(__pyx_v_self->session, (&__pyx_v_msgRequestor), __pyx_v_destination);
 
-  /* "tibemsMsg/emsSession.pyx":169
- *         self._create_dest(name, useTopic)
- *         self.status = ctibco.tibemsMsgRequestor_Create(self.session, &msgRequestor, self.destination)
+  /* "tibemsMsg/emsSession.pyx":269
+ *         self._create_dest(&destination, dest, useTopic)
+ *         self.status = ctibco.tibemsMsgRequestor_Create(self.session, &msgRequestor, destination)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsTextMsg_Create(&msg)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 169, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 269, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":170
- *         self.status = ctibco.tibemsMsgRequestor_Create(self.session, &msgRequestor, self.destination)
+  /* "tibemsMsg/emsSession.pyx":270
+ *         self.status = ctibco.tibemsMsgRequestor_Create(self.session, &msgRequestor, destination)
  *         self._check_status()
  *         self.status = ctibco.tibemsTextMsg_Create(&msg)             # <<<<<<<<<<<<<<
  *         self._check_status()
@@ -3855,219 +5553,125 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__requester(struct __pyx_
  */
   __pyx_v_self->status = tibemsTextMsg_Create((&__pyx_v_msg));
 
-  /* "tibemsMsg/emsSession.pyx":171
+  /* "tibemsMsg/emsSession.pyx":271
  *         self._check_status()
  *         self.status = ctibco.tibemsTextMsg_Create(&msg)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 171, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 271, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":172
+  /* "tibemsMsg/emsSession.pyx":272
  *         self.status = ctibco.tibemsTextMsg_Create(&msg)
  *         self._check_status()
  *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)             # <<<<<<<<<<<<<<
  *         self._check_status()
- *         if self.debug:
+ *         if self.debug != 0:
  */
   __pyx_v_self->status = tibemsTextMsg_SetText(__pyx_v_msg, __pyx_v_data);
 
-  /* "tibemsMsg/emsSession.pyx":173
+  /* "tibemsMsg/emsSession.pyx":273
  *         self._check_status()
  *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)
  *         self._check_status()             # <<<<<<<<<<<<<<
- *         if self.debug:
+ *         if self.debug != 0:
  *             ctibco.tibemsMsg_Print(msg)
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 173, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 273, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":174
+  /* "tibemsMsg/emsSession.pyx":274
  *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)
  *         self._check_status()
- *         if self.debug:             # <<<<<<<<<<<<<<
+ *         if self.debug != 0:             # <<<<<<<<<<<<<<
  *             ctibco.tibemsMsg_Print(msg)
  *         self.status = ctibco.tibemsMsgRequestor_Request(msgRequestor, msg, &reply)
  */
-  __pyx_t_2 = (__pyx_v_self->debug != 0);
+  __pyx_t_2 = ((__pyx_v_self->debug != 0) != 0);
   if (__pyx_t_2) {
 
-    /* "tibemsMsg/emsSession.pyx":175
+    /* "tibemsMsg/emsSession.pyx":275
  *         self._check_status()
- *         if self.debug:
+ *         if self.debug != 0:
  *             ctibco.tibemsMsg_Print(msg)             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsMsgRequestor_Request(msgRequestor, msg, &reply)
  *         self._check_status()
  */
     tibemsMsg_Print(__pyx_v_msg);
 
-    /* "tibemsMsg/emsSession.pyx":174
+    /* "tibemsMsg/emsSession.pyx":274
  *         self.status = ctibco.tibemsTextMsg_SetText(msg, data)
  *         self._check_status()
- *         if self.debug:             # <<<<<<<<<<<<<<
+ *         if self.debug != 0:             # <<<<<<<<<<<<<<
  *             ctibco.tibemsMsg_Print(msg)
  *         self.status = ctibco.tibemsMsgRequestor_Request(msgRequestor, msg, &reply)
  */
   }
 
-  /* "tibemsMsg/emsSession.pyx":176
- *         if self.debug:
+  /* "tibemsMsg/emsSession.pyx":276
+ *         if self.debug != 0:
  *             ctibco.tibemsMsg_Print(msg)
  *         self.status = ctibco.tibemsMsgRequestor_Request(msgRequestor, msg, &reply)             # <<<<<<<<<<<<<<
  *         self._check_status()
- *         if self.debug:
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
  */
   __pyx_v_self->status = tibemsMsgRequestor_Request(__pyx_v_msgRequestor, __pyx_v_msg, (&__pyx_v_reply));
 
-  /* "tibemsMsg/emsSession.pyx":177
+  /* "tibemsMsg/emsSession.pyx":277
  *             ctibco.tibemsMsg_Print(msg)
  *         self.status = ctibco.tibemsMsgRequestor_Request(msgRequestor, msg, &reply)
  *         self._check_status()             # <<<<<<<<<<<<<<
- *         if self.debug:
- *             ctibco.tibemsMsg_Print(reply)
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 177, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 277, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":178
+  /* "tibemsMsg/emsSession.pyx":278
  *         self.status = ctibco.tibemsMsgRequestor_Request(msgRequestor, msg, &reply)
  *         self._check_status()
- *         if self.debug:             # <<<<<<<<<<<<<<
- *             ctibco.tibemsMsg_Print(reply)
- *         self.status = ctibco.tibemsMsg_GetBodyType(reply, &replyType)
- */
-  __pyx_t_2 = (__pyx_v_self->debug != 0);
-  if (__pyx_t_2) {
-
-    /* "tibemsMsg/emsSession.pyx":179
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)             # <<<<<<<<<<<<<<
  *         self._check_status()
- *         if self.debug:
- *             ctibco.tibemsMsg_Print(reply)             # <<<<<<<<<<<<<<
- *         self.status = ctibco.tibemsMsg_GetBodyType(reply, &replyType)
- *         self._check_status()
+ *         self._get_msg(reply)
  */
-    tibemsMsg_Print(__pyx_v_reply);
+  __pyx_v_self->status = tibemsConnection_Start(__pyx_v_self->connection);
 
-    /* "tibemsMsg/emsSession.pyx":178
- *         self.status = ctibco.tibemsMsgRequestor_Request(msgRequestor, msg, &reply)
+  /* "tibemsMsg/emsSession.pyx":279
  *         self._check_status()
- *         if self.debug:             # <<<<<<<<<<<<<<
- *             ctibco.tibemsMsg_Print(reply)
- *         self.status = ctibco.tibemsMsg_GetBodyType(reply, &replyType)
- */
-  }
-
-  /* "tibemsMsg/emsSession.pyx":180
- *         if self.debug:
- *             ctibco.tibemsMsg_Print(reply)
- *         self.status = ctibco.tibemsMsg_GetBodyType(reply, &replyType)             # <<<<<<<<<<<<<<
- *         self._check_status()
- *         if replyType == ctibco.TIBEMS_TEXT_MESSAGE:
- */
-  __pyx_v_self->status = tibemsMsg_GetBodyType(__pyx_v_reply, (&__pyx_v_replyType));
-
-  /* "tibemsMsg/emsSession.pyx":181
- *             ctibco.tibemsMsg_Print(reply)
- *         self.status = ctibco.tibemsMsg_GetBodyType(reply, &replyType)
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
  *         self._check_status()             # <<<<<<<<<<<<<<
- *         if replyType == ctibco.TIBEMS_TEXT_MESSAGE:
- *             self.status = ctibco.tibemsTextMsg_GetText(reply, &self.txt)
+ *         self._get_msg(reply)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 181, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 279, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":182
- *         self.status = ctibco.tibemsMsg_GetBodyType(reply, &replyType)
+  /* "tibemsMsg/emsSession.pyx":280
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
  *         self._check_status()
- *         if replyType == ctibco.TIBEMS_TEXT_MESSAGE:             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsTextMsg_GetText(reply, &self.txt)
- *             self._check_status()
- */
-  __pyx_t_2 = ((__pyx_v_replyType == TIBEMS_TEXT_MESSAGE) != 0);
-  if (likely(__pyx_t_2)) {
-
-    /* "tibemsMsg/emsSession.pyx":183
- *         self._check_status()
- *         if replyType == ctibco.TIBEMS_TEXT_MESSAGE:
- *             self.status = ctibco.tibemsTextMsg_GetText(reply, &self.txt)             # <<<<<<<<<<<<<<
- *             self._check_status()
- *         else:
- */
-    __pyx_v_self->status = tibemsTextMsg_GetText(__pyx_v_reply, (&__pyx_v_self->txt));
-
-    /* "tibemsMsg/emsSession.pyx":184
- *         if replyType == ctibco.TIBEMS_TEXT_MESSAGE:
- *             self.status = ctibco.tibemsTextMsg_GetText(reply, &self.txt)
- *             self._check_status()             # <<<<<<<<<<<<<<
- *         else:
- *             raise TibcoError('Message Type: %s' % replyType)
- */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 184, __pyx_L1_error)
-
-    /* "tibemsMsg/emsSession.pyx":182
- *         self.status = ctibco.tibemsMsg_GetBodyType(reply, &replyType)
- *         self._check_status()
- *         if replyType == ctibco.TIBEMS_TEXT_MESSAGE:             # <<<<<<<<<<<<<<
- *             self.status = ctibco.tibemsTextMsg_GetText(reply, &self.txt)
- *             self._check_status()
- */
-    goto __pyx_L5;
-  }
-
-  /* "tibemsMsg/emsSession.pyx":186
- *             self._check_status()
- *         else:
- *             raise TibcoError('Message Type: %s' % replyType)             # <<<<<<<<<<<<<<
+ *         self._get_msg(reply)             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsMsg_Destroy(msg)
  *         self._check_status()
  */
-  /*else*/ {
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_TibcoError); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 186, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyInt_From_tibemsMsgType(__pyx_v_replyType); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 186, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyUnicode_Format(__pyx_kp_u_Message_Type_s, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 186, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
-      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
-      if (likely(__pyx_t_5)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-        __Pyx_INCREF(__pyx_t_5);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_4, function);
-      }
-    }
-    __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
-    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 186, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_Raise(__pyx_t_3, 0, 0, 0);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(1, 186, __pyx_L1_error)
-  }
-  __pyx_L5:;
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_get_msg(__pyx_v_self, __pyx_v_reply); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 280, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":187
- *         else:
- *             raise TibcoError('Message Type: %s' % replyType)
+  /* "tibemsMsg/emsSession.pyx":281
+ *         self._check_status()
+ *         self._get_msg(reply)
  *         self.status = ctibco.tibemsMsg_Destroy(msg)             # <<<<<<<<<<<<<<
  *         self._check_status()
  *         self.status = ctibco.tibemsMsg_Destroy(reply)
  */
   __pyx_v_self->status = tibemsMsg_Destroy(__pyx_v_msg);
 
-  /* "tibemsMsg/emsSession.pyx":188
- *             raise TibcoError('Message Type: %s' % replyType)
+  /* "tibemsMsg/emsSession.pyx":282
+ *         self._get_msg(reply)
  *         self.status = ctibco.tibemsMsg_Destroy(msg)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsMsg_Destroy(reply)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 188, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 282, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":189
+  /* "tibemsMsg/emsSession.pyx":283
  *         self.status = ctibco.tibemsMsg_Destroy(msg)
  *         self._check_status()
  *         self.status = ctibco.tibemsMsg_Destroy(reply)             # <<<<<<<<<<<<<<
@@ -4076,45 +5680,693 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__requester(struct __pyx_
  */
   __pyx_v_self->status = tibemsMsg_Destroy(__pyx_v_reply);
 
-  /* "tibemsMsg/emsSession.pyx":190
+  /* "tibemsMsg/emsSession.pyx":284
  *         self._check_status()
  *         self.status = ctibco.tibemsMsg_Destroy(reply)
  *         self._check_status()             # <<<<<<<<<<<<<<
  *         self.status = ctibco.tibemsMsgRequestor_Close(msgRequestor)
  *         self._check_status()
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 190, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 284, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":191
+  /* "tibemsMsg/emsSession.pyx":285
  *         self.status = ctibco.tibemsMsg_Destroy(reply)
  *         self._check_status()
  *         self.status = ctibco.tibemsMsgRequestor_Close(msgRequestor)             # <<<<<<<<<<<<<<
  *         self._check_status()
- *         self._destroy_dest()
+ *         self._destroy_dest(destination)
  */
   __pyx_v_self->status = tibemsMsgRequestor_Close(__pyx_v_msgRequestor);
 
-  /* "tibemsMsg/emsSession.pyx":192
+  /* "tibemsMsg/emsSession.pyx":286
  *         self._check_status()
  *         self.status = ctibco.tibemsMsgRequestor_Close(msgRequestor)
  *         self._check_status()             # <<<<<<<<<<<<<<
- *         self._destroy_dest()
+ *         self._destroy_dest(destination)
  *         return 0
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 192, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 286, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":193
+  /* "tibemsMsg/emsSession.pyx":287
  *         self.status = ctibco.tibemsMsgRequestor_Close(msgRequestor)
  *         self._check_status()
- *         self._destroy_dest()             # <<<<<<<<<<<<<<
+ *         self._destroy_dest(destination)             # <<<<<<<<<<<<<<
  *         return 0
  * 
  */
-  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_destroy_dest(__pyx_v_self); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(1, 193, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_destroy_dest(__pyx_v_self, __pyx_v_destination); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 287, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":194
+  /* "tibemsMsg/emsSession.pyx":288
  *         self._check_status()
- *         self._destroy_dest()
+ *         self._destroy_dest(destination)
+ *         return 0             # <<<<<<<<<<<<<<
+ * 
+ *     cdef int _listener(self, char* dest, int useTopic, ctibco.tibemsMsgCallback callback, void* closure) except ? -1:
+ */
+  __pyx_r = 0;
+  goto __pyx_L0;
+
+  /* "tibemsMsg/emsSession.pyx":261
+ *         return 0
+ * 
+ *     cdef int _requester(self, char* dest, int useTopic, char* data) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             ctibco.tibemsDestination destination
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._requester", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":290
+ *         return 0
+ * 
+ *     cdef int _listener(self, char* dest, int useTopic, ctibco.tibemsMsgCallback callback, void* closure) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             ctibco.tibemsDestination destination
+ */
+
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__listener(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_dest, int __pyx_v_useTopic, tibemsMsgCallback __pyx_v_callback, void *__pyx_v_closure) {
+  tibemsDestination __pyx_v_destination;
+  tibemsMsgConsumer __pyx_v_msgConsumer;
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  __Pyx_RefNannySetupContext("_listener", 0);
+
+  /* "tibemsMsg/emsSession.pyx":295
+ *             ctibco.tibemsMsgConsumer msgConsumer
+ *             ctibco.tibemsMsg msg
+ *         self._create_dest(&destination, dest, useTopic)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, destination, NULL, ctibco.TIBEMS_FALSE)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create_dest(__pyx_v_self, (&__pyx_v_destination), __pyx_v_dest, __pyx_v_useTopic); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 295, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":296
+ *             ctibco.tibemsMsg msg
+ *         self._create_dest(&destination, dest, useTopic)
+ *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, destination, NULL, ctibco.TIBEMS_FALSE)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_SetMsgListener(msgConsumer, callback, closure)
+ */
+  __pyx_v_self->status = tibemsSession_CreateConsumer(__pyx_v_self->session, (&__pyx_v_msgConsumer), __pyx_v_destination, NULL, TIBEMS_FALSE);
+
+  /* "tibemsMsg/emsSession.pyx":297
+ *         self._create_dest(&destination, dest, useTopic)
+ *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, destination, NULL, ctibco.TIBEMS_FALSE)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsgConsumer_SetMsgListener(msgConsumer, callback, closure)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 297, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":298
+ *         self.status = ctibco.tibemsSession_CreateConsumer(self.session, &msgConsumer, destination, NULL, ctibco.TIBEMS_FALSE)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_SetMsgListener(msgConsumer, callback, closure)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ */
+  __pyx_v_self->status = tibemsMsgConsumer_SetMsgListener(__pyx_v_msgConsumer, __pyx_v_callback, __pyx_v_closure);
+
+  /* "tibemsMsg/emsSession.pyx":299
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_SetMsgListener(msgConsumer, callback, closure)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 299, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":300
+ *         self.status = ctibco.tibemsMsgConsumer_SetMsgListener(msgConsumer, callback, closure)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         return 0
+ */
+  __pyx_v_self->status = tibemsConnection_Start(__pyx_v_self->connection);
+
+  /* "tibemsMsg/emsSession.pyx":301
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         return 0
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 301, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":302
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()
+ *         return 0             # <<<<<<<<<<<<<<
+ * 
+ *     cdef int _unsubscribe(self, char* name) except ? -1:
+ */
+  __pyx_r = 0;
+  goto __pyx_L0;
+
+  /* "tibemsMsg/emsSession.pyx":290
+ *         return 0
+ * 
+ *     cdef int _listener(self, char* dest, int useTopic, ctibco.tibemsMsgCallback callback, void* closure) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             ctibco.tibemsDestination destination
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._listener", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":304
+ *         return 0
+ * 
+ *     cdef int _unsubscribe(self, char* name) except ? -1:             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsSession_Unsubscribe(self.session, name)
+ *         self._check_status()
+ */
+
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__unsubscribe(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_name) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  __Pyx_RefNannySetupContext("_unsubscribe", 0);
+
+  /* "tibemsMsg/emsSession.pyx":305
+ * 
+ *     cdef int _unsubscribe(self, char* name) except ? -1:
+ *         self.status = ctibco.tibemsSession_Unsubscribe(self.session, name)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         return 0
+ */
+  __pyx_v_self->status = tibemsSession_Unsubscribe(__pyx_v_self->session, __pyx_v_name);
+
+  /* "tibemsMsg/emsSession.pyx":306
+ *     cdef int _unsubscribe(self, char* name) except ? -1:
+ *         self.status = ctibco.tibemsSession_Unsubscribe(self.session, name)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         return 0
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 306, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":307
+ *         self.status = ctibco.tibemsSession_Unsubscribe(self.session, name)
+ *         self._check_status()
+ *         return 0             # <<<<<<<<<<<<<<
+ * 
+ *     cdef int _subscriber(self, char* topic, char* name, char* selector, int timeout) except ? -1:
+ */
+  __pyx_r = 0;
+  goto __pyx_L0;
+
+  /* "tibemsMsg/emsSession.pyx":304
+ *         return 0
+ * 
+ *     cdef int _unsubscribe(self, char* name) except ? -1:             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsSession_Unsubscribe(self.session, name)
+ *         self._check_status()
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._unsubscribe", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":309
+ *         return 0
+ * 
+ *     cdef int _subscriber(self, char* topic, char* name, char* selector, int timeout) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             ctibco.tibemsDestination destination
+ */
+
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__subscriber(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_topic, char *__pyx_v_name, char *__pyx_v_selector, int __pyx_v_timeout) {
+  tibemsDestination __pyx_v_destination;
+  tibemsMsgConsumer __pyx_v_msgConsumer;
+  tibemsMsg __pyx_v_msg;
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  __Pyx_RefNannySetupContext("_subscriber", 0);
+
+  /* "tibemsMsg/emsSession.pyx":314
+ *             ctibco.tibemsMsgConsumer msgConsumer
+ *             ctibco.tibemsMsg msg
+ *         self._create_dest(&destination, topic, 1)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsSession_CreateDurableSubscriber(self.session, &msgConsumer, destination, name, selector, ctibco.TIBEMS_FALSE)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create_dest(__pyx_v_self, (&__pyx_v_destination), __pyx_v_topic, 1); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 314, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":315
+ *             ctibco.tibemsMsg msg
+ *         self._create_dest(&destination, topic, 1)
+ *         self.status = ctibco.tibemsSession_CreateDurableSubscriber(self.session, &msgConsumer, destination, name, selector, ctibco.TIBEMS_FALSE)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ */
+  __pyx_v_self->status = tibemsSession_CreateDurableSubscriber(__pyx_v_self->session, (&__pyx_v_msgConsumer), __pyx_v_destination, __pyx_v_name, __pyx_v_selector, TIBEMS_FALSE);
+
+  /* "tibemsMsg/emsSession.pyx":316
+ *         self._create_dest(&destination, topic, 1)
+ *         self.status = ctibco.tibemsSession_CreateDurableSubscriber(self.session, &msgConsumer, destination, name, selector, ctibco.TIBEMS_FALSE)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 316, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":317
+ *         self.status = ctibco.tibemsSession_CreateDurableSubscriber(self.session, &msgConsumer, destination, name, selector, ctibco.TIBEMS_FALSE)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ */
+  __pyx_v_self->status = tibemsConnection_Start(__pyx_v_self->connection);
+
+  /* "tibemsMsg/emsSession.pyx":318
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 318, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":319
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self._get_msg(msg)
+ */
+  __pyx_v_self->status = tibemsMsgConsumer_ReceiveTimeout(__pyx_v_msgConsumer, (&__pyx_v_msg), __pyx_v_timeout);
+
+  /* "tibemsMsg/emsSession.pyx":320
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self._get_msg(msg)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 320, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":321
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ *         self._check_status()
+ *         self._get_msg(msg)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_get_msg(__pyx_v_self, __pyx_v_msg); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 321, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":322
+ *         self._check_status()
+ *         self._get_msg(msg)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ */
+  __pyx_v_self->status = tibemsMsg_Destroy(__pyx_v_msg);
+
+  /* "tibemsMsg/emsSession.pyx":323
+ *         self._get_msg(msg)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 323, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":324
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self._destroy_dest(destination)
+ */
+  __pyx_v_self->status = tibemsMsgConsumer_Close(__pyx_v_msgConsumer);
+
+  /* "tibemsMsg/emsSession.pyx":325
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self._destroy_dest(destination)
+ *         return 0
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 325, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":326
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ *         self._check_status()
+ *         self._destroy_dest(destination)             # <<<<<<<<<<<<<<
+ *         return 0
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_destroy_dest(__pyx_v_self, __pyx_v_destination); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 326, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":327
+ *         self._check_status()
+ *         self._destroy_dest(destination)
+ *         return 0             # <<<<<<<<<<<<<<
+ * 
+ *     cdef int _shared_consumer(self, char* topic, char* name, char* selector, int timeout) except ? -1:
+ */
+  __pyx_r = 0;
+  goto __pyx_L0;
+
+  /* "tibemsMsg/emsSession.pyx":309
+ *         return 0
+ * 
+ *     cdef int _subscriber(self, char* topic, char* name, char* selector, int timeout) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             ctibco.tibemsDestination destination
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._subscriber", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":329
+ *         return 0
+ * 
+ *     cdef int _shared_consumer(self, char* topic, char* name, char* selector, int timeout) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             ctibco.tibemsDestination destination
+ */
+
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__shared_consumer(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_topic, char *__pyx_v_name, char *__pyx_v_selector, int __pyx_v_timeout) {
+  tibemsDestination __pyx_v_destination;
+  tibemsMsgConsumer __pyx_v_msgConsumer;
+  tibemsMsg __pyx_v_msg;
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  __Pyx_RefNannySetupContext("_shared_consumer", 0);
+
+  /* "tibemsMsg/emsSession.pyx":334
+ *             ctibco.tibemsMsgConsumer msgConsumer
+ *             ctibco.tibemsMsg msg
+ *         self._create_dest(&destination, topic, 1)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsSession_CreateSharedConsumer(self.session, &msgConsumer, destination, name, selector)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create_dest(__pyx_v_self, (&__pyx_v_destination), __pyx_v_topic, 1); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 334, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":335
+ *             ctibco.tibemsMsg msg
+ *         self._create_dest(&destination, topic, 1)
+ *         self.status = ctibco.tibemsSession_CreateSharedConsumer(self.session, &msgConsumer, destination, name, selector)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ */
+  __pyx_v_self->status = tibemsSession_CreateSharedConsumer(__pyx_v_self->session, (&__pyx_v_msgConsumer), __pyx_v_destination, __pyx_v_name, __pyx_v_selector);
+
+  /* "tibemsMsg/emsSession.pyx":336
+ *         self._create_dest(&destination, topic, 1)
+ *         self.status = ctibco.tibemsSession_CreateSharedConsumer(self.session, &msgConsumer, destination, name, selector)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 336, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":337
+ *         self.status = ctibco.tibemsSession_CreateSharedConsumer(self.session, &msgConsumer, destination, name, selector)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ */
+  __pyx_v_self->status = tibemsConnection_Start(__pyx_v_self->connection);
+
+  /* "tibemsMsg/emsSession.pyx":338
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 338, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":339
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self._get_msg(msg)
+ */
+  __pyx_v_self->status = tibemsMsgConsumer_ReceiveTimeout(__pyx_v_msgConsumer, (&__pyx_v_msg), __pyx_v_timeout);
+
+  /* "tibemsMsg/emsSession.pyx":340
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self._get_msg(msg)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 340, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":341
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ *         self._check_status()
+ *         self._get_msg(msg)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_get_msg(__pyx_v_self, __pyx_v_msg); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 341, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":342
+ *         self._check_status()
+ *         self._get_msg(msg)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ */
+  __pyx_v_self->status = tibemsMsg_Destroy(__pyx_v_msg);
+
+  /* "tibemsMsg/emsSession.pyx":343
+ *         self._get_msg(msg)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 343, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":344
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self._destroy_dest(destination)
+ */
+  __pyx_v_self->status = tibemsMsgConsumer_Close(__pyx_v_msgConsumer);
+
+  /* "tibemsMsg/emsSession.pyx":345
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self._destroy_dest(destination)
+ *         return 0
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 345, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":346
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ *         self._check_status()
+ *         self._destroy_dest(destination)             # <<<<<<<<<<<<<<
+ *         return 0
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_destroy_dest(__pyx_v_self, __pyx_v_destination); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 346, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":347
+ *         self._check_status()
+ *         self._destroy_dest(destination)
+ *         return 0             # <<<<<<<<<<<<<<
+ * 
+ *     cdef int _shared_subscriber(self, char* topic, char* name, char* selector, int timeout) except ? -1:
+ */
+  __pyx_r = 0;
+  goto __pyx_L0;
+
+  /* "tibemsMsg/emsSession.pyx":329
+ *         return 0
+ * 
+ *     cdef int _shared_consumer(self, char* topic, char* name, char* selector, int timeout) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             ctibco.tibemsDestination destination
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._shared_consumer", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":349
+ *         return 0
+ * 
+ *     cdef int _shared_subscriber(self, char* topic, char* name, char* selector, int timeout) except ? -1:             # <<<<<<<<<<<<<<
+ *         cdef:
+ *             ctibco.tibemsDestination destination
+ */
+
+static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__shared_subscriber(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, char *__pyx_v_topic, char *__pyx_v_name, char *__pyx_v_selector, int __pyx_v_timeout) {
+  tibemsDestination __pyx_v_destination;
+  tibemsMsgConsumer __pyx_v_msgConsumer;
+  tibemsMsg __pyx_v_msg;
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  __Pyx_RefNannySetupContext("_shared_subscriber", 0);
+
+  /* "tibemsMsg/emsSession.pyx":354
+ *             ctibco.tibemsMsgConsumer msgConsumer
+ *             ctibco.tibemsMsg msg
+ *         self._create_dest(&destination, topic, 1)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsSession_CreateSharedDurableConsumer(self.session, &msgConsumer, destination, name, selector)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_create_dest(__pyx_v_self, (&__pyx_v_destination), __pyx_v_topic, 1); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 354, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":355
+ *             ctibco.tibemsMsg msg
+ *         self._create_dest(&destination, topic, 1)
+ *         self.status = ctibco.tibemsSession_CreateSharedDurableConsumer(self.session, &msgConsumer, destination, name, selector)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ */
+  __pyx_v_self->status = tibemsSession_CreateSharedDurableConsumer(__pyx_v_self->session, (&__pyx_v_msgConsumer), __pyx_v_destination, __pyx_v_name, __pyx_v_selector);
+
+  /* "tibemsMsg/emsSession.pyx":356
+ *         self._create_dest(&destination, topic, 1)
+ *         self.status = ctibco.tibemsSession_CreateSharedDurableConsumer(self.session, &msgConsumer, destination, name, selector)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 356, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":357
+ *         self.status = ctibco.tibemsSession_CreateSharedDurableConsumer(self.session, &msgConsumer, destination, name, selector)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ */
+  __pyx_v_self->status = tibemsConnection_Start(__pyx_v_self->connection);
+
+  /* "tibemsMsg/emsSession.pyx":358
+ *         self._check_status()
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 358, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":359
+ *         self.status = ctibco.tibemsConnection_Start(self.connection)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self._get_msg(msg)
+ */
+  __pyx_v_self->status = tibemsMsgConsumer_ReceiveTimeout(__pyx_v_msgConsumer, (&__pyx_v_msg), __pyx_v_timeout);
+
+  /* "tibemsMsg/emsSession.pyx":360
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self._get_msg(msg)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 360, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":361
+ *         self.status = ctibco.tibemsMsgConsumer_ReceiveTimeout(msgConsumer, &msg, timeout)
+ *         self._check_status()
+ *         self._get_msg(msg)             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_get_msg(__pyx_v_self, __pyx_v_msg); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 361, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":362
+ *         self._check_status()
+ *         self._get_msg(msg)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ */
+  __pyx_v_self->status = tibemsMsg_Destroy(__pyx_v_msg);
+
+  /* "tibemsMsg/emsSession.pyx":363
+ *         self._get_msg(msg)
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ *         self._check_status()
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 363, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":364
+ *         self.status = ctibco.tibemsMsg_Destroy(msg)
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)             # <<<<<<<<<<<<<<
+ *         self._check_status()
+ *         self._destroy_dest(destination)
+ */
+  __pyx_v_self->status = tibemsMsgConsumer_Close(__pyx_v_msgConsumer);
+
+  /* "tibemsMsg/emsSession.pyx":365
+ *         self._check_status()
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ *         self._check_status()             # <<<<<<<<<<<<<<
+ *         self._destroy_dest(destination)
+ *         return 0
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_check_status(__pyx_v_self, NULL); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 365, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":366
+ *         self.status = ctibco.tibemsMsgConsumer_Close(msgConsumer)
+ *         self._check_status()
+ *         self._destroy_dest(destination)             # <<<<<<<<<<<<<<
+ *         return 0
+ * 
+ */
+  __pyx_t_1 = ((struct __pyx_vtabstruct_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self->__pyx_vtab)->_destroy_dest(__pyx_v_self, __pyx_v_destination); if (unlikely(__pyx_t_1 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 366, __pyx_L1_error)
+
+  /* "tibemsMsg/emsSession.pyx":367
+ *         self._check_status()
+ *         self._destroy_dest(destination)
  *         return 0             # <<<<<<<<<<<<<<
  * 
  * 
@@ -4122,21 +6374,93 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__requester(struct __pyx_
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":161
+  /* "tibemsMsg/emsSession.pyx":349
  *         return 0
  * 
- *     cdef int _requester(self, char* name, int useTopic, char* data) except ? -1:             # <<<<<<<<<<<<<<
+ *     cdef int _shared_subscriber(self, char* topic, char* name, char* selector, int timeout) except ? -1:             # <<<<<<<<<<<<<<
  *         cdef:
- *             ctibco.tibemsMsgRequestor msgRequestor
+ *             ctibco.tibemsDestination destination
  */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._requester", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession._shared_subscriber", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "tibemsMsg/emsSession.pyx":41
+ * 
+ *         public:
+ *             int connected             # <<<<<<<<<<<<<<
+ * 
+ *     def __cinit__(self, str serverUrl='', str userName='', str password='', int debug=0):
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9connected_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9connected_1__get__(PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_9connected___get__(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_9connected___get__(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("__get__", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->connected); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.connected.__get__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static int __pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9connected_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static int __pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9connected_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_9connected_2__set__(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static int __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_9connected_2__set__(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, PyObject *__pyx_v_value) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  __Pyx_RefNannySetupContext("__set__", 0);
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_value); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_v_self->connected = __pyx_t_1;
+
+  /* function exit code */
+  __pyx_r = 0;
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("tibemsMsg.emsSession.EmsSession.connected.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
@@ -4150,19 +6474,19 @@ static int __pyx_f_9tibemsMsg_10emsSession_10EmsSession__requester(struct __pyx_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_15__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_15__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_25__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_25__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_14__reduce_cython__(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self));
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_24__reduce_cython__(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_14__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self) {
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_24__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4174,11 +6498,11 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_14__reduce_cython
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __PYX_ERR(0, 2, __pyx_L1_error)
+  __PYX_ERR(1, 2, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
@@ -4204,19 +6528,19 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_14__reduce_cython
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_17__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_17__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_27__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_27__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_16__setstate_cython__(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_9tibemsMsg_10emsSession_10EmsSession_26__setstate_cython__(((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_16__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_26__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4227,11 +6551,11 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_16__setstate_cyth
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __PYX_ERR(0, 4, __pyx_L1_error)
+  __PYX_ERR(1, 4, __pyx_L1_error)
 
   /* "(tree fragment)":3
  * def __reduce_cython__(self):
@@ -4250,10 +6574,10 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10EmsSession_16__setstate_cyth
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":199
+/* "tibemsMsg/emsSession.pyx":372
  * class TibcoError(Exception):
  * 
- *     def __init__(self, status, msg=None, tb=None):             # <<<<<<<<<<<<<<
+ *     def __init__(self, status, msg='', tb=''):             # <<<<<<<<<<<<<<
  *         self.status = status
  *         self.msg = msg
  */
@@ -4272,8 +6596,8 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10TibcoError_1__init__(PyObjec
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_self,&__pyx_n_s_status,&__pyx_n_s_msg,&__pyx_n_s_tb,0};
     PyObject* values[4] = {0,0,0,0};
-    values[2] = ((PyObject *)((PyObject *)Py_None));
-    values[3] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject*)__pyx_kp_u_));
+    values[3] = ((PyObject *)((PyObject*)__pyx_kp_u_));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -4298,7 +6622,7 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10TibcoError_1__init__(PyObjec
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_status)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 4, 1); __PYX_ERR(1, 199, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 4, 1); __PYX_ERR(0, 372, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -4314,7 +6638,7 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10TibcoError_1__init__(PyObjec
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(1, 199, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 372, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -4335,7 +6659,7 @@ static PyObject *__pyx_pw_9tibemsMsg_10emsSession_10TibcoError_1__init__(PyObjec
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(1, 199, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 372, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("tibemsMsg.emsSession.TibcoError.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -4353,37 +6677,37 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10TibcoError___init__(CYTHON_U
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "tibemsMsg/emsSession.pyx":200
+  /* "tibemsMsg/emsSession.pyx":373
  * 
- *     def __init__(self, status, msg=None, tb=None):
+ *     def __init__(self, status, msg='', tb=''):
  *         self.status = status             # <<<<<<<<<<<<<<
  *         self.msg = msg
  *         self.tb = tb
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_status, __pyx_v_status) < 0) __PYX_ERR(1, 200, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_status, __pyx_v_status) < 0) __PYX_ERR(0, 373, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":201
- *     def __init__(self, status, msg=None, tb=None):
+  /* "tibemsMsg/emsSession.pyx":374
+ *     def __init__(self, status, msg='', tb=''):
  *         self.status = status
  *         self.msg = msg             # <<<<<<<<<<<<<<
  *         self.tb = tb
  * 
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_msg, __pyx_v_msg) < 0) __PYX_ERR(1, 201, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_msg, __pyx_v_msg) < 0) __PYX_ERR(0, 374, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":202
+  /* "tibemsMsg/emsSession.pyx":375
  *         self.status = status
  *         self.msg = msg
  *         self.tb = tb             # <<<<<<<<<<<<<<
  * 
  *     def __str__(self):
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_tb, __pyx_v_tb) < 0) __PYX_ERR(1, 202, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_tb, __pyx_v_tb) < 0) __PYX_ERR(0, 375, __pyx_L1_error)
 
-  /* "tibemsMsg/emsSession.pyx":199
+  /* "tibemsMsg/emsSession.pyx":372
  * class TibcoError(Exception):
  * 
- *     def __init__(self, status, msg=None, tb=None):             # <<<<<<<<<<<<<<
+ *     def __init__(self, status, msg='', tb=''):             # <<<<<<<<<<<<<<
  *         self.status = status
  *         self.msg = msg
  */
@@ -4400,11 +6724,11 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10TibcoError___init__(CYTHON_U
   return __pyx_r;
 }
 
-/* "tibemsMsg/emsSession.pyx":204
+/* "tibemsMsg/emsSession.pyx":377
  *         self.tb = tb
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
- *         return '%s\n%s\n%s' % (self.status, self.msg or '', self.tb or '')
+ *         return '{}\n{}\n{}'.format(self.status, self.msg, self.tb)
  */
 
 /* Python wrapper */
@@ -4425,104 +6749,103 @@ static PyObject *__pyx_pf_9tibemsMsg_10emsSession_10TibcoError_2__str__(CYTHON_U
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  Py_ssize_t __pyx_t_2;
-  Py_UCS4 __pyx_t_3;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
-  int __pyx_t_6;
+  PyObject *__pyx_t_6 = NULL;
+  int __pyx_t_7;
+  PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "tibemsMsg/emsSession.pyx":205
+  /* "tibemsMsg/emsSession.pyx":378
  * 
  *     def __str__(self):
- *         return '%s\n%s\n%s' % (self.status, self.msg or '', self.tb or '')             # <<<<<<<<<<<<<<
+ *         return '{}\n{}\n{}'.format(self.status, self.msg, self.tb)             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyTuple_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 205, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = 0;
-  __pyx_t_3 = 127;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_status); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 205, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_u__4, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 378, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_status); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 378, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_msg); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 378, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_4), __pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 205, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_tb); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 378, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_3 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) > __pyx_t_3) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) : __pyx_t_3;
-  __pyx_t_2 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_5);
-  __Pyx_GIVEREF(__pyx_t_5);
-  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_5);
-  __pyx_t_5 = 0;
-  __Pyx_INCREF(__pyx_kp_u__4);
-  __pyx_t_2 += 1;
-  __Pyx_GIVEREF(__pyx_kp_u__4);
-  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_kp_u__4);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_msg); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 205, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(1, 205, __pyx_L1_error)
-  if (!__pyx_t_6) {
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  } else {
-    __Pyx_INCREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_t_4;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    goto __pyx_L3_bool_binop_done;
+  __pyx_t_6 = NULL;
+  __pyx_t_7 = 0;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_6)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+      __pyx_t_7 = 1;
+    }
   }
-  __Pyx_INCREF(__pyx_kp_u_);
-  __pyx_t_5 = __pyx_kp_u_;
-  __pyx_L3_bool_binop_done:;
-  __pyx_t_4 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_5), __pyx_empty_unicode); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 205, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_3 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_4) > __pyx_t_3) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_4) : __pyx_t_3;
-  __pyx_t_2 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_4);
-  __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_t_4);
-  __pyx_t_4 = 0;
-  __Pyx_INCREF(__pyx_kp_u__4);
-  __pyx_t_2 += 1;
-  __Pyx_GIVEREF(__pyx_kp_u__4);
-  PyTuple_SET_ITEM(__pyx_t_1, 3, __pyx_kp_u__4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_tb); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 205, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(1, 205, __pyx_L1_error)
-  if (!__pyx_t_6) {
+  #if CYTHON_FAST_PYCALL
+  if (PyFunction_Check(__pyx_t_2)) {
+    PyObject *__pyx_temp[4] = {__pyx_t_6, __pyx_t_3, __pyx_t_4, __pyx_t_5};
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 378, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  } else {
-    __Pyx_INCREF(__pyx_t_5);
-    __pyx_t_4 = __pyx_t_5;
+  } else
+  #endif
+  #if CYTHON_FAST_PYCCALL
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
+    PyObject *__pyx_temp[4] = {__pyx_t_6, __pyx_t_3, __pyx_t_4, __pyx_t_5};
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 378, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    goto __pyx_L5_bool_binop_done;
+  } else
+  #endif
+  {
+    __pyx_t_8 = PyTuple_New(3+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 378, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    if (__pyx_t_6) {
+      __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
+    }
+    __Pyx_GIVEREF(__pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_7, __pyx_t_3);
+    __Pyx_GIVEREF(__pyx_t_4);
+    PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_t_4);
+    __Pyx_GIVEREF(__pyx_t_5);
+    PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_7, __pyx_t_5);
+    __pyx_t_3 = 0;
+    __pyx_t_4 = 0;
+    __pyx_t_5 = 0;
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 378, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   }
-  __Pyx_INCREF(__pyx_kp_u_);
-  __pyx_t_4 = __pyx_kp_u_;
-  __pyx_L5_bool_binop_done:;
-  __pyx_t_5 = __Pyx_PyObject_FormatSimpleAndDecref(PyObject_Unicode(__pyx_t_4), __pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 205, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_3 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) > __pyx_t_3) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) : __pyx_t_3;
-  __pyx_t_2 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_5);
-  __Pyx_GIVEREF(__pyx_t_5);
-  PyTuple_SET_ITEM(__pyx_t_1, 4, __pyx_t_5);
-  __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyUnicode_Join(__pyx_t_1, 5, __pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 205, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_r = __pyx_t_5;
-  __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "tibemsMsg/emsSession.pyx":204
+  /* "tibemsMsg/emsSession.pyx":377
  *         self.tb = tb
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
- *         return '%s\n%s\n%s' % (self.status, self.msg or '', self.tb or '')
+ *         return '{}\n{}\n{}'.format(self.status, self.msg, self.tb)
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_8);
   __Pyx_AddTraceback("tibemsMsg.emsSession.TibcoError.__str__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -4543,6 +6866,8 @@ static PyObject *__pyx_tp_new_9tibemsMsg_10emsSession_EmsSession(PyTypeObject *t
   if (unlikely(!o)) return 0;
   p = ((struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)o);
   p->__pyx_vtab = __pyx_vtabptr_9tibemsMsg_10emsSession_EmsSession;
+  p->msgTypeMap = ((PyObject*)Py_None); Py_INCREF(Py_None);
+  p->msg = ((PyObject*)Py_None); Py_INCREF(Py_None);
   if (unlikely(__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_1__cinit__(o, a, k) < 0)) goto bad;
   return o;
   bad:
@@ -4551,11 +6876,13 @@ static PyObject *__pyx_tp_new_9tibemsMsg_10emsSession_EmsSession(PyTypeObject *t
 }
 
 static void __pyx_tp_dealloc_9tibemsMsg_10emsSession_EmsSession(PyObject *o) {
+  struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *p = (struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)o;
   #if CYTHON_USE_TP_FINALIZE
-  if (unlikely(PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE) && Py_TYPE(o)->tp_finalize) && (!PyType_IS_GC(Py_TYPE(o)) || !_PyGC_FINALIZED(o))) {
+  if (unlikely(PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE) && Py_TYPE(o)->tp_finalize) && !_PyGC_FINALIZED(o)) {
     if (PyObject_CallFinalizerFromDealloc(o)) return;
   }
   #endif
+  PyObject_GC_UnTrack(o);
   {
     PyObject *etype, *eval, *etb;
     PyErr_Fetch(&etype, &eval, &etb);
@@ -4564,7 +6891,41 @@ static void __pyx_tp_dealloc_9tibemsMsg_10emsSession_EmsSession(PyObject *o) {
     --Py_REFCNT(o);
     PyErr_Restore(etype, eval, etb);
   }
+  Py_CLEAR(p->msgTypeMap);
+  Py_CLEAR(p->msg);
   (*Py_TYPE(o)->tp_free)(o);
+}
+
+static int __pyx_tp_traverse_9tibemsMsg_10emsSession_EmsSession(PyObject *o, visitproc v, void *a) {
+  int e;
+  struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *p = (struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)o;
+  if (p->msgTypeMap) {
+    e = (*v)(p->msgTypeMap, a); if (e) return e;
+  }
+  return 0;
+}
+
+static int __pyx_tp_clear_9tibemsMsg_10emsSession_EmsSession(PyObject *o) {
+  PyObject* tmp;
+  struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *p = (struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *)o;
+  tmp = ((PyObject*)p->msgTypeMap);
+  p->msgTypeMap = ((PyObject*)Py_None); Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
+  return 0;
+}
+
+static PyObject *__pyx_getprop_9tibemsMsg_10emsSession_10EmsSession_connected(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9connected_1__get__(o);
+}
+
+static int __pyx_setprop_9tibemsMsg_10emsSession_10EmsSession_connected(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
+  if (v) {
+    return __pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9connected_3__set__(o, v);
+  }
+  else {
+    PyErr_SetString(PyExc_NotImplementedError, "__del__");
+    return -1;
+  }
 }
 
 static PyMethodDef __pyx_methods_9tibemsMsg_10emsSession_EmsSession[] = {
@@ -4573,9 +6934,19 @@ static PyMethodDef __pyx_methods_9tibemsMsg_10emsSession_EmsSession[] = {
   {"producer", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_9producer, METH_VARARGS|METH_KEYWORDS, 0},
   {"consumer", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_11consumer, METH_VARARGS|METH_KEYWORDS, 0},
   {"requester", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_13requester, METH_VARARGS|METH_KEYWORDS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_15__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_17__setstate_cython__, METH_O, 0},
+  {"listener", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_15listener, METH_VARARGS|METH_KEYWORDS, 0},
+  {"subscriber", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_17subscriber, METH_VARARGS|METH_KEYWORDS, 0},
+  {"shared_consumer", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_19shared_consumer, METH_VARARGS|METH_KEYWORDS, 0},
+  {"shared_subscriber", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_21shared_subscriber, METH_VARARGS|METH_KEYWORDS, 0},
+  {"unsubscribe", (PyCFunction)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_23unsubscribe, METH_O, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_25__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_9tibemsMsg_10emsSession_10EmsSession_27__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
+};
+
+static struct PyGetSetDef __pyx_getsets_9tibemsMsg_10emsSession_EmsSession[] = {
+  {(char *)"connected", __pyx_getprop_9tibemsMsg_10emsSession_10EmsSession_connected, __pyx_setprop_9tibemsMsg_10emsSession_10EmsSession_connected, (char *)0, 0},
+  {0, 0, 0, 0, 0}
 };
 
 static PyTypeObject __pyx_type_9tibemsMsg_10emsSession_EmsSession = {
@@ -4608,17 +6979,17 @@ static PyTypeObject __pyx_type_9tibemsMsg_10emsSession_EmsSession = {
   0, /*tp_getattro*/
   0, /*tp_setattro*/
   0, /*tp_as_buffer*/
-  Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE, /*tp_flags*/
+  Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
   0, /*tp_doc*/
-  0, /*tp_traverse*/
-  0, /*tp_clear*/
+  __pyx_tp_traverse_9tibemsMsg_10emsSession_EmsSession, /*tp_traverse*/
+  __pyx_tp_clear_9tibemsMsg_10emsSession_EmsSession, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
   __pyx_methods_9tibemsMsg_10emsSession_EmsSession, /*tp_methods*/
   0, /*tp_members*/
-  0, /*tp_getset*/
+  __pyx_getsets_9tibemsMsg_10emsSession_EmsSession, /*tp_getset*/
   0, /*tp_base*/
   0, /*tp_dict*/
   0, /*tp_descr_get*/
@@ -4694,34 +7065,47 @@ static struct PyModuleDef __pyx_moduledef = {
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_, __pyx_k_, sizeof(__pyx_k_), 0, 1, 0, 0},
+  {&__pyx_n_u_BYTES, __pyx_k_BYTES, sizeof(__pyx_k_BYTES), 0, 1, 0, 1},
   {&__pyx_n_s_EmsSession, __pyx_k_EmsSession, sizeof(__pyx_k_EmsSession), 0, 0, 1, 1},
-  {&__pyx_kp_u_Message_Type_s, __pyx_k_Message_Type_s, sizeof(__pyx_k_Message_Type_s), 0, 1, 0, 0},
+  {&__pyx_kp_u_Listener_callback_error, __pyx_k_Listener_callback_error, sizeof(__pyx_k_Listener_callback_error), 0, 1, 0, 0},
+  {&__pyx_n_u_MAP, __pyx_k_MAP, sizeof(__pyx_k_MAP), 0, 1, 0, 1},
+  {&__pyx_kp_u_Not_Connected, __pyx_k_Not_Connected, sizeof(__pyx_k_Not_Connected), 0, 1, 0, 0},
+  {&__pyx_n_u_OBJECT, __pyx_k_OBJECT, sizeof(__pyx_k_OBJECT), 0, 1, 0, 1},
+  {&__pyx_n_u_STREAM, __pyx_k_STREAM, sizeof(__pyx_k_STREAM), 0, 1, 0, 1},
+  {&__pyx_n_u_TEXT, __pyx_k_TEXT, sizeof(__pyx_k_TEXT), 0, 1, 0, 1},
   {&__pyx_n_s_TibcoError, __pyx_k_TibcoError, sizeof(__pyx_k_TibcoError), 0, 0, 1, 1},
   {&__pyx_n_s_TibcoError___init, __pyx_k_TibcoError___init, sizeof(__pyx_k_TibcoError___init), 0, 0, 1, 1},
   {&__pyx_n_s_TibcoError___str, __pyx_k_TibcoError___str, sizeof(__pyx_k_TibcoError___str), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_kp_u__4, __pyx_k__4, sizeof(__pyx_k__4), 0, 1, 0, 0},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
-  {&__pyx_n_s_create, __pyx_k_create, sizeof(__pyx_k_create), 0, 0, 1, 1},
   {&__pyx_n_s_data, __pyx_k_data, sizeof(__pyx_k_data), 0, 0, 1, 1},
   {&__pyx_n_s_debug, __pyx_k_debug, sizeof(__pyx_k_debug), 0, 0, 1, 1},
+  {&__pyx_n_s_dest, __pyx_k_dest, sizeof(__pyx_k_dest), 0, 0, 1, 1},
   {&__pyx_n_s_doc, __pyx_k_doc, sizeof(__pyx_k_doc), 0, 0, 1, 1},
+  {&__pyx_n_s_encode, __pyx_k_encode, sizeof(__pyx_k_encode), 0, 0, 1, 1},
+  {&__pyx_n_s_format, __pyx_k_format, sizeof(__pyx_k_format), 0, 0, 1, 1},
+  {&__pyx_n_s_func, __pyx_k_func, sizeof(__pyx_k_func), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_init, __pyx_k_init, sizeof(__pyx_k_init), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_metaclass, __pyx_k_metaclass, sizeof(__pyx_k_metaclass), 0, 0, 1, 1},
   {&__pyx_n_s_module, __pyx_k_module, sizeof(__pyx_k_module), 0, 0, 1, 1},
   {&__pyx_n_s_msg, __pyx_k_msg, sizeof(__pyx_k_msg), 0, 0, 1, 1},
+  {&__pyx_n_s_msgType, __pyx_k_msgType, sizeof(__pyx_k_msgType), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_n_s_name_2, __pyx_k_name_2, sizeof(__pyx_k_name_2), 0, 0, 1, 1},
   {&__pyx_kp_s_no_default___reduce___due_to_non, __pyx_k_no_default___reduce___due_to_non, sizeof(__pyx_k_no_default___reduce___due_to_non), 0, 0, 1, 0},
   {&__pyx_n_s_password, __pyx_k_password, sizeof(__pyx_k_password), 0, 0, 1, 1},
   {&__pyx_n_s_prepare, __pyx_k_prepare, sizeof(__pyx_k_prepare), 0, 0, 1, 1},
+  {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_qualname, __pyx_k_qualname, sizeof(__pyx_k_qualname), 0, 0, 1, 1},
+  {&__pyx_kp_u_receive, __pyx_k_receive, sizeof(__pyx_k_receive), 0, 1, 0, 0},
   {&__pyx_n_s_reduce, __pyx_k_reduce, sizeof(__pyx_k_reduce), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
+  {&__pyx_n_s_selector, __pyx_k_selector, sizeof(__pyx_k_selector), 0, 0, 1, 1},
   {&__pyx_n_s_self, __pyx_k_self, sizeof(__pyx_k_self), 0, 0, 1, 1},
   {&__pyx_n_s_serverUrl, __pyx_k_serverUrl, sizeof(__pyx_k_serverUrl), 0, 0, 1, 1},
   {&__pyx_n_s_setstate, __pyx_k_setstate, sizeof(__pyx_k_setstate), 0, 0, 1, 1},
@@ -4733,12 +7117,15 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_tibemsMsg_emsSession, __pyx_k_tibemsMsg_emsSession, sizeof(__pyx_k_tibemsMsg_emsSession), 0, 0, 1, 1},
   {&__pyx_kp_s_tibemsMsg_emsSession_pyx, __pyx_k_tibemsMsg_emsSession_pyx, sizeof(__pyx_k_tibemsMsg_emsSession_pyx), 0, 0, 1, 0},
   {&__pyx_n_s_timeout, __pyx_k_timeout, sizeof(__pyx_k_timeout), 0, 0, 1, 1},
+  {&__pyx_n_s_topic, __pyx_k_topic, sizeof(__pyx_k_topic), 0, 0, 1, 1},
+  {&__pyx_n_s_upper, __pyx_k_upper, sizeof(__pyx_k_upper), 0, 0, 1, 1},
   {&__pyx_n_s_useTopic, __pyx_k_useTopic, sizeof(__pyx_k_useTopic), 0, 0, 1, 1},
   {&__pyx_n_s_userName, __pyx_k_userName, sizeof(__pyx_k_userName), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(0, 2, __pyx_L1_error)
+  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 22, __pyx_L1_error)
+  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -4754,7 +7141,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 2, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
@@ -4763,35 +7150,35 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 4, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "tibemsMsg/emsSession.pyx":199
+  /* "tibemsMsg/emsSession.pyx":372
  * class TibcoError(Exception):
  * 
- *     def __init__(self, status, msg=None, tb=None):             # <<<<<<<<<<<<<<
+ *     def __init__(self, status, msg='', tb=''):             # <<<<<<<<<<<<<<
  *         self.status = status
  *         self.msg = msg
  */
-  __pyx_tuple__5 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_status, __pyx_n_s_msg, __pyx_n_s_tb); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(1, 199, __pyx_L1_error)
+  __pyx_tuple__5 = PyTuple_Pack(4, __pyx_n_s_self, __pyx_n_s_status, __pyx_n_s_msg, __pyx_n_s_tb); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 372, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
-  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_tibemsMsg_emsSession_pyx, __pyx_n_s_init, 199, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(1, 199, __pyx_L1_error)
-  __pyx_tuple__7 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(1, 199, __pyx_L1_error)
+  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_tibemsMsg_emsSession_pyx, __pyx_n_s_init, 372, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 372, __pyx_L1_error)
+  __pyx_tuple__7 = PyTuple_Pack(2, ((PyObject*)__pyx_kp_u_), ((PyObject*)__pyx_kp_u_)); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 372, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 
-  /* "tibemsMsg/emsSession.pyx":204
+  /* "tibemsMsg/emsSession.pyx":377
  *         self.tb = tb
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
- *         return '%s\n%s\n%s' % (self.status, self.msg or '', self.tb or '')
+ *         return '{}\n{}\n{}'.format(self.status, self.msg, self.tb)
  */
-  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(1, 204, __pyx_L1_error)
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 377, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
-  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_tibemsMsg_emsSession_pyx, __pyx_n_s_str, 204, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(1, 204, __pyx_L1_error)
+  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_tibemsMsg_emsSession_pyx, __pyx_n_s_str, 377, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 377, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -4800,7 +7187,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 }
 
 static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
-  if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(1, 2, __pyx_L1_error);
+  if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 2, __pyx_L1_error);
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -4844,23 +7231,31 @@ static int __Pyx_modinit_type_init_code(void) {
   /*--- Type init code ---*/
   __pyx_vtabptr_9tibemsMsg_10emsSession_EmsSession = &__pyx_vtable_9tibemsMsg_10emsSession_EmsSession;
   __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._check_status = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, struct __pyx_opt_args_9tibemsMsg_10emsSession_10EmsSession__check_status *__pyx_optional_args))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__check_status;
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._check_conn = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__check_conn;
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._getMsgTypeName = (void (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, tibemsMsgType))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__getMsgTypeName;
   __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._create = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, char *, char *))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__create;
   __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._close = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__close;
-  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._create_dest = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__create_dest;
-  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._destroy_dest = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__destroy_dest;
-  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._producer = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int, char *))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__producer;
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._create_dest = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, tibemsDestination *, char *, int))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__create_dest;
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._destroy_dest = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, tibemsDestination))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__destroy_dest;
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._get_msg = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, tibemsMsg))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__get_msg;
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._producer = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int, char *, tibemsMsgType, char *))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__producer;
   __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._consumer = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int, int))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__consumer;
   __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._requester = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int, char *))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__requester;
-  if (PyType_Ready(&__pyx_type_9tibemsMsg_10emsSession_EmsSession) < 0) __PYX_ERR(1, 5, __pyx_L1_error)
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._listener = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, int, tibemsMsgCallback, void *))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__listener;
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._unsubscribe = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__unsubscribe;
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._subscriber = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, char *, char *, int))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__subscriber;
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._shared_consumer = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, char *, char *, int))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__shared_consumer;
+  __pyx_vtable_9tibemsMsg_10emsSession_EmsSession._shared_subscriber = (int (*)(struct __pyx_obj_9tibemsMsg_10emsSession_EmsSession *, char *, char *, char *, int))__pyx_f_9tibemsMsg_10emsSession_10EmsSession__shared_subscriber;
+  if (PyType_Ready(&__pyx_type_9tibemsMsg_10emsSession_EmsSession) < 0) __PYX_ERR(0, 26, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_9tibemsMsg_10emsSession_EmsSession.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_9tibemsMsg_10emsSession_EmsSession.tp_dictoffset && __pyx_type_9tibemsMsg_10emsSession_EmsSession.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_9tibemsMsg_10emsSession_EmsSession.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_9tibemsMsg_10emsSession_EmsSession.tp_dict, __pyx_vtabptr_9tibemsMsg_10emsSession_EmsSession) < 0) __PYX_ERR(1, 5, __pyx_L1_error)
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_EmsSession, (PyObject *)&__pyx_type_9tibemsMsg_10emsSession_EmsSession) < 0) __PYX_ERR(1, 5, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_9tibemsMsg_10emsSession_EmsSession) < 0) __PYX_ERR(1, 5, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_9tibemsMsg_10emsSession_EmsSession.tp_dict, __pyx_vtabptr_9tibemsMsg_10emsSession_EmsSession) < 0) __PYX_ERR(0, 26, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_EmsSession, (PyObject *)&__pyx_type_9tibemsMsg_10emsSession_EmsSession) < 0) __PYX_ERR(0, 26, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_9tibemsMsg_10emsSession_EmsSession) < 0) __PYX_ERR(0, 26, __pyx_L1_error)
   __pyx_ptype_9tibemsMsg_10emsSession_EmsSession = &__pyx_type_9tibemsMsg_10emsSession_EmsSession;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -5009,30 +7404,30 @@ if (!__Pyx_RefNanny) {
 }
 #endif
   __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_emsSession(void)", 0);
-  if (__Pyx_check_binary_version() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_check_binary_version() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #ifdef __Pxy_PyFrame_Initialize_Offsets
   __Pxy_PyFrame_Initialize_Offsets();
   #endif
-  __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __pyx_empty_unicode = PyUnicode_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_unicode)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) __PYX_ERR(0, 2, __pyx_L1_error)
+  __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) __PYX_ERR(0, 2, __pyx_L1_error)
+  __pyx_empty_unicode = PyUnicode_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_unicode)) __PYX_ERR(0, 2, __pyx_L1_error)
   #ifdef __Pyx_CyFunction_USED
-  if (__pyx_CyFunction_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_CyFunction_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   #ifdef __Pyx_FusedFunction_USED
-  if (__pyx_FusedFunction_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_FusedFunction_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   #ifdef __Pyx_Coroutine_USED
-  if (__pyx_Coroutine_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_Coroutine_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   #ifdef __Pyx_Generator_USED
-  if (__pyx_Generator_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_Generator_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   #ifdef __Pyx_AsyncGen_USED
-  if (__pyx_AsyncGen_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_AsyncGen_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   #ifdef __Pyx_StopAsyncIteration_USED
-  if (__pyx_StopAsyncIteration_init() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__pyx_StopAsyncIteration_init() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   /*--- Library function declarations ---*/
   /*--- Threads initialization code ---*/
@@ -5051,28 +7446,28 @@ if (!__Pyx_RefNanny) {
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
-  if (unlikely(!__pyx_m)) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (unlikely(!__pyx_m)) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
-  __pyx_d = PyModule_GetDict(__pyx_m); if (unlikely(!__pyx_d)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_d = PyModule_GetDict(__pyx_m); if (unlikely(!__pyx_d)) __PYX_ERR(0, 2, __pyx_L1_error)
   Py_INCREF(__pyx_d);
-  __pyx_b = PyImport_AddModule(__Pyx_BUILTIN_MODULE_NAME); if (unlikely(!__pyx_b)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_b = PyImport_AddModule(__Pyx_BUILTIN_MODULE_NAME); if (unlikely(!__pyx_b)) __PYX_ERR(0, 2, __pyx_L1_error)
   Py_INCREF(__pyx_b);
-  __pyx_cython_runtime = PyImport_AddModule((char *) "cython_runtime"); if (unlikely(!__pyx_cython_runtime)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_cython_runtime = PyImport_AddModule((char *) "cython_runtime"); if (unlikely(!__pyx_cython_runtime)) __PYX_ERR(0, 2, __pyx_L1_error)
   Py_INCREF(__pyx_cython_runtime);
-  if (PyObject_SetAttrString(__pyx_m, "__builtins__", __pyx_b) < 0) __PYX_ERR(1, 2, __pyx_L1_error);
+  if (PyObject_SetAttrString(__pyx_m, "__builtins__", __pyx_b) < 0) __PYX_ERR(0, 2, __pyx_L1_error);
   /*--- Initialize various global constants etc. ---*/
-  if (__Pyx_InitGlobals() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_InitGlobals() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
-  if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
   if (__pyx_module_is_main_tibemsMsg__emsSession) {
-    if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name_2, __pyx_n_s_main) < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+    if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name_2, __pyx_n_s_main) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
-    PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(1, 2, __pyx_L1_error)
+    PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 2, __pyx_L1_error)
     if (!PyDict_GetItemString(modules, "tibemsMsg.emsSession")) {
-      if (unlikely(PyDict_SetItemString(modules, "tibemsMsg.emsSession", __pyx_m) < 0)) __PYX_ERR(1, 2, __pyx_L1_error)
+      if (unlikely(PyDict_SetItemString(modules, "tibemsMsg.emsSession", __pyx_m) < 0)) __PYX_ERR(0, 2, __pyx_L1_error)
     }
   }
   #endif
@@ -5090,60 +7485,60 @@ if (!__Pyx_RefNanny) {
   (void)__Pyx_modinit_function_import_code();
   /*--- Execution code ---*/
   #if defined(__Pyx_Generator_USED) || defined(__Pyx_Coroutine_USED)
-  if (__Pyx_patch_abc() < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   #endif
 
-  /* "tibemsMsg/emsSession.pyx":197
+  /* "tibemsMsg/emsSession.pyx":370
  * 
  * 
  * class TibcoError(Exception):             # <<<<<<<<<<<<<<
  * 
- *     def __init__(self, status, msg=None, tb=None):
+ *     def __init__(self, status, msg='', tb=''):
  */
-  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 197, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 370, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
   __Pyx_GIVEREF(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
   PyTuple_SET_ITEM(__pyx_t_1, 0, ((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
-  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 197, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 370, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_t_1, __pyx_n_s_TibcoError, __pyx_n_s_TibcoError, (PyObject *) NULL, __pyx_n_s_tibemsMsg_emsSession, (PyObject *) NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 197, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_t_1, __pyx_n_s_TibcoError, __pyx_n_s_TibcoError, (PyObject *) NULL, __pyx_n_s_tibemsMsg_emsSession, (PyObject *) NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 370, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
 
-  /* "tibemsMsg/emsSession.pyx":199
+  /* "tibemsMsg/emsSession.pyx":372
  * class TibcoError(Exception):
  * 
- *     def __init__(self, status, msg=None, tb=None):             # <<<<<<<<<<<<<<
+ *     def __init__(self, status, msg='', tb=''):             # <<<<<<<<<<<<<<
  *         self.status = status
  *         self.msg = msg
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9tibemsMsg_10emsSession_10TibcoError_1__init__, 0, __pyx_n_s_TibcoError___init, NULL, __pyx_n_s_tibemsMsg_emsSession, __pyx_d, ((PyObject *)__pyx_codeobj__6)); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 199, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9tibemsMsg_10emsSession_10TibcoError_1__init__, 0, __pyx_n_s_TibcoError___init, NULL, __pyx_n_s_tibemsMsg_emsSession, __pyx_d, ((PyObject *)__pyx_codeobj__6)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 372, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_4, __pyx_tuple__7);
-  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_init, __pyx_t_4) < 0) __PYX_ERR(1, 199, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_init, __pyx_t_4) < 0) __PYX_ERR(0, 372, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "tibemsMsg/emsSession.pyx":204
+  /* "tibemsMsg/emsSession.pyx":377
  *         self.tb = tb
  * 
  *     def __str__(self):             # <<<<<<<<<<<<<<
- *         return '%s\n%s\n%s' % (self.status, self.msg or '', self.tb or '')
+ *         return '{}\n{}\n{}'.format(self.status, self.msg, self.tb)
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9tibemsMsg_10emsSession_10TibcoError_3__str__, 0, __pyx_n_s_TibcoError___str, NULL, __pyx_n_s_tibemsMsg_emsSession, __pyx_d, ((PyObject *)__pyx_codeobj__9)); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 204, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_9tibemsMsg_10emsSession_10TibcoError_3__str__, 0, __pyx_n_s_TibcoError___str, NULL, __pyx_n_s_tibemsMsg_emsSession, __pyx_d, ((PyObject *)__pyx_codeobj__9)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 377, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_str, __pyx_t_4) < 0) __PYX_ERR(1, 204, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_3, __pyx_n_s_str, __pyx_t_4) < 0) __PYX_ERR(0, 377, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "tibemsMsg/emsSession.pyx":197
+  /* "tibemsMsg/emsSession.pyx":370
  * 
  * 
  * class TibcoError(Exception):             # <<<<<<<<<<<<<<
  * 
- *     def __init__(self, status, msg=None, tb=None):
+ *     def __init__(self, status, msg='', tb=''):
  */
-  __pyx_t_4 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_TibcoError, __pyx_t_1, __pyx_t_3, NULL, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 197, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_TibcoError, __pyx_t_1, __pyx_t_3, NULL, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 370, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_TibcoError, __pyx_t_4) < 0) __PYX_ERR(1, 197, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_TibcoError, __pyx_t_4) < 0) __PYX_ERR(0, 370, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -5155,9 +7550,9 @@ if (!__Pyx_RefNanny) {
  * 
  * 
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(1, 2, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /*--- Wrapped vars code ---*/
@@ -5231,6 +7626,568 @@ static PyObject *__Pyx_GetBuiltinName(PyObject *name) {
 #endif
     }
     return result;
+}
+
+/* decode_c_string */
+static CYTHON_INLINE PyObject* __Pyx_decode_c_string(
+         const char* cstring, Py_ssize_t start, Py_ssize_t stop,
+         const char* encoding, const char* errors,
+         PyObject* (*decode_func)(const char *s, Py_ssize_t size, const char *errors)) {
+    Py_ssize_t length;
+    if (unlikely((start < 0) | (stop < 0))) {
+        size_t slen = strlen(cstring);
+        if (unlikely(slen > (size_t) PY_SSIZE_T_MAX)) {
+            PyErr_SetString(PyExc_OverflowError,
+                            "c-string too long to convert to Python");
+            return NULL;
+        }
+        length = (Py_ssize_t) slen;
+        if (start < 0) {
+            start += length;
+            if (start < 0)
+                start = 0;
+        }
+        if (stop < 0)
+            stop += length;
+    }
+    if (unlikely(stop <= start))
+        return PyUnicode_FromUnicode(NULL, 0);
+    length = stop - start;
+    cstring += start;
+    if (decode_func) {
+        return decode_func(cstring, length, errors);
+    } else {
+        return PyUnicode_Decode(cstring, length, encoding, errors);
+    }
+}
+
+/* PyCFunctionFastCall */
+#if CYTHON_FAST_PYCCALL
+static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
+    PyCFunctionObject *func = (PyCFunctionObject*)func_obj;
+    PyCFunction meth = PyCFunction_GET_FUNCTION(func);
+    PyObject *self = PyCFunction_GET_SELF(func);
+    int flags = PyCFunction_GET_FLAGS(func);
+    assert(PyCFunction_Check(func));
+    assert(METH_FASTCALL == (flags & ~(METH_CLASS | METH_STATIC | METH_COEXIST | METH_KEYWORDS | METH_STACKLESS)));
+    assert(nargs >= 0);
+    assert(nargs == 0 || args != NULL);
+    /* _PyCFunction_FastCallDict() must not be called with an exception set,
+       because it may clear it (directly or indirectly) and so the
+       caller loses its exception */
+    assert(!PyErr_Occurred());
+    if ((PY_VERSION_HEX < 0x030700A0) || unlikely(flags & METH_KEYWORDS)) {
+        return (*((__Pyx_PyCFunctionFastWithKeywords)(void*)meth)) (self, args, nargs, NULL);
+    } else {
+        return (*((__Pyx_PyCFunctionFast)(void*)meth)) (self, args, nargs);
+    }
+}
+#endif
+
+/* PyFunctionFastCall */
+#if CYTHON_FAST_PYCALL
+static PyObject* __Pyx_PyFunction_FastCallNoKw(PyCodeObject *co, PyObject **args, Py_ssize_t na,
+                                               PyObject *globals) {
+    PyFrameObject *f;
+    PyThreadState *tstate = __Pyx_PyThreadState_Current;
+    PyObject **fastlocals;
+    Py_ssize_t i;
+    PyObject *result;
+    assert(globals != NULL);
+    /* XXX Perhaps we should create a specialized
+       PyFrame_New() that doesn't take locals, but does
+       take builtins without sanity checking them.
+       */
+    assert(tstate != NULL);
+    f = PyFrame_New(tstate, co, globals, NULL);
+    if (f == NULL) {
+        return NULL;
+    }
+    fastlocals = __Pyx_PyFrame_GetLocalsplus(f);
+    for (i = 0; i < na; i++) {
+        Py_INCREF(*args);
+        fastlocals[i] = *args++;
+    }
+    result = PyEval_EvalFrameEx(f,0);
+    ++tstate->recursion_depth;
+    Py_DECREF(f);
+    --tstate->recursion_depth;
+    return result;
+}
+#if 1 || PY_VERSION_HEX < 0x030600B1
+static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, Py_ssize_t nargs, PyObject *kwargs) {
+    PyCodeObject *co = (PyCodeObject *)PyFunction_GET_CODE(func);
+    PyObject *globals = PyFunction_GET_GLOBALS(func);
+    PyObject *argdefs = PyFunction_GET_DEFAULTS(func);
+    PyObject *closure;
+#if PY_MAJOR_VERSION >= 3
+    PyObject *kwdefs;
+#endif
+    PyObject *kwtuple, **k;
+    PyObject **d;
+    Py_ssize_t nd;
+    Py_ssize_t nk;
+    PyObject *result;
+    assert(kwargs == NULL || PyDict_Check(kwargs));
+    nk = kwargs ? PyDict_Size(kwargs) : 0;
+    if (Py_EnterRecursiveCall((char*)" while calling a Python object")) {
+        return NULL;
+    }
+    if (
+#if PY_MAJOR_VERSION >= 3
+            co->co_kwonlyargcount == 0 &&
+#endif
+            likely(kwargs == NULL || nk == 0) &&
+            co->co_flags == (CO_OPTIMIZED | CO_NEWLOCALS | CO_NOFREE)) {
+        if (argdefs == NULL && co->co_argcount == nargs) {
+            result = __Pyx_PyFunction_FastCallNoKw(co, args, nargs, globals);
+            goto done;
+        }
+        else if (nargs == 0 && argdefs != NULL
+                 && co->co_argcount == Py_SIZE(argdefs)) {
+            /* function called with no arguments, but all parameters have
+               a default value: use default values as arguments .*/
+            args = &PyTuple_GET_ITEM(argdefs, 0);
+            result =__Pyx_PyFunction_FastCallNoKw(co, args, Py_SIZE(argdefs), globals);
+            goto done;
+        }
+    }
+    if (kwargs != NULL) {
+        Py_ssize_t pos, i;
+        kwtuple = PyTuple_New(2 * nk);
+        if (kwtuple == NULL) {
+            result = NULL;
+            goto done;
+        }
+        k = &PyTuple_GET_ITEM(kwtuple, 0);
+        pos = i = 0;
+        while (PyDict_Next(kwargs, &pos, &k[i], &k[i+1])) {
+            Py_INCREF(k[i]);
+            Py_INCREF(k[i+1]);
+            i += 2;
+        }
+        nk = i / 2;
+    }
+    else {
+        kwtuple = NULL;
+        k = NULL;
+    }
+    closure = PyFunction_GET_CLOSURE(func);
+#if PY_MAJOR_VERSION >= 3
+    kwdefs = PyFunction_GET_KW_DEFAULTS(func);
+#endif
+    if (argdefs != NULL) {
+        d = &PyTuple_GET_ITEM(argdefs, 0);
+        nd = Py_SIZE(argdefs);
+    }
+    else {
+        d = NULL;
+        nd = 0;
+    }
+#if PY_MAJOR_VERSION >= 3
+    result = PyEval_EvalCodeEx((PyObject*)co, globals, (PyObject *)NULL,
+                               args, (int)nargs,
+                               k, (int)nk,
+                               d, (int)nd, kwdefs, closure);
+#else
+    result = PyEval_EvalCodeEx(co, globals, (PyObject *)NULL,
+                               args, (int)nargs,
+                               k, (int)nk,
+                               d, (int)nd, closure);
+#endif
+    Py_XDECREF(kwtuple);
+done:
+    Py_LeaveRecursiveCall();
+    return result;
+}
+#endif
+#endif
+
+/* PyObjectCall */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
+    PyObject *result;
+    ternaryfunc call = func->ob_type->tp_call;
+    if (unlikely(!call))
+        return PyObject_Call(func, arg, kw);
+    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
+        return NULL;
+    result = (*call)(func, arg, kw);
+    Py_LeaveRecursiveCall();
+    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
+        PyErr_SetString(
+            PyExc_SystemError,
+            "NULL result without error in PyObject_Call");
+    }
+    return result;
+}
+#endif
+
+/* PyObjectCall2Args */
+static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2) {
+    PyObject *args, *result = NULL;
+    #if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(function)) {
+        PyObject *args[2] = {arg1, arg2};
+        return __Pyx_PyFunction_FastCall(function, args, 2);
+    }
+    #endif
+    #if CYTHON_FAST_PYCCALL
+    if (__Pyx_PyFastCFunction_Check(function)) {
+        PyObject *args[2] = {arg1, arg2};
+        return __Pyx_PyCFunction_FastCall(function, args, 2);
+    }
+    #endif
+    args = PyTuple_New(2);
+    if (unlikely(!args)) goto done;
+    Py_INCREF(arg1);
+    PyTuple_SET_ITEM(args, 0, arg1);
+    Py_INCREF(arg2);
+    PyTuple_SET_ITEM(args, 1, arg2);
+    Py_INCREF(function);
+    result = __Pyx_PyObject_Call(function, args, NULL);
+    Py_DECREF(args);
+    Py_DECREF(function);
+done:
+    return result;
+}
+
+/* PyObjectCallMethO */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
+    PyObject *self, *result;
+    PyCFunction cfunc;
+    cfunc = PyCFunction_GET_FUNCTION(func);
+    self = PyCFunction_GET_SELF(func);
+    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
+        return NULL;
+    result = cfunc(self, arg);
+    Py_LeaveRecursiveCall();
+    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
+        PyErr_SetString(
+            PyExc_SystemError,
+            "NULL result without error in PyObject_Call");
+    }
+    return result;
+}
+#endif
+
+/* PyObjectCallOneArg */
+#if CYTHON_COMPILING_IN_CPYTHON
+static PyObject* __Pyx__PyObject_CallOneArg(PyObject *func, PyObject *arg) {
+    PyObject *result;
+    PyObject *args = PyTuple_New(1);
+    if (unlikely(!args)) return NULL;
+    Py_INCREF(arg);
+    PyTuple_SET_ITEM(args, 0, arg);
+    result = __Pyx_PyObject_Call(func, args, NULL);
+    Py_DECREF(args);
+    return result;
+}
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
+#if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(func)) {
+        return __Pyx_PyFunction_FastCall(func, &arg, 1);
+    }
+#endif
+    if (likely(PyCFunction_Check(func))) {
+        if (likely(PyCFunction_GET_FLAGS(func) & METH_O)) {
+            return __Pyx_PyObject_CallMethO(func, arg);
+#if CYTHON_FAST_PYCCALL
+        } else if (PyCFunction_GET_FLAGS(func) & METH_FASTCALL) {
+            return __Pyx_PyCFunction_FastCall(func, &arg, 1);
+#endif
+        }
+    }
+    return __Pyx__PyObject_CallOneArg(func, arg);
+}
+#else
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
+    PyObject *result;
+    PyObject *args = PyTuple_Pack(1, arg);
+    if (unlikely(!args)) return NULL;
+    result = __Pyx_PyObject_Call(func, args, NULL);
+    Py_DECREF(args);
+    return result;
+}
+#endif
+
+/* GetTopmostException */
+#if CYTHON_USE_EXC_INFO_STACK
+static _PyErr_StackItem *
+__Pyx_PyErr_GetTopmostException(PyThreadState *tstate)
+{
+    _PyErr_StackItem *exc_info = tstate->exc_info;
+    while ((exc_info->exc_type == NULL || exc_info->exc_type == Py_None) &&
+           exc_info->previous_item != NULL)
+    {
+        exc_info = exc_info->previous_item;
+    }
+    return exc_info;
+}
+#endif
+
+/* SaveResetException */
+#if CYTHON_FAST_THREAD_STATE
+static CYTHON_INLINE void __Pyx__ExceptionSave(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
+    #if CYTHON_USE_EXC_INFO_STACK
+    _PyErr_StackItem *exc_info = __Pyx_PyErr_GetTopmostException(tstate);
+    *type = exc_info->exc_type;
+    *value = exc_info->exc_value;
+    *tb = exc_info->exc_traceback;
+    #else
+    *type = tstate->exc_type;
+    *value = tstate->exc_value;
+    *tb = tstate->exc_traceback;
+    #endif
+    Py_XINCREF(*type);
+    Py_XINCREF(*value);
+    Py_XINCREF(*tb);
+}
+static CYTHON_INLINE void __Pyx__ExceptionReset(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb) {
+    PyObject *tmp_type, *tmp_value, *tmp_tb;
+    #if CYTHON_USE_EXC_INFO_STACK
+    _PyErr_StackItem *exc_info = tstate->exc_info;
+    tmp_type = exc_info->exc_type;
+    tmp_value = exc_info->exc_value;
+    tmp_tb = exc_info->exc_traceback;
+    exc_info->exc_type = type;
+    exc_info->exc_value = value;
+    exc_info->exc_traceback = tb;
+    #else
+    tmp_type = tstate->exc_type;
+    tmp_value = tstate->exc_value;
+    tmp_tb = tstate->exc_traceback;
+    tstate->exc_type = type;
+    tstate->exc_value = value;
+    tstate->exc_traceback = tb;
+    #endif
+    Py_XDECREF(tmp_type);
+    Py_XDECREF(tmp_value);
+    Py_XDECREF(tmp_tb);
+}
+#endif
+
+/* PyErrExceptionMatches */
+#if CYTHON_FAST_THREAD_STATE
+static int __Pyx_PyErr_ExceptionMatchesTuple(PyObject *exc_type, PyObject *tuple) {
+    Py_ssize_t i, n;
+    n = PyTuple_GET_SIZE(tuple);
+#if PY_MAJOR_VERSION >= 3
+    for (i=0; i<n; i++) {
+        if (exc_type == PyTuple_GET_ITEM(tuple, i)) return 1;
+    }
+#endif
+    for (i=0; i<n; i++) {
+        if (__Pyx_PyErr_GivenExceptionMatches(exc_type, PyTuple_GET_ITEM(tuple, i))) return 1;
+    }
+    return 0;
+}
+static CYTHON_INLINE int __Pyx_PyErr_ExceptionMatchesInState(PyThreadState* tstate, PyObject* err) {
+    PyObject *exc_type = tstate->curexc_type;
+    if (exc_type == err) return 1;
+    if (unlikely(!exc_type)) return 0;
+    if (unlikely(PyTuple_Check(err)))
+        return __Pyx_PyErr_ExceptionMatchesTuple(exc_type, err);
+    return __Pyx_PyErr_GivenExceptionMatches(exc_type, err);
+}
+#endif
+
+/* GetException */
+#if CYTHON_FAST_THREAD_STATE
+static int __Pyx__GetException(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb)
+#else
+static int __Pyx_GetException(PyObject **type, PyObject **value, PyObject **tb)
+#endif
+{
+    PyObject *local_type, *local_value, *local_tb;
+#if CYTHON_FAST_THREAD_STATE
+    PyObject *tmp_type, *tmp_value, *tmp_tb;
+    local_type = tstate->curexc_type;
+    local_value = tstate->curexc_value;
+    local_tb = tstate->curexc_traceback;
+    tstate->curexc_type = 0;
+    tstate->curexc_value = 0;
+    tstate->curexc_traceback = 0;
+#else
+    PyErr_Fetch(&local_type, &local_value, &local_tb);
+#endif
+    PyErr_NormalizeException(&local_type, &local_value, &local_tb);
+#if CYTHON_FAST_THREAD_STATE
+    if (unlikely(tstate->curexc_type))
+#else
+    if (unlikely(PyErr_Occurred()))
+#endif
+        goto bad;
+    #if PY_MAJOR_VERSION >= 3
+    if (local_tb) {
+        if (unlikely(PyException_SetTraceback(local_value, local_tb) < 0))
+            goto bad;
+    }
+    #endif
+    Py_XINCREF(local_tb);
+    Py_XINCREF(local_type);
+    Py_XINCREF(local_value);
+    *type = local_type;
+    *value = local_value;
+    *tb = local_tb;
+#if CYTHON_FAST_THREAD_STATE
+    #if CYTHON_USE_EXC_INFO_STACK
+    {
+        _PyErr_StackItem *exc_info = tstate->exc_info;
+        tmp_type = exc_info->exc_type;
+        tmp_value = exc_info->exc_value;
+        tmp_tb = exc_info->exc_traceback;
+        exc_info->exc_type = local_type;
+        exc_info->exc_value = local_value;
+        exc_info->exc_traceback = local_tb;
+    }
+    #else
+    tmp_type = tstate->exc_type;
+    tmp_value = tstate->exc_value;
+    tmp_tb = tstate->exc_traceback;
+    tstate->exc_type = local_type;
+    tstate->exc_value = local_value;
+    tstate->exc_traceback = local_tb;
+    #endif
+    Py_XDECREF(tmp_type);
+    Py_XDECREF(tmp_value);
+    Py_XDECREF(tmp_tb);
+#else
+    PyErr_SetExcInfo(local_type, local_value, local_tb);
+#endif
+    return 0;
+bad:
+    *type = 0;
+    *value = 0;
+    *tb = 0;
+    Py_XDECREF(local_type);
+    Py_XDECREF(local_value);
+    Py_XDECREF(local_tb);
+    return -1;
+}
+
+/* PyObjectCallNoArg */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
+#if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(func)) {
+        return __Pyx_PyFunction_FastCall(func, NULL, 0);
+    }
+#endif
+#ifdef __Pyx_CyFunction_USED
+    if (likely(PyCFunction_Check(func) || __Pyx_CyFunction_Check(func)))
+#else
+    if (likely(PyCFunction_Check(func)))
+#endif
+    {
+        if (likely(PyCFunction_GET_FLAGS(func) & METH_NOARGS)) {
+            return __Pyx_PyObject_CallMethO(func, NULL);
+        }
+    }
+    return __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL);
+}
+#endif
+
+/* PyErrFetchRestore */
+#if CYTHON_FAST_THREAD_STATE
+static CYTHON_INLINE void __Pyx_ErrRestoreInState(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb) {
+    PyObject *tmp_type, *tmp_value, *tmp_tb;
+    tmp_type = tstate->curexc_type;
+    tmp_value = tstate->curexc_value;
+    tmp_tb = tstate->curexc_traceback;
+    tstate->curexc_type = type;
+    tstate->curexc_value = value;
+    tstate->curexc_traceback = tb;
+    Py_XDECREF(tmp_type);
+    Py_XDECREF(tmp_value);
+    Py_XDECREF(tmp_tb);
+}
+static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
+    *type = tstate->curexc_type;
+    *value = tstate->curexc_value;
+    *tb = tstate->curexc_traceback;
+    tstate->curexc_type = 0;
+    tstate->curexc_value = 0;
+    tstate->curexc_traceback = 0;
+}
+#endif
+
+/* SwapException */
+#if CYTHON_FAST_THREAD_STATE
+static CYTHON_INLINE void __Pyx__ExceptionSwap(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
+    PyObject *tmp_type, *tmp_value, *tmp_tb;
+    #if CYTHON_USE_EXC_INFO_STACK
+    _PyErr_StackItem *exc_info = tstate->exc_info;
+    tmp_type = exc_info->exc_type;
+    tmp_value = exc_info->exc_value;
+    tmp_tb = exc_info->exc_traceback;
+    exc_info->exc_type = *type;
+    exc_info->exc_value = *value;
+    exc_info->exc_traceback = *tb;
+    #else
+    tmp_type = tstate->exc_type;
+    tmp_value = tstate->exc_value;
+    tmp_tb = tstate->exc_traceback;
+    tstate->exc_type = *type;
+    tstate->exc_value = *value;
+    tstate->exc_traceback = *tb;
+    #endif
+    *type = tmp_type;
+    *value = tmp_value;
+    *tb = tmp_tb;
+}
+#else
+static CYTHON_INLINE void __Pyx_ExceptionSwap(PyObject **type, PyObject **value, PyObject **tb) {
+    PyObject *tmp_type, *tmp_value, *tmp_tb;
+    PyErr_GetExcInfo(&tmp_type, &tmp_value, &tmp_tb);
+    PyErr_SetExcInfo(*type, *value, *tb);
+    *type = tmp_type;
+    *value = tmp_value;
+    *tb = tmp_tb;
+}
+#endif
+
+/* WriteUnraisableException */
+static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
+                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
+                                  int full_traceback, CYTHON_UNUSED int nogil) {
+    PyObject *old_exc, *old_val, *old_tb;
+    PyObject *ctx;
+    __Pyx_PyThreadState_declare
+#ifdef WITH_THREAD
+    PyGILState_STATE state;
+    if (nogil)
+        state = PyGILState_Ensure();
+#ifdef _MSC_VER
+    else state = (PyGILState_STATE)-1;
+#endif
+#endif
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
+    if (full_traceback) {
+        Py_XINCREF(old_exc);
+        Py_XINCREF(old_val);
+        Py_XINCREF(old_tb);
+        __Pyx_ErrRestore(old_exc, old_val, old_tb);
+        PyErr_PrintEx(1);
+    }
+    #if PY_MAJOR_VERSION < 3
+    ctx = PyString_FromString(name);
+    #else
+    ctx = PyUnicode_FromString(name);
+    #endif
+    __Pyx_ErrRestore(old_exc, old_val, old_tb);
+    if (!ctx) {
+        PyErr_WriteUnraisable(Py_None);
+    } else {
+        PyErr_WriteUnraisable(ctx);
+        Py_DECREF(ctx);
+    }
+#ifdef WITH_THREAD
+    if (nogil)
+        PyGILState_Release(state);
+#endif
 }
 
 /* RaiseDoubleKeywords */
@@ -5396,266 +8353,178 @@ static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *nam
     return 0;
 }
 
-/* PyFunctionFastCall */
-#if CYTHON_FAST_PYCALL
-static PyObject* __Pyx_PyFunction_FastCallNoKw(PyCodeObject *co, PyObject **args, Py_ssize_t na,
-                                               PyObject *globals) {
-    PyFrameObject *f;
-    PyThreadState *tstate = __Pyx_PyThreadState_Current;
-    PyObject **fastlocals;
-    Py_ssize_t i;
-    PyObject *result;
-    assert(globals != NULL);
-    /* XXX Perhaps we should create a specialized
-       PyFrame_New() that doesn't take locals, but does
-       take builtins without sanity checking them.
-       */
-    assert(tstate != NULL);
-    f = PyFrame_New(tstate, co, globals, NULL);
-    if (f == NULL) {
-        return NULL;
-    }
-    fastlocals = __Pyx_PyFrame_GetLocalsplus(f);
-    for (i = 0; i < na; i++) {
-        Py_INCREF(*args);
-        fastlocals[i] = *args++;
-    }
-    result = PyEval_EvalFrameEx(f,0);
-    ++tstate->recursion_depth;
-    Py_DECREF(f);
-    --tstate->recursion_depth;
-    return result;
-}
-#if 1 || PY_VERSION_HEX < 0x030600B1
-static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, Py_ssize_t nargs, PyObject *kwargs) {
-    PyCodeObject *co = (PyCodeObject *)PyFunction_GET_CODE(func);
-    PyObject *globals = PyFunction_GET_GLOBALS(func);
-    PyObject *argdefs = PyFunction_GET_DEFAULTS(func);
-    PyObject *closure;
-#if PY_MAJOR_VERSION >= 3
-    PyObject *kwdefs;
-#endif
-    PyObject *kwtuple, **k;
-    PyObject **d;
-    Py_ssize_t nd;
-    Py_ssize_t nk;
-    PyObject *result;
-    assert(kwargs == NULL || PyDict_Check(kwargs));
-    nk = kwargs ? PyDict_Size(kwargs) : 0;
-    if (Py_EnterRecursiveCall((char*)" while calling a Python object")) {
-        return NULL;
-    }
-    if (
-#if PY_MAJOR_VERSION >= 3
-            co->co_kwonlyargcount == 0 &&
-#endif
-            likely(kwargs == NULL || nk == 0) &&
-            co->co_flags == (CO_OPTIMIZED | CO_NEWLOCALS | CO_NOFREE)) {
-        if (argdefs == NULL && co->co_argcount == nargs) {
-            result = __Pyx_PyFunction_FastCallNoKw(co, args, nargs, globals);
-            goto done;
-        }
-        else if (nargs == 0 && argdefs != NULL
-                 && co->co_argcount == Py_SIZE(argdefs)) {
-            /* function called with no arguments, but all parameters have
-               a default value: use default values as arguments .*/
-            args = &PyTuple_GET_ITEM(argdefs, 0);
-            result =__Pyx_PyFunction_FastCallNoKw(co, args, Py_SIZE(argdefs), globals);
-            goto done;
-        }
-    }
-    if (kwargs != NULL) {
-        Py_ssize_t pos, i;
-        kwtuple = PyTuple_New(2 * nk);
-        if (kwtuple == NULL) {
-            result = NULL;
-            goto done;
-        }
-        k = &PyTuple_GET_ITEM(kwtuple, 0);
-        pos = i = 0;
-        while (PyDict_Next(kwargs, &pos, &k[i], &k[i+1])) {
-            Py_INCREF(k[i]);
-            Py_INCREF(k[i+1]);
-            i += 2;
-        }
-        nk = i / 2;
-    }
-    else {
-        kwtuple = NULL;
-        k = NULL;
-    }
-    closure = PyFunction_GET_CLOSURE(func);
-#if PY_MAJOR_VERSION >= 3
-    kwdefs = PyFunction_GET_KW_DEFAULTS(func);
-#endif
-    if (argdefs != NULL) {
-        d = &PyTuple_GET_ITEM(argdefs, 0);
-        nd = Py_SIZE(argdefs);
-    }
-    else {
-        d = NULL;
-        nd = 0;
-    }
-#if PY_MAJOR_VERSION >= 3
-    result = PyEval_EvalCodeEx((PyObject*)co, globals, (PyObject *)NULL,
-                               args, (int)nargs,
-                               k, (int)nk,
-                               d, (int)nd, kwdefs, closure);
+/* BytesEquals */
+static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int equals) {
+#if CYTHON_COMPILING_IN_PYPY
+    return PyObject_RichCompareBool(s1, s2, equals);
 #else
-    result = PyEval_EvalCodeEx(co, globals, (PyObject *)NULL,
-                               args, (int)nargs,
-                               k, (int)nk,
-                               d, (int)nd, closure);
+    if (s1 == s2) {
+        return (equals == Py_EQ);
+    } else if (PyBytes_CheckExact(s1) & PyBytes_CheckExact(s2)) {
+        const char *ps1, *ps2;
+        Py_ssize_t length = PyBytes_GET_SIZE(s1);
+        if (length != PyBytes_GET_SIZE(s2))
+            return (equals == Py_NE);
+        ps1 = PyBytes_AS_STRING(s1);
+        ps2 = PyBytes_AS_STRING(s2);
+        if (ps1[0] != ps2[0]) {
+            return (equals == Py_NE);
+        } else if (length == 1) {
+            return (equals == Py_EQ);
+        } else {
+            int result;
+#if CYTHON_USE_UNICODE_INTERNALS
+            Py_hash_t hash1, hash2;
+            hash1 = ((PyBytesObject*)s1)->ob_shash;
+            hash2 = ((PyBytesObject*)s2)->ob_shash;
+            if (hash1 != hash2 && hash1 != -1 && hash2 != -1) {
+                return (equals == Py_NE);
+            }
 #endif
-    Py_XDECREF(kwtuple);
-done:
-    Py_LeaveRecursiveCall();
-    return result;
-}
-#endif
-#endif
-
-/* PyCFunctionFastCall */
-#if CYTHON_FAST_PYCCALL
-static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
-    PyCFunctionObject *func = (PyCFunctionObject*)func_obj;
-    PyCFunction meth = PyCFunction_GET_FUNCTION(func);
-    PyObject *self = PyCFunction_GET_SELF(func);
-    int flags = PyCFunction_GET_FLAGS(func);
-    assert(PyCFunction_Check(func));
-    assert(METH_FASTCALL == (flags & ~(METH_CLASS | METH_STATIC | METH_COEXIST | METH_KEYWORDS | METH_STACKLESS)));
-    assert(nargs >= 0);
-    assert(nargs == 0 || args != NULL);
-    /* _PyCFunction_FastCallDict() must not be called with an exception set,
-       because it may clear it (directly or indirectly) and so the
-       caller loses its exception */
-    assert(!PyErr_Occurred());
-    if ((PY_VERSION_HEX < 0x030700A0) || unlikely(flags & METH_KEYWORDS)) {
-        return (*((__Pyx_PyCFunctionFastWithKeywords)(void*)meth)) (self, args, nargs, NULL);
+            result = memcmp(ps1, ps2, (size_t)length);
+            return (equals == Py_EQ) ? (result == 0) : (result != 0);
+        }
+    } else if ((s1 == Py_None) & PyBytes_CheckExact(s2)) {
+        return (equals == Py_NE);
+    } else if ((s2 == Py_None) & PyBytes_CheckExact(s1)) {
+        return (equals == Py_NE);
     } else {
-        return (*((__Pyx_PyCFunctionFast)(void*)meth)) (self, args, nargs);
+        int result;
+        PyObject* py_result = PyObject_RichCompare(s1, s2, equals);
+        if (!py_result)
+            return -1;
+        result = __Pyx_PyObject_IsTrue(py_result);
+        Py_DECREF(py_result);
+        return result;
     }
-}
 #endif
+}
 
-/* PyObjectCall */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
-    PyObject *result;
-    ternaryfunc call = func->ob_type->tp_call;
-    if (unlikely(!call))
-        return PyObject_Call(func, arg, kw);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = (*call)(func, arg, kw);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
+/* UnicodeEquals */
+static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals) {
+#if CYTHON_COMPILING_IN_PYPY
+    return PyObject_RichCompareBool(s1, s2, equals);
+#else
+#if PY_MAJOR_VERSION < 3
+    PyObject* owned_ref = NULL;
+#endif
+    int s1_is_unicode, s2_is_unicode;
+    if (s1 == s2) {
+        goto return_eq;
     }
-    return result;
-}
-#endif
-
-/* PyErrFetchRestore */
-#if CYTHON_FAST_THREAD_STATE
-static CYTHON_INLINE void __Pyx_ErrRestoreInState(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb) {
-    PyObject *tmp_type, *tmp_value, *tmp_tb;
-    tmp_type = tstate->curexc_type;
-    tmp_value = tstate->curexc_value;
-    tmp_tb = tstate->curexc_traceback;
-    tstate->curexc_type = type;
-    tstate->curexc_value = value;
-    tstate->curexc_traceback = tb;
-    Py_XDECREF(tmp_type);
-    Py_XDECREF(tmp_value);
-    Py_XDECREF(tmp_tb);
-}
-static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
-    *type = tstate->curexc_type;
-    *value = tstate->curexc_value;
-    *tb = tstate->curexc_traceback;
-    tstate->curexc_type = 0;
-    tstate->curexc_value = 0;
-    tstate->curexc_traceback = 0;
-}
-#endif
-
-/* WriteUnraisableException */
-static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
-                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
-                                  int full_traceback, CYTHON_UNUSED int nogil) {
-    PyObject *old_exc, *old_val, *old_tb;
-    PyObject *ctx;
-    __Pyx_PyThreadState_declare
-#ifdef WITH_THREAD
-    PyGILState_STATE state;
-    if (nogil)
-        state = PyGILState_Ensure();
-#ifdef _MSC_VER
-    else state = (PyGILState_STATE)-1;
-#endif
-#endif
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
-    if (full_traceback) {
-        Py_XINCREF(old_exc);
-        Py_XINCREF(old_val);
-        Py_XINCREF(old_tb);
-        __Pyx_ErrRestore(old_exc, old_val, old_tb);
-        PyErr_PrintEx(1);
+    s1_is_unicode = PyUnicode_CheckExact(s1);
+    s2_is_unicode = PyUnicode_CheckExact(s2);
+#if PY_MAJOR_VERSION < 3
+    if ((s1_is_unicode & (!s2_is_unicode)) && PyString_CheckExact(s2)) {
+        owned_ref = PyUnicode_FromObject(s2);
+        if (unlikely(!owned_ref))
+            return -1;
+        s2 = owned_ref;
+        s2_is_unicode = 1;
+    } else if ((s2_is_unicode & (!s1_is_unicode)) && PyString_CheckExact(s1)) {
+        owned_ref = PyUnicode_FromObject(s1);
+        if (unlikely(!owned_ref))
+            return -1;
+        s1 = owned_ref;
+        s1_is_unicode = 1;
+    } else if (((!s2_is_unicode) & (!s1_is_unicode))) {
+        return __Pyx_PyBytes_Equals(s1, s2, equals);
     }
+#endif
+    if (s1_is_unicode & s2_is_unicode) {
+        Py_ssize_t length;
+        int kind;
+        void *data1, *data2;
+        if (unlikely(__Pyx_PyUnicode_READY(s1) < 0) || unlikely(__Pyx_PyUnicode_READY(s2) < 0))
+            return -1;
+        length = __Pyx_PyUnicode_GET_LENGTH(s1);
+        if (length != __Pyx_PyUnicode_GET_LENGTH(s2)) {
+            goto return_ne;
+        }
+#if CYTHON_USE_UNICODE_INTERNALS
+        {
+            Py_hash_t hash1, hash2;
+        #if CYTHON_PEP393_ENABLED
+            hash1 = ((PyASCIIObject*)s1)->hash;
+            hash2 = ((PyASCIIObject*)s2)->hash;
+        #else
+            hash1 = ((PyUnicodeObject*)s1)->hash;
+            hash2 = ((PyUnicodeObject*)s2)->hash;
+        #endif
+            if (hash1 != hash2 && hash1 != -1 && hash2 != -1) {
+                goto return_ne;
+            }
+        }
+#endif
+        kind = __Pyx_PyUnicode_KIND(s1);
+        if (kind != __Pyx_PyUnicode_KIND(s2)) {
+            goto return_ne;
+        }
+        data1 = __Pyx_PyUnicode_DATA(s1);
+        data2 = __Pyx_PyUnicode_DATA(s2);
+        if (__Pyx_PyUnicode_READ(kind, data1, 0) != __Pyx_PyUnicode_READ(kind, data2, 0)) {
+            goto return_ne;
+        } else if (length == 1) {
+            goto return_eq;
+        } else {
+            int result = memcmp(data1, data2, (size_t)(length * kind));
+            #if PY_MAJOR_VERSION < 3
+            Py_XDECREF(owned_ref);
+            #endif
+            return (equals == Py_EQ) ? (result == 0) : (result != 0);
+        }
+    } else if ((s1 == Py_None) & s2_is_unicode) {
+        goto return_ne;
+    } else if ((s2 == Py_None) & s1_is_unicode) {
+        goto return_ne;
+    } else {
+        int result;
+        PyObject* py_result = PyObject_RichCompare(s1, s2, equals);
+        #if PY_MAJOR_VERSION < 3
+        Py_XDECREF(owned_ref);
+        #endif
+        if (!py_result)
+            return -1;
+        result = __Pyx_PyObject_IsTrue(py_result);
+        Py_DECREF(py_result);
+        return result;
+    }
+return_eq:
     #if PY_MAJOR_VERSION < 3
-    ctx = PyString_FromString(name);
-    #else
-    ctx = PyUnicode_FromString(name);
+    Py_XDECREF(owned_ref);
     #endif
-    __Pyx_ErrRestore(old_exc, old_val, old_tb);
-    if (!ctx) {
-        PyErr_WriteUnraisable(Py_None);
-    } else {
-        PyErr_WriteUnraisable(ctx);
-        Py_DECREF(ctx);
-    }
-#ifdef WITH_THREAD
-    if (nogil)
-        PyGILState_Release(state);
+    return (equals == Py_EQ);
+return_ne:
+    #if PY_MAJOR_VERSION < 3
+    Py_XDECREF(owned_ref);
+    #endif
+    return (equals == Py_NE);
 #endif
 }
 
-/* decode_c_string */
-static CYTHON_INLINE PyObject* __Pyx_decode_c_string(
-         const char* cstring, Py_ssize_t start, Py_ssize_t stop,
-         const char* encoding, const char* errors,
-         PyObject* (*decode_func)(const char *s, Py_ssize_t size, const char *errors)) {
-    Py_ssize_t length;
-    if (unlikely((start < 0) | (stop < 0))) {
-        size_t slen = strlen(cstring);
-        if (unlikely(slen > (size_t) PY_SSIZE_T_MAX)) {
-            PyErr_SetString(PyExc_OverflowError,
-                            "c-string too long to convert to Python");
-            return NULL;
+/* DictGetItem */
+#if PY_MAJOR_VERSION >= 3 && !CYTHON_COMPILING_IN_PYPY
+static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key) {
+    PyObject *value;
+    value = PyDict_GetItemWithError(d, key);
+    if (unlikely(!value)) {
+        if (!PyErr_Occurred()) {
+            if (unlikely(PyTuple_Check(key))) {
+                PyObject* args = PyTuple_Pack(1, key);
+                if (likely(args)) {
+                    PyErr_SetObject(PyExc_KeyError, args);
+                    Py_DECREF(args);
+                }
+            } else {
+                PyErr_SetObject(PyExc_KeyError, key);
+            }
         }
-        length = (Py_ssize_t) slen;
-        if (start < 0) {
-            start += length;
-            if (start < 0)
-                start = 0;
-        }
-        if (stop < 0)
-            stop += length;
+        return NULL;
     }
-    if (unlikely(stop <= start))
-        return PyUnicode_FromUnicode(NULL, 0);
-    length = stop - start;
-    cstring += start;
-    if (decode_func) {
-        return decode_func(cstring, length, errors);
-    } else {
-        return PyUnicode_Decode(cstring, length, encoding, errors);
-    }
+    Py_INCREF(value);
+    return value;
 }
+#endif
 
 /* PyDictVersioning */
 #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_TYPE_SLOTS
@@ -5877,95 +8746,6 @@ bad:
 }
 #endif
 
-/* PyObjectCall2Args */
-static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2) {
-    PyObject *args, *result = NULL;
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(function)) {
-        PyObject *args[2] = {arg1, arg2};
-        return __Pyx_PyFunction_FastCall(function, args, 2);
-    }
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(function)) {
-        PyObject *args[2] = {arg1, arg2};
-        return __Pyx_PyCFunction_FastCall(function, args, 2);
-    }
-    #endif
-    args = PyTuple_New(2);
-    if (unlikely(!args)) goto done;
-    Py_INCREF(arg1);
-    PyTuple_SET_ITEM(args, 0, arg1);
-    Py_INCREF(arg2);
-    PyTuple_SET_ITEM(args, 1, arg2);
-    Py_INCREF(function);
-    result = __Pyx_PyObject_Call(function, args, NULL);
-    Py_DECREF(args);
-    Py_DECREF(function);
-done:
-    return result;
-}
-
-/* PyObjectCallMethO */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
-    PyObject *self, *result;
-    PyCFunction cfunc;
-    cfunc = PyCFunction_GET_FUNCTION(func);
-    self = PyCFunction_GET_SELF(func);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = cfunc(self, arg);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
-    }
-    return result;
-}
-#endif
-
-/* PyObjectCallOneArg */
-#if CYTHON_COMPILING_IN_CPYTHON
-static PyObject* __Pyx__PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-    PyObject *result;
-    PyObject *args = PyTuple_New(1);
-    if (unlikely(!args)) return NULL;
-    Py_INCREF(arg);
-    PyTuple_SET_ITEM(args, 0, arg);
-    result = __Pyx_PyObject_Call(func, args, NULL);
-    Py_DECREF(args);
-    return result;
-}
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-#if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(func)) {
-        return __Pyx_PyFunction_FastCall(func, &arg, 1);
-    }
-#endif
-    if (likely(PyCFunction_Check(func))) {
-        if (likely(PyCFunction_GET_FLAGS(func) & METH_O)) {
-            return __Pyx_PyObject_CallMethO(func, arg);
-#if CYTHON_FAST_PYCCALL
-        } else if (PyCFunction_GET_FLAGS(func) & METH_FASTCALL) {
-            return __Pyx_PyCFunction_FastCall(func, &arg, 1);
-#endif
-        }
-    }
-    return __Pyx__PyObject_CallOneArg(func, arg);
-}
-#else
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
-    PyObject *result;
-    PyObject *args = PyTuple_Pack(1, arg);
-    if (unlikely(!args)) return NULL;
-    result = __Pyx_PyObject_Call(func, args, NULL);
-    Py_DECREF(args);
-    return result;
-}
-#endif
-
 /* PyObjectSetAttrStr */
 #if CYTHON_USE_TYPE_SLOTS
 static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr_name, PyObject* value) {
@@ -5979,87 +8759,6 @@ static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr
     return PyObject_SetAttr(obj, attr_name, value);
 }
 #endif
-
-/* PyObjectFormatAndDecref */
-static CYTHON_INLINE PyObject* __Pyx_PyObject_FormatSimpleAndDecref(PyObject* s, PyObject* f) {
-    if (unlikely(!s)) return NULL;
-    if (likely(PyUnicode_CheckExact(s))) return s;
-    #if PY_MAJOR_VERSION < 3
-    if (likely(PyString_CheckExact(s))) {
-        PyObject *result = PyUnicode_FromEncodedObject(s, NULL, "strict");
-        Py_DECREF(s);
-        return result;
-    }
-    #endif
-    return __Pyx_PyObject_FormatAndDecref(s, f);
-}
-static CYTHON_INLINE PyObject* __Pyx_PyObject_FormatAndDecref(PyObject* s, PyObject* f) {
-    PyObject *result = PyObject_Format(s, f);
-    Py_DECREF(s);
-    return result;
-}
-
-/* JoinPyUnicode */
-static PyObject* __Pyx_PyUnicode_Join(PyObject* value_tuple, Py_ssize_t value_count, Py_ssize_t result_ulength,
-                                      CYTHON_UNUSED Py_UCS4 max_char) {
-#if CYTHON_USE_UNICODE_INTERNALS && CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    PyObject *result_uval;
-    int result_ukind;
-    Py_ssize_t i, char_pos;
-    void *result_udata;
-#if CYTHON_PEP393_ENABLED
-    result_uval = PyUnicode_New(result_ulength, max_char);
-    if (unlikely(!result_uval)) return NULL;
-    result_ukind = (max_char <= 255) ? PyUnicode_1BYTE_KIND : (max_char <= 65535) ? PyUnicode_2BYTE_KIND : PyUnicode_4BYTE_KIND;
-    result_udata = PyUnicode_DATA(result_uval);
-#else
-    result_uval = PyUnicode_FromUnicode(NULL, result_ulength);
-    if (unlikely(!result_uval)) return NULL;
-    result_ukind = sizeof(Py_UNICODE);
-    result_udata = PyUnicode_AS_UNICODE(result_uval);
-#endif
-    char_pos = 0;
-    for (i=0; i < value_count; i++) {
-        int ukind;
-        Py_ssize_t ulength;
-        void *udata;
-        PyObject *uval = PyTuple_GET_ITEM(value_tuple, i);
-        if (unlikely(__Pyx_PyUnicode_READY(uval)))
-            goto bad;
-        ulength = __Pyx_PyUnicode_GET_LENGTH(uval);
-        if (unlikely(!ulength))
-            continue;
-        if (unlikely(char_pos + ulength < 0))
-            goto overflow;
-        ukind = __Pyx_PyUnicode_KIND(uval);
-        udata = __Pyx_PyUnicode_DATA(uval);
-        if (!CYTHON_PEP393_ENABLED || ukind == result_ukind) {
-            memcpy((char *)result_udata + char_pos * result_ukind, udata, (size_t) (ulength * result_ukind));
-        } else {
-            #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030300F0 || defined(_PyUnicode_FastCopyCharacters)
-            _PyUnicode_FastCopyCharacters(result_uval, char_pos, uval, 0, ulength);
-            #else
-            Py_ssize_t j;
-            for (j=0; j < ulength; j++) {
-                Py_UCS4 uchar = __Pyx_PyUnicode_READ(ukind, udata, j);
-                __Pyx_PyUnicode_WRITE(result_ukind, result_udata, char_pos+j, uchar);
-            }
-            #endif
-        }
-        char_pos += ulength;
-    }
-    return result_uval;
-overflow:
-    PyErr_SetString(PyExc_OverflowError, "join() result is too long for a Python string");
-bad:
-    Py_DECREF(result_uval);
-    return NULL;
-#else
-    result_ulength++;
-    value_count++;
-    return PyUnicode_Join(__pyx_empty_unicode, value_tuple);
-#endif
-}
 
 /* PyObject_GenericGetAttrNoDict */
 #if CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP && PY_VERSION_HEX < 0x03070000
@@ -6128,31 +8827,6 @@ bad:
     Py_XDECREF(ob);
     return -1;
 }
-
-/* PyErrExceptionMatches */
-#if CYTHON_FAST_THREAD_STATE
-static int __Pyx_PyErr_ExceptionMatchesTuple(PyObject *exc_type, PyObject *tuple) {
-    Py_ssize_t i, n;
-    n = PyTuple_GET_SIZE(tuple);
-#if PY_MAJOR_VERSION >= 3
-    for (i=0; i<n; i++) {
-        if (exc_type == PyTuple_GET_ITEM(tuple, i)) return 1;
-    }
-#endif
-    for (i=0; i<n; i++) {
-        if (__Pyx_PyErr_GivenExceptionMatches(exc_type, PyTuple_GET_ITEM(tuple, i))) return 1;
-    }
-    return 0;
-}
-static CYTHON_INLINE int __Pyx_PyErr_ExceptionMatchesInState(PyThreadState* tstate, PyObject* err) {
-    PyObject *exc_type = tstate->curexc_type;
-    if (exc_type == err) return 1;
-    if (unlikely(!exc_type)) return 0;
-    if (unlikely(PyTuple_Check(err)))
-        return __Pyx_PyErr_ExceptionMatchesTuple(exc_type, err);
-    return __Pyx_PyErr_GivenExceptionMatches(exc_type, err);
-}
-#endif
 
 /* PyObjectGetAttrStrNoError */
 static void __Pyx_PyObject_GetAttrStr_ClearAttributeError(void) {
@@ -7250,37 +9924,6 @@ bad:
     }
 
 /* CIntToPy */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
-    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(int) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(int) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-#endif
-        }
-    } else {
-        if (sizeof(int) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-#endif
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(int),
-                                     little, !is_unsigned);
-    }
-}
-
-/* CIntToPy */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_tibemsMsgType(tibemsMsgType value) {
     const tibemsMsgType neg_one = (tibemsMsgType) ((tibemsMsgType) 0 - (tibemsMsgType) 1), const_zero = (tibemsMsgType) 0;
     const int is_unsigned = neg_one > const_zero;
@@ -7307,6 +9950,37 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_tibemsMsgType(tibemsMsgType valu
         int one = 1; int little = (int)*(unsigned char *)&one;
         unsigned char *bytes = (unsigned char *)&value;
         return _PyLong_FromByteArray(bytes, sizeof(tibemsMsgType),
+                                     little, !is_unsigned);
+    }
+}
+
+/* CIntToPy */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
+    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(int) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(int) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
+#endif
+        }
+    } else {
+        if (sizeof(int) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+#endif
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(int),
                                      little, !is_unsigned);
     }
 }
@@ -7498,6 +10172,195 @@ raise_neg_overflow:
     PyErr_SetString(PyExc_OverflowError,
         "can't convert negative value to int");
     return (int) -1;
+}
+
+/* CIntFromPy */
+static CYTHON_INLINE tibemsMsgType __Pyx_PyInt_As_tibemsMsgType(PyObject *x) {
+    const tibemsMsgType neg_one = (tibemsMsgType) ((tibemsMsgType) 0 - (tibemsMsgType) 1), const_zero = (tibemsMsgType) 0;
+    const int is_unsigned = neg_one > const_zero;
+#if PY_MAJOR_VERSION < 3
+    if (likely(PyInt_Check(x))) {
+        if (sizeof(tibemsMsgType) < sizeof(long)) {
+            __PYX_VERIFY_RETURN_INT(tibemsMsgType, long, PyInt_AS_LONG(x))
+        } else {
+            long val = PyInt_AS_LONG(x);
+            if (is_unsigned && unlikely(val < 0)) {
+                goto raise_neg_overflow;
+            }
+            return (tibemsMsgType) val;
+        }
+    } else
+#endif
+    if (likely(PyLong_Check(x))) {
+        if (is_unsigned) {
+#if CYTHON_USE_PYLONG_INTERNALS
+            const digit* digits = ((PyLongObject*)x)->ob_digit;
+            switch (Py_SIZE(x)) {
+                case  0: return (tibemsMsgType) 0;
+                case  1: __PYX_VERIFY_RETURN_INT(tibemsMsgType, digit, digits[0])
+                case 2:
+                    if (8 * sizeof(tibemsMsgType) > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(tibemsMsgType, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(tibemsMsgType) >= 2 * PyLong_SHIFT) {
+                            return (tibemsMsgType) (((((tibemsMsgType)digits[1]) << PyLong_SHIFT) | (tibemsMsgType)digits[0]));
+                        }
+                    }
+                    break;
+                case 3:
+                    if (8 * sizeof(tibemsMsgType) > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(tibemsMsgType, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(tibemsMsgType) >= 3 * PyLong_SHIFT) {
+                            return (tibemsMsgType) (((((((tibemsMsgType)digits[2]) << PyLong_SHIFT) | (tibemsMsgType)digits[1]) << PyLong_SHIFT) | (tibemsMsgType)digits[0]));
+                        }
+                    }
+                    break;
+                case 4:
+                    if (8 * sizeof(tibemsMsgType) > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(tibemsMsgType, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(tibemsMsgType) >= 4 * PyLong_SHIFT) {
+                            return (tibemsMsgType) (((((((((tibemsMsgType)digits[3]) << PyLong_SHIFT) | (tibemsMsgType)digits[2]) << PyLong_SHIFT) | (tibemsMsgType)digits[1]) << PyLong_SHIFT) | (tibemsMsgType)digits[0]));
+                        }
+                    }
+                    break;
+            }
+#endif
+#if CYTHON_COMPILING_IN_CPYTHON
+            if (unlikely(Py_SIZE(x) < 0)) {
+                goto raise_neg_overflow;
+            }
+#else
+            {
+                int result = PyObject_RichCompareBool(x, Py_False, Py_LT);
+                if (unlikely(result < 0))
+                    return (tibemsMsgType) -1;
+                if (unlikely(result == 1))
+                    goto raise_neg_overflow;
+            }
+#endif
+            if (sizeof(tibemsMsgType) <= sizeof(unsigned long)) {
+                __PYX_VERIFY_RETURN_INT_EXC(tibemsMsgType, unsigned long, PyLong_AsUnsignedLong(x))
+#ifdef HAVE_LONG_LONG
+            } else if (sizeof(tibemsMsgType) <= sizeof(unsigned PY_LONG_LONG)) {
+                __PYX_VERIFY_RETURN_INT_EXC(tibemsMsgType, unsigned PY_LONG_LONG, PyLong_AsUnsignedLongLong(x))
+#endif
+            }
+        } else {
+#if CYTHON_USE_PYLONG_INTERNALS
+            const digit* digits = ((PyLongObject*)x)->ob_digit;
+            switch (Py_SIZE(x)) {
+                case  0: return (tibemsMsgType) 0;
+                case -1: __PYX_VERIFY_RETURN_INT(tibemsMsgType, sdigit, (sdigit) (-(sdigit)digits[0]))
+                case  1: __PYX_VERIFY_RETURN_INT(tibemsMsgType,  digit, +digits[0])
+                case -2:
+                    if (8 * sizeof(tibemsMsgType) - 1 > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(tibemsMsgType, long, -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(tibemsMsgType) - 1 > 2 * PyLong_SHIFT) {
+                            return (tibemsMsgType) (((tibemsMsgType)-1)*(((((tibemsMsgType)digits[1]) << PyLong_SHIFT) | (tibemsMsgType)digits[0])));
+                        }
+                    }
+                    break;
+                case 2:
+                    if (8 * sizeof(tibemsMsgType) > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(tibemsMsgType, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(tibemsMsgType) - 1 > 2 * PyLong_SHIFT) {
+                            return (tibemsMsgType) ((((((tibemsMsgType)digits[1]) << PyLong_SHIFT) | (tibemsMsgType)digits[0])));
+                        }
+                    }
+                    break;
+                case -3:
+                    if (8 * sizeof(tibemsMsgType) - 1 > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(tibemsMsgType, long, -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(tibemsMsgType) - 1 > 3 * PyLong_SHIFT) {
+                            return (tibemsMsgType) (((tibemsMsgType)-1)*(((((((tibemsMsgType)digits[2]) << PyLong_SHIFT) | (tibemsMsgType)digits[1]) << PyLong_SHIFT) | (tibemsMsgType)digits[0])));
+                        }
+                    }
+                    break;
+                case 3:
+                    if (8 * sizeof(tibemsMsgType) > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(tibemsMsgType, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(tibemsMsgType) - 1 > 3 * PyLong_SHIFT) {
+                            return (tibemsMsgType) ((((((((tibemsMsgType)digits[2]) << PyLong_SHIFT) | (tibemsMsgType)digits[1]) << PyLong_SHIFT) | (tibemsMsgType)digits[0])));
+                        }
+                    }
+                    break;
+                case -4:
+                    if (8 * sizeof(tibemsMsgType) - 1 > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(tibemsMsgType, long, -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(tibemsMsgType) - 1 > 4 * PyLong_SHIFT) {
+                            return (tibemsMsgType) (((tibemsMsgType)-1)*(((((((((tibemsMsgType)digits[3]) << PyLong_SHIFT) | (tibemsMsgType)digits[2]) << PyLong_SHIFT) | (tibemsMsgType)digits[1]) << PyLong_SHIFT) | (tibemsMsgType)digits[0])));
+                        }
+                    }
+                    break;
+                case 4:
+                    if (8 * sizeof(tibemsMsgType) > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(tibemsMsgType, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(tibemsMsgType) - 1 > 4 * PyLong_SHIFT) {
+                            return (tibemsMsgType) ((((((((((tibemsMsgType)digits[3]) << PyLong_SHIFT) | (tibemsMsgType)digits[2]) << PyLong_SHIFT) | (tibemsMsgType)digits[1]) << PyLong_SHIFT) | (tibemsMsgType)digits[0])));
+                        }
+                    }
+                    break;
+            }
+#endif
+            if (sizeof(tibemsMsgType) <= sizeof(long)) {
+                __PYX_VERIFY_RETURN_INT_EXC(tibemsMsgType, long, PyLong_AsLong(x))
+#ifdef HAVE_LONG_LONG
+            } else if (sizeof(tibemsMsgType) <= sizeof(PY_LONG_LONG)) {
+                __PYX_VERIFY_RETURN_INT_EXC(tibemsMsgType, PY_LONG_LONG, PyLong_AsLongLong(x))
+#endif
+            }
+        }
+        {
+#if CYTHON_COMPILING_IN_PYPY && !defined(_PyLong_AsByteArray)
+            PyErr_SetString(PyExc_RuntimeError,
+                            "_PyLong_AsByteArray() not available in PyPy, cannot convert large numbers");
+#else
+            tibemsMsgType val;
+            PyObject *v = __Pyx_PyNumber_IntOrLong(x);
+ #if PY_MAJOR_VERSION < 3
+            if (likely(v) && !PyLong_Check(v)) {
+                PyObject *tmp = v;
+                v = PyNumber_Long(tmp);
+                Py_DECREF(tmp);
+            }
+ #endif
+            if (likely(v)) {
+                int one = 1; int is_little = (int)*(unsigned char *)&one;
+                unsigned char *bytes = (unsigned char *)&val;
+                int ret = _PyLong_AsByteArray((PyLongObject *)v,
+                                              bytes, sizeof(val),
+                                              is_little, !is_unsigned);
+                Py_DECREF(v);
+                if (likely(!ret))
+                    return val;
+            }
+#endif
+            return (tibemsMsgType) -1;
+        }
+    } else {
+        tibemsMsgType val;
+        PyObject *tmp = __Pyx_PyNumber_IntOrLong(x);
+        if (!tmp) return (tibemsMsgType) -1;
+        val = __Pyx_PyInt_As_tibemsMsgType(tmp);
+        Py_DECREF(tmp);
+        return val;
+    }
+raise_overflow:
+    PyErr_SetString(PyExc_OverflowError,
+        "value too large to convert to tibemsMsgType");
+    return (tibemsMsgType) -1;
+raise_neg_overflow:
+    PyErr_SetString(PyExc_OverflowError,
+        "can't convert negative value to tibemsMsgType");
+    return (tibemsMsgType) -1;
 }
 
 /* CIntToPy */
