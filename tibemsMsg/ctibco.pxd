@@ -1,8 +1,12 @@
 cdef extern from "../include/tibems/tibems.h":
     ctypedef int tibems_int;
     ctypedef long long tibems_long
+    ctypedef unsigned int tibems_uint
 
     cdef struct __tibemsMsg:
+        pass
+
+    cdef struct __tibemsMsgEnum:
         pass
 
     ctypedef void* tibemsConnectionFactory
@@ -143,7 +147,11 @@ cdef extern from "../include/tibems/tibems.h":
         TIBEMS_DEST_UNDEFINED = 256
     ctypedef __tibemsMsg tibemsMsg
     ctypedef __tibemsMsg tibemsTextMsg
+    ctypedef __tibemsMsg tibemsMapMsg
+    ctypedef __tibemsMsg tibemsBytesMsg
+    ctypedef __tibemsMsgEnum tibemsMsgEnum
     ctypedef void (*tibemsMsgCompletionCallback) (tibemsMsg msg, tibems_status status, void* closure)
+    ctypedef void (*tibemsMsgCallback) (tibemsMsgConsumer msgConsumer, tibemsMsg msg, void* closure)
 
     const char* tibemsStatus_GetText(tibems_status status)
     tibems_status tibemsErrorContext_Create(tibemsErrorContext* errorContext)
@@ -175,9 +183,15 @@ cdef extern from "../include/tibems/tibems.h":
     tibems_status tibemsSession_Close(tibemsSession session)
 
     tibems_status tibemsSession_CreateConsumer(tibemsSession session, tibemsMsgConsumer* consumer, tibemsDestination destination, const char* optionalSelector, tibems_bool noLocal)
+    tibems_status tibemsSession_CreateSharedConsumer(tibemsSession session, tibemsMsgConsumer* consumer, tibemsTopic topic, const char* sharedSubscriptionName, const char* optionalSelector)
+    tibems_status tibemsSession_CreateDurableSubscriber(tibemsSession session, tibemsMsgConsumer* msgConsumer, tibemsTopic topic, const char* name, const char* messageSelector, tibems_bool noLocal)
+    tibems_status tibemsSession_CreateSharedDurableConsumer(tibemsSession session, tibemsMsgConsumer* consumer, tibemsTopic topic, const char* durableName, const char* optionalSelector)
+    tibems_status tibemsSession_Unsubscribe(tibemsSession session, const char* subscriberName)
     tibems_status tibemsMsgConsumer_Receive(tibemsMsgConsumer msgConsumer, tibemsMsg* msg)
     tibems_status tibemsMsgConsumer_ReceiveTimeout(tibemsMsgConsumer msgConsumer, tibemsMsg* msg, tibems_long timeout)
     tibems_status tibemsMsgConsumer_Close(tibemsMsgConsumer msgConsumer)
+    tibems_status tibemsMsgConsumer_SetMsgListener(tibemsMsgConsumer msgConsumer, tibemsMsgCallback callback, void* closure)
+    tibems_status tibemsMsgConsumer_GetMsgListener(tibemsMsgConsumer msgConsumer, tibemsMsgCallback* callbackPtr, void** closure)
 
     tibems_status tibemsSession_CreateProducer(tibemsSession session, tibemsMsgProducer* producer, tibemsDestination destination)
     tibems_status tibemsMsgProducer_AsyncSend(tibemsMsgProducer msgProducer, tibemsMsg msg, tibemsMsgCompletionCallback asyncSendCallback, void* asyncSendClosure)
@@ -191,8 +205,21 @@ cdef extern from "../include/tibems/tibems.h":
     tibems_status tibemsTextMsg_Create(tibemsTextMsg* message)
     tibems_status tibemsTextMsg_SetText(tibemsTextMsg message, const char* text)
     tibems_status tibemsTextMsg_GetText(tibemsTextMsg message, const char** text)
+    tibems_status tibemsMapMsg_Create(tibemsMapMsg* message)
+    tibems_status tibemsMapMsg_SetString(tibemsMapMsg message, const char* name, const char* value)
+    tibems_status tibemsMapMsg_GetMapNames(tibemsMsg message, tibemsMsgEnum* enumeration)
+    tibems_status tibemsMsgEnum_GetNextName(tibemsMsgEnum enumeration, const char** name)
+    tibems_status tibemsMsgEnum_Destroy(tibemsMsgEnum enumeration)
+    tibems_status tibemsMapMsg_GetString(tibemsMapMsg message, const char* name, const char** value)
+    tibems_status tibemsBytesMsg_Create(tibemsBytesMsg* message)
+    tibems_status tibemsBytesMsg_WriteBytes(tibemsBytesMsg message, const void* value, tibems_uint size)
+    tibems_status tibemsMsg_SetDestination(tibemsMsg message, tibemsDestination value)
+    tibems_status tibemsMsg_SetReplyTo(tibemsMsg message, tibemsDestination value)
+    tibems_status tibemsMsg_SetTimestamp(tibemsMsg message, tibems_long value)
     tibems_status tibemsMsg_GetBodyType(tibemsMsg message, tibemsMsgType* type)
+    tibems_status tibemsMsg_Create(tibemsMsg* message)
+    tibems_status tibemsMsg_SetType(tibemsMsg message, const char* value)
     tibems_status tibemsMsg_Destroy(tibemsMsg message)
-    void tibemsMsg_Print(tibemsMsg message)
     tibems_status tibemsMsg_GetByteSize(tibemsMsg msg, tibems_int* size)
     tibems_status tibemsMsg_GetAsBytes(const tibemsMsg msg, const void** bytes, tibems_int* actual_size)
+    void tibemsMsg_Print(tibemsMsg message)
